@@ -38,9 +38,11 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  
+  global $changed;
+  $changed = false;
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
     if ($field->identifier == 'description') {
+      if ($asset["metadata"]->teaser != $field->text) {$changed = true;}
       $asset["metadata"]->teaser = $field->text;
     } elseif ($field->identifier == 'faculty-set') {
       if(!is_array($field->structuredDataNodes->structuredDataNode)) {
@@ -56,8 +58,10 @@ function changes(&$asset) {
         // print_r($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode);
         foreach ($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode as $subfield) {
           if ($subfield->identifier == 'faculty') {
+            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value != 'site://'.str_replace(':','/',$subfield->pagePath)) {$changed = true;}
             $asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value = 'site://'.str_replace(':','/',$subfield->pagePath); //Faculty Path
           } elseif ($subfield->identifier == 'note') {
+            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value != $subfield->text) {$changed = true;}
             $asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value = $subfield->text; //Faculty Note
           }
         }
@@ -75,10 +79,13 @@ function changes(&$asset) {
     **/
     
     // elseif ($field->identifier == 'visibility') {
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[10]->fieldValues->fieldValue->value != $field->text) {$changed = true;}
     //   $asset["metadata"]->dynamicFields->dynamicField[10]->fieldValues->fieldValue->value = $field->text;
     // } elseif ($field->identifier == 'semester') {
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[11]->fieldValues->fieldValue->value != $field->text) {$changed = true;}
     //   $asset["metadata"]->dynamicFields->dynamicField[11]->fieldValues->fieldValue->value = $field->text;
     // } elseif ($field->identifier == 'course-type') {
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[12]->fieldValues->fieldValue->value != $field->text) {$changed = true;}
     //   $asset["metadata"]->dynamicFields->dynamicField[12]->fieldValues->fieldValue->value = $field->text;
     // } elseif ($field->identifier == 'level') {
     //   $levels = explode("::CONTENT-XML-CHECKBOX::",$field->text);
@@ -88,13 +95,18 @@ function changes(&$asset) {
     //   }
     //   $asset["metadata"]->dynamicFields->dynamicField[13]->fieldValues->fieldValue = array();
     //   for ($i = 0;$i <= count($levels)-1; $i++) {
+    //     if ($asset["metadata"]->dynamicFields->dynamicField[13]->fieldValues->fieldValue[$i]->value != $levels[$i]) {$changed = true;}
     //     $asset["metadata"]->dynamicFields->dynamicField[13]->fieldValues->fieldValue[$i]->value = $levels[$i];
     //   }
     // } elseif ($field->identifier == 'sorting-group') {
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[14]->fieldValues->fieldValue->value != $field->text) {$changed = true;}
     //   $asset["metadata"]->dynamicFields->dynamicField[14]->fieldValues->fieldValue->value = $field->text;
     // } elseif ($field->identifier == 'scope') {
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[15]->fieldValues->fieldValue->value != $field->text) {$changed = true;}
     //   $asset["metadata"]->dynamicFields->dynamicField[15]->fieldValues->fieldValue->value = $field->text;
     // } elseif ($field->identifier == 'admin') { //Addendum
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[16]->fieldValues->fieldValue->value != $field->structuredDataNodes->structuredDataNode[0]->text) {$changed = true;}
+    //   if ($asset["metadata"]->dynamicFields->dynamicField[17]->fieldValues->fieldValue->value != $field->structuredDataNodes->structuredDataNode[1]->text) {$changed = true;}
     //   $asset["metadata"]->dynamicFields->dynamicField[16]->fieldValues->fieldValue->value = $field->structuredDataNodes->structuredDataNode[0]->text;
     //   $asset["metadata"]->dynamicFields->dynamicField[17]->fieldValues->fieldValue->value = $field->structuredDataNodes->structuredDataNode[1]->text;
     // }

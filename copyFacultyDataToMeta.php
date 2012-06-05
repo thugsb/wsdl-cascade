@@ -23,7 +23,8 @@ function output($client, $auth, $id) {
 }
 
 function changes(&$asset) {
-  
+  global $changed;
+  $changed = false;
   // Grab the correct fields
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode[0]->structuredDataNodes->structuredDataNode as $sdnode) {
     if ($sdnode->identifier == "first") {
@@ -50,16 +51,22 @@ function changes(&$asset) {
   $asset["metadata"]->teaser = $fac_content->text; // WYSIWYG Bio Content
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == "first") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_first->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_first->text;
     } elseif ($dyn->name == "last") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_last->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_last->text;
     } elseif ($dyn->name == "faculty-title") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_title->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_title->text;
     } elseif ($dyn->name == "email") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_email->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_email->text;
     } elseif ($dyn->name == "status") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_status->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_status->text;
     } elseif ($dyn->name == "note") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_note->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_note->text;
     }
   }
@@ -71,10 +78,12 @@ function changes(&$asset) {
   for ($i = 0;$i <= count($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode)-1; $i++) {
     $link = 'site://'.str_replace(':','/',$asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[$i]->pagePath);
     if ($link != 'site://') {
+      if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+11]->fieldValues->fieldValue->value != $link) {$changed = true;}
       $asset["metadata"]->dynamicFields->dynamicField[2*$i+11]->fieldValues->fieldValue->value = $link; //Aff-links
       if (is_array($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue)) {
         $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue = new stdClass;
       }
+      if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value != $dis[$link]) {$changed = $true;}
       $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value = $dis[$link]; //Aff-disps
     }
   }

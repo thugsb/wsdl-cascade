@@ -38,9 +38,11 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  
+  global $changed;
+  $changed = false;
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
     if ($field->identifier == 'description') {
+      if ($asset["metadata"]->teaser != $field->text) {$changed = true;}
       $asset["metadata"]->teaser = $field->text;
     } elseif ($field->identifier == 'faculty-set') {
       if(!is_array($field->structuredDataNodes->structuredDataNode)) {
@@ -56,8 +58,10 @@ function changes(&$asset) {
         // print_r($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode);
         foreach ($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode as $subfield) {
           if ($subfield->identifier == 'faculty') {
+            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value != 'site://'.str_replace(':','/',$subfield->pagePath)) {$changed = true;}
             $asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value = 'site://'.str_replace(':','/',$subfield->pagePath); //Faculty Path
           } elseif ($subfield->identifier == 'note') {
+            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value != $subfield->text) {$changed = true;}
             $asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value = $subfield->text; //Faculty Note
           }
         }

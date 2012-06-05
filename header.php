@@ -10,6 +10,7 @@
 
 include_once("html_header.php");
 
+$changed = true;
 
 function readFolder($client, $auth, $id) {
   global $asset_type, $asset_children_type, $data;
@@ -69,7 +70,7 @@ function readPage($client, $auth, $id) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total, $asset_type, $asset_children_type, $data;
+  global $total, $asset_type, $asset_children_type, $data, $changed;
   echo '<div class="page">';
   if ($_POST['before'] == 'on') {
     echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
@@ -90,17 +91,21 @@ function editPage($client, $auth, $asset) {
     echo '</label>';
   }
   
-  if ($_POST['action'] == 'edit') {
-    $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
+  if ($changed == true) {
+    if ($_POST['action'] == 'edit') {
+      $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
+    }
+    if ($edit->editReturn->success == 'true') {
+      echo '<div class="s">Edit success</div>';
+      $total['s']++;
+    } else {
+      echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+      $total['f']++;
+    }
+  } else {
+    echo '<div class="s">No changes needed</div>';
   }
   
-  if ($edit->editReturn->success == 'true') {
-    echo '<div class="s">Edit success</div>';
-    $total['s']++;
-  } else {
-    echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
-    $total['f']++;
-  }
   echo '</div>';
 }
 
