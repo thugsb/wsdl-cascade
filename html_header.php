@@ -8,7 +8,7 @@ if (array_key_exists('submit',$_POST)) {
   $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
   $id = array ('type' => $_POST['type'], 'id' => $_POST['id'] );
 }
-$total = array('s' => 0, 'f' => 0);
+$total = array('s' => 0, 'f' => 0, 'k' => 0);
 
 // If it's not a folder, you need to set the correct $asset_type (camelCase)
 if (!isset($asset_type)) {
@@ -26,6 +26,7 @@ if (!isset($data)) {$data = '';}
   .right {float:right;}
   .hidden {display:none;}
   .s {color:#090;}
+  .k {color:#009;}
   .f {padding:1em;font-size:1em;color:#fff;background:#c00;}
   
   .advanced {font-size:0.8em;}
@@ -91,7 +92,7 @@ if (!isset($data)) {$data = '';}
     <section class="output">
       <?php if ($_POST['type'] == 'folder' || $_POST['type'] == 'assetfactorycontainer') {
         readFolder($client, $auth, $id);
-        echo '<div class="totals">Successes: '.$total['s'].' Failures: '.$total['f'].'</div>';
+        echo '<div class="totals">Successes: '.$total['s'].' Failures: '.$total['f'].' Skipped: '.$total['k'].'</div>';
       } elseif ($_POST['type'] == 'page') {
         readPage($client, $auth, $id);
       } ?>

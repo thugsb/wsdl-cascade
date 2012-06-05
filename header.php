@@ -103,7 +103,8 @@ function editPage($client, $auth, $asset) {
       $total['f']++;
     }
   } else {
-    echo '<div class="s">No changes needed</div>';
+    echo '<div class="k">No changes needed</div>';
+    $total['k']++;
   }
   
   echo '</div>';
