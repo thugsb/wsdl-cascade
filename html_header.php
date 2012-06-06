@@ -19,8 +19,9 @@ if (!isset($data)) {$data = '';}
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
   <title>WSDL - <?php echo $title; ?></title>
   <style type="text/css">
   .right {float:right;}
