@@ -109,7 +109,7 @@ function editPage($client, $auth, $asset) {
   }
   
   $page_title = strtolower(str_replace(':','',str_replace(' ','-',$asset['metadata']->title)));
-  echo $page_title;
+  echo 'New page name: '.$page_title;
   if ($_POST['action'] == 'edit') {
     $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('newName'=> $page_title, 'doWorkflow'=>false) ) );
   }
