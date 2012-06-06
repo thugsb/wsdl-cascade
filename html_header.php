@@ -2,9 +2,9 @@
 
 
 include("web_services_util.php");
-$client = new SoapClient ( "https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl", array ('trace' => 1 ) );	
 $asset_types = array("folder", "page", "assetfactory", "assetfactorycontainer", "block", "block_FEED", "block_INDEX", "block_TEXT", "block_XHTML_DATADEFINITION", "block_XML", "connectorcontainer", "twitterconnector", "facebookconnector", "wordpressconnector", "googleanalyticsconnector", "contenttype", "contenttypecontainer", "destination", "file", "group", "message", "metadataset", "metadatasetcontainer", "pageconfigurationset", "pageconfiguration", "pageregion", "pageconfigurationsetcontainer", "publishset", "publishsetcontainer", "reference", "role", "datadefinition", "datadefinitioncontainer", "format", "format_XSLT", "format_SCRIPT", "site", "sitedestinationcontainer", "symlink", "target", "template", "transport", "transport_fs", "transport_ftp", "transport_db", "transportcontainer", "user", "workflow", "workflowdefinition", "workflowdefinitioncontainer");
 if (array_key_exists('submit',$_POST)) {
+  $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
   $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
   $id = array ('type' => $_POST['type'], 'id' => $_POST['id'] );
 }
@@ -49,6 +49,7 @@ if (!isset($data)) {$data = '';}
     <form id="options" method="POST">
       <input name="login" placeholder="username" size="8" value="<?php echo $_POST['login']; ?>">
       <input name="password" type="password" size="8" placeholder="password" value="<?php echo $_POST['password']; ?>">
+      <input name="client" placeholder="client" size="8" value="<?php echo $_POST['client']; ?>">
       <select name="type">
         <?php foreach($asset_types as $type) {
           if ($type_override == $type || ($_POST['type'] == $type && $type_override == null)) {
