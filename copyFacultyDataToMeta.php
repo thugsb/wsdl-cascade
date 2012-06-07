@@ -23,7 +23,7 @@ function output($client, $auth, $id) {
 }
 
 function changes(&$asset) {
-  global $changed;
+  global $changed, $data;
   $changed = false;
   // Grab the correct fields
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode[0]->structuredDataNodes->structuredDataNode as $sdnode) {
@@ -80,12 +80,13 @@ function changes(&$asset) {
     if ($link != 'site://') {
       if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+11]->fieldValues->fieldValue->value != $link) {$changed = true;}
       $asset["metadata"]->dynamicFields->dynamicField[2*$i+11]->fieldValues->fieldValue->value = $link; //Aff-links
-      if (is_array($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue)) {
-        $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue = new stdClass;
-      }
-      if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value != $dis[$link]) {$changed = $true;}
-      $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value = $dis[$link]; //Aff-disps
     }
+    if (is_array($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue)) {
+      $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue = new stdClass;
+    }
+    // print_r($data);
+    if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value != $data[$link]) {$changed = true;}
+    $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value = $data[$link]; //Aff-disps
   }
 }
 

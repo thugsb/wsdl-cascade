@@ -2,7 +2,7 @@
 $title = 'Rename Pages based on their Title';
 
 // $type_override = 'page';
-$start_asset = '502accc57f00000217772487eb1a5242';
+$start_asset = '502909967f00000217772487364c242c';
 
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
