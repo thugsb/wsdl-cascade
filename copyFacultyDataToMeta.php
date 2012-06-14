@@ -14,13 +14,7 @@ function foldertest($child) {
 function edittest($asset) {
   return true;
 }
-function output($client, $auth, $id) {
-  global $total;
-  if ($_POST['type'] == 'folder' || $_POST['type'] == 'assetfactorycontainer') {
-    readFolder($client, $auth, $id);
-    echo '<div class="totals">Successes: '.$total['s'].' Failures: '.$total['f'].'</div>';
-  }
-}
+
 
 function changes(&$asset) {
   global $changed, $data;
