@@ -40,6 +40,10 @@ function edittest($asset) {
 function changes(&$asset) {
   global $changed;
   $changed = false;
+  if ($asset["metadata"]->title != trim($asset['metadata']->title)) {
+    $changed = true;
+    $asset['metadata']->title = trim($asset['metadata']->title);
+  }
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
     if ($field->identifier == 'description') {
       if ($asset["metadata"]->teaser != $field->text) {$changed = true;}
