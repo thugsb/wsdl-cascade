@@ -1,5 +1,5 @@
 <?php
-$title = 'Publish catalogue area pages';
+$title = 'Publish catalogue discipline pages to the prince destination';
 
 // $type_override = 'page';
 $start_asset = '817373157f00000101f92de5bea1554a';
@@ -8,14 +8,6 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 // $asset_type = 'assetFactoryContainer';
 // $asset_children_type = 'assetFactory';
 
-/*
- *  The following pagetest and foldertest match either the current years, 
- *  or the archived years.
- *  To change from one to the other, comment and uncomment the appropriate
- *  lines in BOTH pagetest and foldertest. Also, adjust the $year folder param.
- *  If you want to narrow down pages editing, add a course name of the end of 
- *  pagetest e.g. ...primary\/[a-z]allet/'
- */
 
 // $year = '[-0-9]+'; // Matches all years
 $year = '2012-2013';
@@ -116,7 +108,7 @@ function editPage($client, $auth, $asset) {
   }
   
   if ($_POST['action'] == 'edit') {
-    $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]) ) );
+    $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"], 'destination' => 'prince') ) );
   }
   
   
