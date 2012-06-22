@@ -42,7 +42,10 @@ function changes(&$asset) {
   // echo '<div>First: '.$fac_first->text.'<br>Last: '.$fac_last->text.'<br>Title: '.$fac_title->text.'<br>Email: '.$fac_email->text.'<br>Status: '.$fac_status->text.'<br>Note: '.$fac_note->text.'<br>Bio: '.$fac_content->text.'</div>';
   
   // Set the data in the correct metadata fields
-  $asset["metadata"]->teaser = $fac_content->text; // WYSIWYG Bio Content
+  if ($asset["metadata"]->teaser != $fac_content->text) {
+    $asset["metadata"]->teaser = $fac_content->text; // WYSIWYG Bio Content
+    $changed = true;
+  }
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == "first") {
       if ($dyn->fieldValues->fieldValue->value != $fac_first->text) {$changed = true;}
