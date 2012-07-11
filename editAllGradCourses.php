@@ -2,7 +2,7 @@
 $title = 'Graduate - Copying DD data to metadata for all course pages in specified years';
 
 // $type_override = 'page';
-$start_asset = '3f38baed7f000001002240026c2d8630';
+$start_asset = '4e9e12a97f000001015d84e03ea3fb26';
 
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
@@ -33,7 +33,7 @@ function foldertest($child) {
     return true;
 }
 function edittest($asset) {
-  if (preg_match('/^slc-catalogue-undergraduate:slc-catalogue-undergraduate\/Catalog\/Course/', $asset["contentTypePath"]))
+  if (preg_match('/^www-graduate\/Program Courses/', $asset["contentTypePath"]))
     return true;
 }
 
