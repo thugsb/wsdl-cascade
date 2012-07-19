@@ -5,7 +5,7 @@ $title = 'Copy Faculty Structured Data to Metadata';
 $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
 
 function pagetest($child) {
-  if ($child->path->path != 'index' && preg_match('/^[a-z]/',$child->path->path))
+  if ($child->path->path != 'index' && preg_match('/^farr[a-z]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
@@ -29,6 +29,8 @@ function changes(&$asset) {
       $fac_title = $sdnode;
     } elseif ($sdnode->identifier == "email") {
       $fac_email = $sdnode;
+    } elseif ($sdnode->identifier == "phone") {
+      $fac_phone = $sdnode;
     } elseif ($sdnode->identifier == "status") {
       $fac_status = $sdnode;
     } elseif ($sdnode->identifier == "note") {
@@ -37,6 +39,18 @@ function changes(&$asset) {
       $fac_content = $sdnode;
     }
   }
+  
+  
+  // Affiliations
+  if (!is_array($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode)) {
+    $asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode = array($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode);
+  }
+  $links = array('site://','site://','site://','site://');
+  for ($i = 0;$i <= count($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode)-1; $i++) {
+    $link = 'site://'.str_replace(':','/',$asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[$i]->pagePath);
+    $links[$i] = $link;
+  }
+  // print_r($links);
   
   // This is what we have grabbed
   // echo '<div>First: '.$fac_first->text.'<br>Last: '.$fac_last->text.'<br>Title: '.$fac_title->text.'<br>Email: '.$fac_email->text.'<br>Status: '.$fac_status->text.'<br>Note: '.$fac_note->text.'<br>Bio: '.$fac_content->text.'</div>';
@@ -59,31 +73,52 @@ function changes(&$asset) {
     } elseif ($dyn->name == "email") {
       if ($dyn->fieldValues->fieldValue->value != $fac_email->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_email->text;
+    } elseif ($dyn->name == "phone") {
+      if ($dyn->fieldValues->fieldValue->value != $fac_phone->text) {$changed = true;}
+      $dyn->fieldValues->fieldValue->value = $fac_phone->text;
     } elseif ($dyn->name == "status") {
       if ($dyn->fieldValues->fieldValue->value != $fac_status->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_status->text;
     } elseif ($dyn->name == "note") {
       if ($dyn->fieldValues->fieldValue->value != $fac_note->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_note->text;
+    } elseif ($dyn->name == "affiliation-link-1") {
+      if ($dyn->fieldValues->fieldValue->value != $links[0] && $links[0] != 'site://') {
+        $changed = true;
+        $dyn->fieldValues->fieldValue->value = $links[0];
+      }
+    } elseif ($dyn->name == "affiliation-display-1") {
+      if (is_array($dyn->fieldValues->fieldValue)) {$dyn->fieldValues->fieldValue = new stdClass;}
+      if ($dyn->fieldValues->fieldValue->value != $data[$links[0]]) {$changed = true;}
+      $dyn->fieldValues->fieldValue->value = $data[$links[0]];
+    } elseif ($dyn->name == "affiliation-link-2") {
+      if ($dyn->fieldValues->fieldValue->value != $links[1] && $links[1] != 'site://') {
+        $changed = true;
+        $dyn->fieldValues->fieldValue->value = $links[1];
+      }
+    } elseif ($dyn->name == "affiliation-display-2") {
+      if (is_array($dyn->fieldValues->fieldValue)) {$dyn->fieldValues->fieldValue = new stdClass;}
+      if ($dyn->fieldValues->fieldValue->value != $data[$links[1]]) {$changed = true;}
+      $dyn->fieldValues->fieldValue->value = $data[$links[1]];
+    } elseif ($dyn->name == "affiliation-link-3") {
+      if ($dyn->fieldValues->fieldValue->value != $links[2] && $links[2] != 'site://') {
+        $changed = true;
+        $dyn->fieldValues->fieldValue->value = $links[2];
+      }
+    } elseif ($dyn->name == "affiliation-display-3") {
+      if (is_array($dyn->fieldValues->fieldValue)) {$dyn->fieldValues->fieldValue = new stdClass;}
+      if ($dyn->fieldValues->fieldValue->value != $data[$links[2]]) {$changed = true;}
+      $dyn->fieldValues->fieldValue->value = $data[$links[2]];
+    } elseif ($dyn->name == "affiliation-link-4") {
+      if ($dyn->fieldValues->fieldValue->value != $links[3] && $links[3] != 'site://') {
+        $changed = true;
+        $dyn->fieldValues->fieldValue->value = $links[3];
+      }
+    } elseif ($dyn->name == "affiliation-display-4") {
+      if (is_array($dyn->fieldValues->fieldValue)) {$dyn->fieldValues->fieldValue = new stdClass;}
+      if ($dyn->fieldValues->fieldValue->value != $data[$links[3]]) {$changed = true;}
+      $dyn->fieldValues->fieldValue->value = $data[$links[3]];
     }
-  }
-  
-  // Affiliations
-  if (!is_array($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode)) {
-    $asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode = array($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode);
-  }
-  for ($i = 0;$i <= count($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode)-1; $i++) {
-    $link = 'site://'.str_replace(':','/',$asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[$i]->pagePath);
-    if ($link != 'site://') {
-      if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+11]->fieldValues->fieldValue->value != $link) {$changed = true;}
-      $asset["metadata"]->dynamicFields->dynamicField[2*$i+11]->fieldValues->fieldValue->value = $link; //Aff-links
-    }
-    if (is_array($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue)) {
-      $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue = new stdClass;
-    }
-    // print_r($data);
-    if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value != $data[$link]) {$changed = true;}
-    $asset["metadata"]->dynamicFields->dynamicField[2*$i+12]->fieldValues->fieldValue->value = $data[$link]; //Aff-disps
   }
 }
 
@@ -95,7 +130,7 @@ $data = array (
   'site://slc-catalogue-undergraduate/humanities/art-history/index' => 'Art History','site://slc-catalogue-undergraduate/humanities/film-history/index' => 'Film History','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/french/index' => 'French','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/german/index' => 'German','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/classics/index' => 'Classics','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/greek/index' => 'Greek','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/italian/index' => 'Italian','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/japanese/index' => 'Japanese','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/latin/index' => 'Latin','site://slc-catalogue-undergraduate/humanities/literature/index' => 'Literature','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/index' => 'Modern Languages and Literatures','site://slc-catalogue-undergraduate/humanities/philosophy/index' => 'Philosophy','site://slc-catalogue-undergraduate/humanities/religion/index' => 'Religion','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/russian/index' => 'Russian','site://slc-catalogue-undergraduate/humanities/modern-languages-and-literatures/spanish/index' => 'Spanish',
   'site://slc-catalogue-undergraduate/natural-sciences-and-mathematics/biology/index' => 'Biology','site://slc-catalogue-undergraduate/natural-sciences-and-mathematics/chemistry/index' => 'Chemistry','site://slc-catalogue-undergraduate/natural-sciences-and-mathematics/computer-science/index' => 'Computer Science','site://slc-catalogue-undergraduate/natural-sciences-and-mathematics/mathematics/index' => 'Mathematics','site://slc-catalogue-undergraduate/natural-sciences-and-mathematics/physics/index' => 'Physics',
   'site://slc-catalogue-undergraduate/disciplines/science-and-mathematics/index' => 'Science and Mathematics','site://slc-catalogue-undergraduate/disciplines/social-science/index' => 'Social Science',
-  'site://slc-catalogue-graduate/programs/art-of-teaching/index' => 'MS Ed Art of Teaching Program','site://slc-catalogue-graduate/programs/child-development/index' => 'MA Child Development Program','site://slc-catalogue-graduate/programs/child-development/index' => 'MA/MSW Dual Degree in Social Work and Child Development','site://slc-catalogue-graduate/programs/dance/index' => 'MFA Dance Program','site://slc-catalogue-graduate/programs/dance-movement-therapy/index' => 'MS Dance/Movement Therapy Program','site://slc-catalogue-graduate/programs/health-advocacy/index' => 'MA Health Advocacy Program','site://slc-catalogue-graduate/programs/human-genetics/index' => 'MS Human Genetics Program','site://slc-catalogue-graduate/programs/theatre/index' => 'MFA Theatre Program','site://slc-catalogue-graduate/programs/womens-history/index' => "MA Women's History Program",'site://slc-catalogue-graduate/programs/writing/index' => 'MFA Writing Program','site://' => ''
+  'site://slc-catalogue-graduate/art-of-teaching/index' => 'MS Ed Art of Teaching Program','site://slc-catalogue-graduate/child-development/index' => 'MA Child Development Program','site://slc-catalogue-graduate/child-development/index' => 'MA/MSW Dual Degree in Social Work and Child Development','site://slc-catalogue-graduate/dance/index' => 'MFA Dance Program','site://slc-catalogue-graduate/dance-movement-therapy/index' => 'MS Dance/Movement Therapy Program','site://slc-catalogue-graduate/health-advocacy/index' => 'MA Health Advocacy Program','site://slc-catalogue-graduate/human-genetics/index' => 'MS Human Genetics Program','site://slc-catalogue-graduate/theatre/index' => 'MFA Theatre Program','site://slc-catalogue-graduate/womens-history/index' => "MA Women's History Program",'site://slc-catalogue-graduate/writing/index' => 'MFA Writing Program','site://' => ' '
 );
 
 
