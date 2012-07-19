@@ -5,7 +5,7 @@ $title = 'Copy Faculty Structured Data to Metadata';
 $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
 
 function pagetest($child) {
-  if ($child->path->path != 'index' && preg_match('/^farr[a-z]/',$child->path->path))
+  if ($child->path->path != 'index' && preg_match('/^[a-z]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
