@@ -33,10 +33,19 @@ function changes(&$asset) {
     } elseif ($sdnode->identifier == "summary") {
       $news_summary = $sdnode;
     } elseif ($sdnode->identifier == "content") {
-      if (count($asset["structuredData"]->structuredDataNodes->structuredDataNode) < 7) {
+      if ($asset["contentTypePath"] == 'News Types/News - Announcement' || $asset["contentTypePath"] == 'News Types/News - Buzz' || $asset["contentTypePath"] == 'News Types/News - In The News' || $asset["contentTypePath"] == 'News Types/News - Short Form') {
         $news_summary = $sdnode;
       }
     }
+  }
+  // Fix the cross-site file paths so cascade can use them
+  if (preg_match('/:/', $news_thumbnail->filePath)) {
+    $x = explode(':',$news_thumbnail->filePath);
+    $news_thumbnail->filePath = 'site://'.$x[0].'/'.$x[1];
+  }
+  if (preg_match('/:/', $news_avatar->filePath)) {
+    $x = explode(':',$news_avatar->filePath);
+    $news_avatar->filePath = 'site://'.$x[0].'/'.$x[1];
   }
   // echo $news_thumbnail->filePath;
   // echo $news_avatar->filePath;
