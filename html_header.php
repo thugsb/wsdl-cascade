@@ -92,10 +92,10 @@ if (!isset($data)) {$data = '';}
       echo 'E<u>x</u>pand All <input type="checkbox" id="expandAll" accesskey="x">';
     ?>
     <section class="output">
-      <?php if ($_POST['type'] == 'folder' || $_POST['type'] == 'assetfactorycontainer') {
+      <?php if ($_POST['type'] == 'folder' || preg_match('/container/', $_POST['type']) ) {
         readFolder($client, $auth, $id);
         echo '<div class="totals">Successes: '.$total['s'].' Failures: '.$total['f'].' Skipped: '.$total['k'].'</div>';
-      } elseif ($_POST['type'] == 'page') {
+      } else {
         readPage($client, $auth, $id);
       } ?>
     </section>
