@@ -3,11 +3,6 @@
 
 include("web_services_util.php");
 $asset_types = array("folder", "page", "assetfactory", "assetfactorycontainer", "block", "block_FEED", "block_INDEX", "block_TEXT", "block_XHTML_DATADEFINITION", "block_XML", "connectorcontainer", "twitterconnector", "facebookconnector", "wordpressconnector", "googleanalyticsconnector", "contenttype", "contenttypecontainer", "destination", "file", "group", "message", "metadataset", "metadatasetcontainer", "pageconfigurationset", "pageconfiguration", "pageregion", "pageconfigurationsetcontainer", "publishset", "publishsetcontainer", "reference", "role", "datadefinition", "datadefinitioncontainer", "format", "format_XSLT", "format_SCRIPT", "site", "sitedestinationcontainer", "symlink", "target", "template", "transport", "transport_fs", "transport_ftp", "transport_db", "transportcontainer", "user", "workflow", "workflowdefinition", "workflowdefinitioncontainer");
-if (array_key_exists('submit',$_POST)) {
-  $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
-  $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
-  $id = array ('type' => $_POST['type'], 'id' => $_POST['id'] );
-}
 $total = array('s' => 0, 'f' => 0, 'k' => 0);
 
 // If it's not a folder, you need to set the correct $asset_type (camelCase)
@@ -29,6 +24,7 @@ if (!isset($data)) {$data = '';}
   .s {color:#090;}
   .k {color:#009;}
   .f {padding:1em;font-size:1em;color:#fff;background:#c00;}
+  .left_label {display:inline-block;width:50%;}
   
   .advanced {font-size:0.8em;}
   .totals {position:fixed;top:0;right:0;padding:0.5em;box-shadow:0 0 5px #000;background:#fff;}
@@ -48,6 +44,7 @@ if (!isset($data)) {$data = '';}
 <body>
   <nav>
     <form id="options" method="POST">
+      <a href="./">./</a>
       <input name="login" placeholder="username" size="8" value="<?php echo $_POST['login']; ?>">
       <input name="password" type="password" size="8" placeholder="password" value="<?php echo $_POST['password']; ?>">
       <input name="client" placeholder="client" size="8" value="<?php echo $_POST['client']; ?>">
@@ -88,15 +85,25 @@ if (!isset($data)) {$data = '';}
     </form>
   </nav>
   <?php if (array_key_exists('submit',$_POST)) { //If form was submitted 
+    $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
+    $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
+    $ids = explode(',',$_POST['id']);
+    
     if ($_POST['before'] == 'on' || $_POST['after'] == 'on')
       echo 'E<u>x</u>pand All <input type="checkbox" id="expandAll" accesskey="x">';
     ?>
     <section class="output">
       <?php if ($_POST['type'] == 'folder' || preg_match('/container/', $_POST['type']) ) {
-        readFolder($client, $auth, $id);
+        foreach($ids as $id) {
+          $asset = array ('type' => $_POST['type'], 'id' => $id );
+          readFolder($client, $auth, $asset);
+        }
         echo '<div class="totals">Successes: '.$total['s'].' Failures: '.$total['f'].' Skipped: '.$total['k'].'</div>';
       } else {
-        readPage($client, $auth, $id);
+        foreach($ids as $id) {
+          $asset = array ('type' => $_POST['type'], 'id' => $id );
+          readPage($client, $auth, $asset);
+        }
       } ?>
     </section>
   <?php } ?>

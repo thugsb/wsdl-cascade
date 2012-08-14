@@ -25,19 +25,24 @@ function changes(&$asset) {
 
 include('header.php');
 
-// Read asset Access
-$reply = $client->readAccessRights ( array ('authentication' => $auth, 'identifier' => $id ) );
-if ($reply->readAccessRightsReturn->success == 'true') {
-  $asset = ( array ) $reply;
-  echo "<script type='text/javascript'>var access = ";
-  print_r(json_encode($asset));
-  echo "; console.log('access')";
-  echo "</script>";
-  echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
-    print_r($asset);
-  echo '</label>';
-} else {
-  echo '<div class="f">Access Read failed</div>';
+if (array_key_exists('submit',$_POST)) {
+  // Read asset Access
+  foreach($ids as $id) {
+    $asset = array ('type' => $_POST['type'], 'id' => $id );
+    $reply = $client->readAccessRights ( array ('authentication' => $auth, 'identifier' => $asset ) );
+    if ($reply->readAccessRightsReturn->success == 'true') {
+      $asset = ( array ) $reply;
+      echo "<script type='text/javascript'>var access = ";
+      print_r(json_encode($asset));
+      echo "; console.log('access')";
+      echo "</script>";
+      echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
+      print_r($asset);
+      echo '</label>';
+    } else {
+      echo '<div class="f">Access Read failed</div>';
+    }
+  }
 }
 
 ?>
