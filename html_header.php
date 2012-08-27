@@ -19,6 +19,7 @@ if (!isset($data)) {$data = '';}
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
   <title>WSDL - <?php echo $title; ?></title>
   <style type="text/css">
+  a {text-decoration:none;color:#334}
   .right {float:right;}
   .hidden {display:none;}
   .s {color:#090;}
@@ -102,7 +103,7 @@ if (!isset($data)) {$data = '';}
       } else {
         foreach($ids as $id) {
           $asset = array ('type' => $_POST['type'], 'id' => $id );
-          readPage($client, $auth, $asset);
+          readPage($client, $auth, $asset, $_POST['type']);
         }
       } ?>
     </section>

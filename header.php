@@ -39,24 +39,24 @@ function indexFolder($client, $auth, $asset) {
   foreach($asset["children"]->child as $child) {
     if ($child->type == "page") {
       if (pagetest($child))
-        readPage($client, $auth, array ('type' => 'page', 'id' => $child->id));
+        readPage($client, $auth, array ('type' => 'page', 'id' => $child->id), $child->type);
     } elseif ($child->type == "folder") {
       if (foldertest($child))
         readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
     } elseif ($child->type == "assetfactory") {
       if (assetfactorytest($child))
-        readPage($client, $auth, array ('type' => 'assetfactory', 'id' => $child->id));
+        readPage($client, $auth, array ('type' => 'assetfactory', 'id' => $child->id, $child->type));
     }
   }
 }
 
-function readPage($client, $auth, $id) {
+function readPage($client, $auth, $id, $type) {
   global $asset_type, $asset_children_type, $data;
   $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
     if ($_POST['asset'] == 'on') {
-      echo '<h4>'.$asset['path']."</h4>";
+      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
     }
     
     if (edittest($asset)) {
