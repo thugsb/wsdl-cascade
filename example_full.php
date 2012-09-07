@@ -39,9 +39,11 @@ include('html_header.php');
 <?php
 
 function readFolder($client, $auth, $id) {
+  global $asset_type, $asset_children_type, $data;
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($folder->readReturn->success == 'true') {
-    $asset = ( array ) $folder->readReturn->asset->folder;
+    
+    $asset = ( array ) $folder->readReturn->asset->$asset_type;
     if ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
@@ -56,26 +58,31 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
+  global $data;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
   foreach($asset["children"]->child as $child) {
     if ($child->type == "page") {
       if (pagetest($child))
-        readPage($client, $auth, array ('type' => 'page', 'id' => $child->id));
+        readPage($client, $auth, array ('type' => 'page', 'id' => $child->id), $child->type);
     } elseif ($child->type == "folder") {
       if (foldertest($child))
         readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
+    } elseif ($child->type == "assetfactory") {
+      if (assetfactorytest($child))
+        readPage($client, $auth, array ('type' => 'assetfactory', 'id' => $child->id, $child->type));
     }
   }
 }
 
-function readPage($client, $auth, $id) {
+function readPage($client, $auth, $id, $type) {
+  global $asset_type, $asset_children_type, $data;
   $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->readReturn->success == 'true') {
-    $asset = ( array ) $reply->readReturn->asset->page;
+    $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
     if ($_POST['asset'] == 'on') {
-      echo '<h4>'.$asset['path']."</h4>";
+      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
     }
     
     if (edittest($asset)) {
@@ -89,7 +96,7 @@ function readPage($client, $auth, $id) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total;
+  global $total, $asset_type, $asset_children_type, $data, $changed;
   echo '<div class="page">';
   if ($_POST['before'] == 'on') {
     echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
@@ -110,18 +117,22 @@ function editPage($client, $auth, $asset) {
     echo '</label>';
   }
   
-  if ($_POST['action'] == 'edit') {
-    $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array('page' => $asset) ) );
-  }
-  
-  
-  if ($edit->editReturn->success == 'true') {
-    echo '<div class="s">Edit success</div>';
-    $total['s']++;
+  if ($changed == true) {
+    if ($_POST['action'] == 'edit') {
+      $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
+    }
+    if ($edit->editReturn->success == 'true') {
+      echo '<div class="s">Edit success</div>';
+      $total['s']++;
+    } else {
+      echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+      $total['f']++;
+    }
   } else {
-    echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
-    $total['f']++;
+    echo '<div class="k">No changes needed</div>';
+    $total['k']++;
   }
+  
   echo '</div>';
 }
 
