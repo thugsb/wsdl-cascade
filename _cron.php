@@ -12,8 +12,8 @@ if ($_GET['s']) {
 
 include("web_services_util.php");
 
-if (file_exists('_credentials.php')) {
-  include("_credentials.php");
+if (file_exists('../_credentials.php')) {
+  include("../_credentials.php");
 } else {
   echo 'You must supply a _credentials.php file, setting $username, $password and $email (to send the output to).'."\n";
   exit;
