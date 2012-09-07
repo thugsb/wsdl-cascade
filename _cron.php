@@ -8,14 +8,17 @@ if ($_GET['s']) {
   exit;
 }
 
-if (function_exists(readFolder)) {
-  echo "Customized functions can't be run. Exiting...\n";
-  exit;
-}
 
 
 include("web_services_util.php");
-include("_credentials.php");
+
+if (file_exists('_credentials.php')) {
+  include("_credentials.php");
+} else {
+  echo 'You must supply a _credentials.php file, setting $username, $password and $email (to send the output to).'."\n";
+  exit;
+}
+
 $asset_types = array("folder", "page", "assetfactory", "assetfactorycontainer", "block", "block_FEED", "block_INDEX", "block_TEXT", "block_XHTML_DATADEFINITION", "block_XML", "connectorcontainer", "twitterconnector", "facebookconnector", "wordpressconnector", "googleanalyticsconnector", "contenttype", "contenttypecontainer", "destination", "file", "group", "message", "metadataset", "metadatasetcontainer", "pageconfigurationset", "pageconfiguration", "pageregion", "pageconfigurationsetcontainer", "publishset", "publishsetcontainer", "reference", "role", "datadefinition", "datadefinitioncontainer", "format", "format_XSLT", "format_SCRIPT", "site", "sitedestinationcontainer", "symlink", "target", "template", "transport", "transport_fs", "transport_ftp", "transport_db", "transportcontainer", "user", "workflow", "workflowdefinition", "workflowdefinitioncontainer");
 $total = array('s' => 0, 'f' => 0, 'k' => 0);
 
@@ -74,7 +77,7 @@ function readFolder($client, $auth, $id) {
 
     indexFolder($client, $auth, $asset);
   } else {
-    $o[1] .= '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
     $total['f']++;
   }
 }
@@ -109,7 +112,7 @@ function readPage($client, $auth, $id, $type) {
     }
     
   } else {
-    $o[1] .= '<div class="f">Failed to read page: '.$id.'</div>';
+    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
     $total['f']++;
   }
 }
@@ -118,7 +121,6 @@ function readPage($client, $auth, $id, $type) {
 function editPage($client, $auth, $asset, $type) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o;
   // $o[6] .= '<div class="page"><h3>Before</h3>';
-  // $o[6] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
   // $o[6] .= '<div style="white-space:pre;">"' . print_r($asset, true) . '</div>'; // Shows the page in all its glory
   
   changes($asset);
@@ -130,9 +132,10 @@ function editPage($client, $auth, $asset, $type) {
     $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
     if ($edit->editReturn->success == 'true') {
       // $o[6] .= '<div class="s">Edit success</div>';
+      $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
       $total['s']++;
     } else {
-      $o[1] .= '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
       $total['f']++;
     }
   } else {
