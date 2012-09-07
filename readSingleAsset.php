@@ -23,7 +23,8 @@ function changes(&$asset) {
 
 
 
-include('header.php');
+if (!$cron)
+  include('header.php');
 
 if (array_key_exists('submit',$_POST)) {
   // Read asset Access

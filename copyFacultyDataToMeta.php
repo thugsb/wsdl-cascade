@@ -134,6 +134,7 @@ $data = array (
 );
 
 
-include('header.php');
+if (!$cron)
+  include('header.php');
 
 ?>
