@@ -36,6 +36,95 @@ $client = new SoapClient ( 'https://cms.slc.edu:8443/ws/services/AssetOperationS
 $auth = array ('username' => $username, 'password' => $password );
 $ids = explode(',',$start_asset);
 
+
+
+if (!function_exists(readFolder)) {
+
+  function readFolder($client, $auth, $id) {
+    global $asset_type, $asset_children_type, $data, $o;
+    $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
+    if ($folder->readReturn->success == 'true') {
+    
+      $asset = ( array ) $folder->readReturn->asset->$asset_type;
+      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+
+      // $o[5] .= '<div style="white-space:pre;">' . print_r($asset["children"], true) . '</div>'; // Shows all the children of the folder
+
+      indexFolder($client, $auth, $asset);
+    } else {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+      $total['f']++;
+    }
+  }
+  function indexFolder($client, $auth, $asset) {
+    global $data, $o;
+    if (!is_array($asset["children"]->child)) {
+      $asset["children"]->child=array($asset["children"]->child);
+    }
+    foreach($asset["children"]->child as $child) {
+      if ($child->type == "page") {
+        if (pagetest($child))
+          readPage($client, $auth, array ('type' => 'page', 'id' => $child->id), $child->type);
+      } elseif ($child->type == "folder") {
+        if (foldertest($child))
+          readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
+      } elseif ($child->type == "assetfactory") {
+        if (assetfactorytest($child))
+          readPage($client, $auth, array ('type' => 'assetfactory', 'id' => $child->id, $child->type));
+      }
+    }
+  }
+
+  function readPage($client, $auth, $id, $type) {
+    global $asset_type, $asset_children_type, $data, $o;
+    $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
+    if ($reply->readReturn->success == 'true') {
+      $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
+      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+    
+      if (edittest($asset)) {
+        editPage($client, $auth, $asset, $type);
+      }
+    
+    } else {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
+      $total['f']++;
+    }
+  }
+
+
+  function editPage($client, $auth, $asset, $type) {
+    global $total, $asset_type, $asset_children_type, $data, $changed, $o;
+    // $o[6] .= '<div class="page"><h3>Before</h3>';
+    // $o[6] .= '<div style="white-space:pre;">"' . print_r($asset, true) . '</div>'; // Shows the page in all its glory
+  
+    changes($asset);
+  
+    // $o[6] .= '<h3>After</h3>';
+    // $o[6] .= '<div style="white-space:pre;">"' . print_r($asset, true) . '</div>'; // Shows the page as it will be
+  
+    if ($changed == true) {
+      $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
+      if ($edit->editReturn->success == 'true') {
+        // $o[6] .= '<div class="s">Edit success</div>';
+        $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $total['s']++;
+      } else {
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
+        $total['f']++;
+      }
+    } else {
+      // $o[6] .= '<div class="k">No changes needed</div>';
+      $total['k']++;
+    }
+  
+    // $o[6] .= '</div>';
+  }
+}
+
+
+
+
 if ($asset_type == 'folder' || preg_match('/container/', $asset_type) ) {
   foreach($ids as $id) {
     $asset = array ('type' => $asset_type, 'id' => $id );
@@ -61,90 +150,6 @@ if ($total['f'] > 0)
 
 mail($email, $subject, $output, 'Content-type: text/html; charset=UTF-8');
 
-
-
-
-
-function readFolder($client, $auth, $id) {
-  global $asset_type, $asset_children_type, $data, $o;
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
-  if ($folder->readReturn->success == 'true') {
-    
-    $asset = ( array ) $folder->readReturn->asset->$asset_type;
-    $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
-
-    // $o[5] .= '<div style="white-space:pre;">' . print_r($asset["children"], true) . '</div>'; // Shows all the children of the folder
-
-    indexFolder($client, $auth, $asset);
-  } else {
-    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
-    $total['f']++;
-  }
-}
-function indexFolder($client, $auth, $asset) {
-  global $data, $o;
-  if (!is_array($asset["children"]->child)) {
-    $asset["children"]->child=array($asset["children"]->child);
-  }
-  foreach($asset["children"]->child as $child) {
-    if ($child->type == "page") {
-      if (pagetest($child))
-        readPage($client, $auth, array ('type' => 'page', 'id' => $child->id), $child->type);
-    } elseif ($child->type == "folder") {
-      if (foldertest($child))
-        readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
-    } elseif ($child->type == "assetfactory") {
-      if (assetfactorytest($child))
-        readPage($client, $auth, array ('type' => 'assetfactory', 'id' => $child->id, $child->type));
-    }
-  }
-}
-
-function readPage($client, $auth, $id, $type) {
-  global $asset_type, $asset_children_type, $data, $o;
-  $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
-  if ($reply->readReturn->success == 'true') {
-    $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
-    $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
-    
-    if (edittest($asset)) {
-      editPage($client, $auth, $asset, $type);
-    }
-    
-  } else {
-    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
-    $total['f']++;
-  }
-}
-
-
-function editPage($client, $auth, $asset, $type) {
-  global $total, $asset_type, $asset_children_type, $data, $changed, $o;
-  // $o[6] .= '<div class="page"><h3>Before</h3>';
-  // $o[6] .= '<div style="white-space:pre;">"' . print_r($asset, true) . '</div>'; // Shows the page in all its glory
-  
-  changes($asset);
-  
-  // $o[6] .= '<h3>After</h3>';
-  // $o[6] .= '<div style="white-space:pre;">"' . print_r($asset, true) . '</div>'; // Shows the page as it will be
-  
-  if ($changed == true) {
-    $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
-    if ($edit->editReturn->success == 'true') {
-      // $o[6] .= '<div class="s">Edit success</div>';
-      $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
-      $total['s']++;
-    } else {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
-      $total['f']++;
-    }
-  } else {
-    // $o[6] .= '<div class="k">No changes needed</div>';
-    $total['k']++;
-  }
-  
-  // $o[6] .= '</div>';
-}
 
 
 ?>
