@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
 if ($_GET['s']) {
   $cron = true;
