@@ -40,9 +40,12 @@ function edittest($asset) {
 function changes(&$asset) {
   global $changed;
   $changed = false;
-  if ($asset["metadata"]->title != trim($asset['metadata']->title)) {
+  $newTitle = trim($asset['metadata']->title);
+  $newTitle = preg_replace('/& /','&amp; ',$newTitle);
+  $newTitle = preg_replace('/< /','&lt; ',$newTitle);
+  if ($asset["metadata"]->title != $newTitle) {
     $changed = true;
-    $asset['metadata']->title = trim($asset['metadata']->title);
+    $asset['metadata']->title = $newTitle;
   }
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
     if ($field->identifier == 'description') {
