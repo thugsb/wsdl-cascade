@@ -61,24 +61,33 @@ function changes(&$asset) {
             foreach ($conf->pageRegions->pageRegion as $region) {
               if ($region->name == 'DEFAULT') {
                 echo '<div class="s">DEFAULT copied as CONTENT</div>';
-                $region->name = 'CONTENT';
-                array_push($regions, $region);
+                $newRegion = clone $region;
+                $newRegion->name = 'CONTENT';
+                array_push($regions, $newRegion);
               } elseif ($region->name == 'MARKETING-METRICS') {
                 echo '<div class="s">MARKETING-METRICS copied as JS-MARKETING</div>';
-                $region->name = 'JS-MARKETING';
-                array_push($regions, $region);
+                $newRegion = clone $region;
+                $newRegion->name = 'JS-MARKETING';
+                array_push($regions, $newRegion);
               } elseif ($region->name == 'RIGHT_SIDEBAR') {
                 echo '<div class="s">RIGHT_SIDEBAR copied</div>';
-                array_push($regions, $region);
+                $newRegion = clone $region;
+                array_push($regions, $newRegion);
               } elseif ($region->name == 'META-FACET') {
                 echo '<div class="s">META-FACET copied</div>';
-                array_push($regions, $region);
+                $newRegion = clone $region;
+                array_push($regions, $newRegion);
               } elseif ($region->name == 'LEFT_NAV') {
                 echo '<div class="k">LEFT_NAV probably does not matter</div>';
               } else {
                 echo '<div class="f">'.$region->name.' region needs attention</div>';
               }
             }
+            
+            foreach ($regions as $r) {
+              unset($r->id);
+            }
+            
             $newConf->pageRegions = new stdClass();
             $newConf->pageRegions->pageRegion = $regions;
           } else {
@@ -152,7 +161,7 @@ function readPage($client, $auth, $id, $type) {
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
     if ($_POST['asset'] == 'on') {
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+      echo '<h2><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h2>";
     }
     
     if (edittest($asset)) {
