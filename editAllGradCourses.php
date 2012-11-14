@@ -41,7 +41,8 @@ function changes(&$asset) {
   global $changed;
   $changed = false;
   $newTitle = trim($asset['metadata']->title);
-  $newTitle = preg_replace('/& /','&amp; ',$newTitle);
+  $newTitle = preg_replace('/& /','and ',$newTitle);
+  $newTitle = preg_replace('/&amp; /','and ',$newTitle);
   $newTitle = preg_replace('/< /','&lt; ',$newTitle);
   if ($asset["metadata"]->title != $newTitle) {
     $changed = true;
