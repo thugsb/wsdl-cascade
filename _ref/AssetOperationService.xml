@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:intf="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <!--+
@@ -111,6 +112,9 @@
 				     <sequence>
 					      <element name="authentication" type="impl:authentication"/>
 					      <element name="identifier" type="impl:identifier"/>
+					
+					<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
+					      <element name="unpublish" type="xsd:boolean"/>
 				     </sequence>
 			    </complexType>
 		   </element>
@@ -314,6 +318,29 @@
 			    </complexType>
 		   </element>
 		
+		   <element name="siteCopy">
+			    <complexType>
+				     <sequence>
+					      <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+					
+					<!-- ONE REQUIRED: The id or name of the site that needs to be copied. If both id and name is provided, id will be used. -->
+					      <element maxOccurs="1" minOccurs="0" name="originalSiteId" type="xsd:string"/>
+					      <element maxOccurs="1" minOccurs="0" name="originalSiteName" type="xsd:string"/>
+					
+					<!-- REQUIRED: The name of the new site -->
+					      <element maxOccurs="1" minOccurs="1" name="newSiteName" nillable="false" type="xsd:string"/>
+				     </sequence>
+			    </complexType>
+		   </element>
+		
+		   <element name="siteCopyResponse">
+			    <complexType>
+				     <sequence>
+					      <element name="siteCopyReturn" type="impl:operationResult"/>
+				     </sequence>
+			    </complexType>
+		   </element>
+		
 		   <element name="readAudits">
 			    <complexType>
 				     <sequence>
@@ -475,6 +502,52 @@
 				<!-- Whether or not to search template assets
 					 NOT REQUIRED default: false -->
 				     <element maxOccurs="1" minOccurs="0" name="searchTemplates" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchAssetFactories" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchPageConfigurationSets" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchContentTypes" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchDataDefinitions" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchWorkflowDefinitions" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchMetadataSets" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchPublishSets" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchConnectors" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchDestinations" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchTargets" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchTransports" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchUsers" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchGroups" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchRoles" type="xsd:boolean"/>
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+				     <element maxOccurs="1" minOccurs="0" name="searchSites" type="xsd:boolean"/>
+				
 			    </sequence>
 		   </complexType>
 		
@@ -621,6 +694,7 @@
 				     <enumeration value="block_TEXT"/>
 				     <enumeration value="block_XHTML_DATADEFINITION"/>
 				     <enumeration value="block_XML"/>
+				     <enumeration value="block_TWITTER_FEED"/>
 				     <enumeration value="connectorcontainer"/>
 				     <enumeration value="twitterconnector"/>
 				     <enumeration value="facebookconnector"/>
@@ -1270,7 +1344,9 @@
 				
 				<!-- NOT REQUIRED - default false -->
 				     <element maxOccurs="1" minOccurs="0" name="pathRepairTool" type="xsd:boolean"/>
-				
+				<!-- NOT REQUIRED - default false -->
+				     <element maxOccurs="1" minOccurs="0" name="databaseExportTool" type="xsd:boolean"/>
+							
 			    </sequence>
 		   </complexType>
 		
@@ -2954,6 +3030,40 @@
 			    </complexContent>
 		   </complexType>
 		
+		   <complexType name="twitterFeedBlock">
+			    <complexContent>
+				     <extension base="impl:block">
+					      <sequence>
+						<!-- The Account Name of the block
+							Required for Tweets Only and Tweets and Mentions query types -->
+						       <element maxOccurs="1" minOccurs="0" name="accountName" type="xsd:string"/>
+						<!-- The Search String for the block 
+							Required for Tweets Only and Tweets and Mentions search terms types-->
+						       <element maxOccurs="1" minOccurs="0" name="searchString" type="xsd:string"/>
+						<!-- The maximum number of tweets which can be shown 
+							REQUIRED-->
+						       <element maxOccurs="1" minOccurs="1" name="maxResults" type="xsd:nonNegativeInteger"/>
+						<!-- Should the twitter feed block use the default CSS style?
+							REQUIRED -->
+						       <element maxOccurs="1" minOccurs="1" name="useDefaultStyle" type="xsd:boolean"/>
+						<!--  Should the twitter feed block include the JQuery API -->
+					 	       <element maxOccurs="1" minOccurs="1" name="excludeJQuery" type="xsd:boolean"/>
+					 	<!-- The type of twitter feed block
+							 REQUIRED -->
+						       <element maxOccurs="1" minOccurs="1" name="queryType" type="impl:twitter-query-type"/>
+					      </sequence>
+				     </extension>
+			    </complexContent>
+		   </complexType>
+		
+		   <simpleType name="twitter-query-type">
+			    <restriction base="xsd:string">
+				     <enumeration value="user-only"/>
+				     <enumeration value="users-and-mentions"/>
+				     <enumeration value="search-terms"/>
+			    </restriction>
+		   </simpleType>
+		
 		<!-- End concrete block types -->
 		<!-- End types that extend expiring-asset -->
 		
@@ -3204,6 +3314,7 @@
 					      <element maxOccurs="1" minOccurs="1" name="transportContainer" nillable="true" type="impl:transportContainer"/>
 					      <element maxOccurs="1" minOccurs="1" name="workflowDefinition" nillable="true" type="impl:workflowDefinition"/>
 					      <element maxOccurs="1" minOccurs="1" name="workflowDefinitionContainer" nillable="true" type="impl:workflowDefinitionContainer"/>
+					      <element maxOccurs="1" minOccurs="1" name="twitterFeedBlock" nillable="true" type="impl:twitterFeedBlock"/>
 					<!-- other assets -->
 					      <element maxOccurs="1" minOccurs="1" name="site" nillable="true" type="impl:site"/>
 				     </choice>
@@ -3289,6 +3400,9 @@
 		   <complexType name="publish">
 			    <sequence>
 				     <element maxOccurs="1" minOccurs="1" name="identifier" type="impl:identifier"/>
+
+					<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
+				     <element name="unpublish" type="xsd:boolean"/>
 			    </sequence>
 		   </complexType>
 		
@@ -3332,6 +3446,17 @@
 			    </sequence>
 		   </complexType>
 		
+		   <complexType name="siteCopy">
+			    <sequence>
+				<!-- ONE REQUIRED: The id or name of the site that needs to be copied. If both id and name is provided, id will be used. -->
+				     <element maxOccurs="1" minOccurs="0" name="originalSiteId" type="xsd:string"/>
+				     <element maxOccurs="1" minOccurs="0" name="originalSiteName" type="xsd:string"/>
+				
+				<!-- REQUIRED: The name of the new site -->
+				     <element maxOccurs="1" minOccurs="1" name="newSiteName" nillable="false" type="xsd:string"/>
+			    </sequence>
+		   </complexType>
+
 		   <complexType name="operation">
 			    <choice>
 				     <element name="create" type="impl:create"/>
@@ -3345,6 +3470,7 @@
 				     <element name="checkOut" type="impl:checkOut"/>
 				     <element name="checkIn" type="impl:checkIn"/>
 				     <element name="copy" type="impl:copy"/>
+				     <element name="siteCopy" type="impl:siteCopy"/>
 			    </choice>
 		   </complexType>
 		
@@ -3507,6 +3633,16 @@
 	   
     </wsdl:message>
    
+    <wsdl:message name="siteCopyRequest">
+	     <wsdl:part element="impl:siteCopy" name="parameters"/>
+   
+    </wsdl:message>
+
+    <wsdl:message name="siteCopyResponse">
+	     <wsdl:part element="impl:siteCopyResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
     <wsdl:message name="moveRequest">
 	     <wsdl:part element="impl:move" name="parameters"/>
    
@@ -3630,6 +3766,11 @@
 		     <wsdl:output message="impl:copyResponse" name="copyResponse"/>
 	    </wsdl:operation>
 	  
+        <wsdl:operation name="siteCopy">
+		     <wsdl:input message="impl:siteCopyRequest" name="siteCopyRequest"/>
+		     <wsdl:output message="impl:siteCopyResponse" name="siteCopyResponse"/>
+	    </wsdl:operation>
+
 	    <wsdl:operation name="move">
 		     <wsdl:input message="impl:moveRequest" name="moveRequest"/>
 		     <wsdl:output message="impl:moveResponse" name="moveResponse"/>
@@ -3817,6 +3958,16 @@
             </wsdl:output>
         </wsdl:operation>
       
+	    <wsdl:operation name="siteCopy">
+            <wsdlsoap:operation soapAction=""/>
+            <wsdl:input name="siteCopyRequest">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="siteCopyResponse">
+                <wsdlsoap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
         <wsdl:operation name="move">
             <wsdlsoap:operation soapAction=""/>
             <wsdl:input name="moveRequest">
