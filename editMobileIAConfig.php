@@ -2,8 +2,8 @@
 $title = 'Add a MobileIA config to all CSets with Mobile';
 
 $type_override = 'pageconfigurationsetcontainer';
-$start_asset = '6833b8437f00000101b7715d707702d7';
-// $start_asset = '1697b0d97f00000101f92de526b6ff9b'; // All configs
+// $start_asset = '6833b8437f00000101b7715d707702d7';
+$start_asset = '1697b0d97f00000101f92de526b6ff9b'; // All configs
 
 // Optionally override the container/child types
 $asset_type = 'pageConfigurationSetContainer';
@@ -46,27 +46,30 @@ function changes(&$asset) {
   // if ($exists == 1) {
   foreach ($asset['pageConfigurations']->pageConfiguration as $conf) {
     if ($conf->name == 'MobileIA' ) {
-      // $conf->publishable = '0';
+      if ($conf->publishable != '1' && $conf->outputExtension != '.html') {
+        $conf->publishable = '1';
+        $conf->outputExtension = '.html';
+      
+        // Adding pageRegions
+        // $regions = array();
+        // $content = new stdClass();
+        // $content->name = 'CONTENT';
+        // $content->blockId = '2aa617d67f0000021312656b001c0b8b';
+        // $content->formatId = '6302a46f7f00000101b7715d4dda43ab';
+        // array_push($regions, $content);
+        // $conf->pageRegions = new stdClass();
+        // $conf->pageRegions->pageRegion = $regions;
     
-      // Adding pageRegions
-      // $regions = array();
-      // $content = new stdClass();
-      // $content->name = 'CONTENT';
-      // $content->blockId = '2aa617d67f0000021312656b001c0b8b';
-      // $content->formatId = '6302a46f7f00000101b7715d4dda43ab';
-      // array_push($regions, $content);
-      // $conf->pageRegions = new stdClass();
-      // $conf->pageRegions->pageRegion = $regions;
     
+        // foreach ($conf->pageRegions->pageRegion as $region) {
+        //   if ($region->name == 'CONTENT-BELOW') {
+        //     $region->formatId = 'e3c8357f7f00000225ca623f101bacd3';
+        //     $region->formatPath = '';
+        //   }
+        // }
     
-      foreach ($conf->pageRegions->pageRegion as $region) {
-        if ($region->name == 'CONTENT-BELOW') {
-          $region->formatId = 'e3c8357f7f00000225ca623f101bacd3';
-          $region->formatPath = '';
-        }
+        $changed = true;
       }
-    
-      $changed = true;
     }
   }
   // }
