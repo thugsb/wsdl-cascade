@@ -32,20 +32,16 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $data;
+  global $data, $asset_children_type, $asset_type;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
   foreach($asset["children"]->child as $child) {
-    if ($child->type == "page") {
-      if (pagetest($child))
-        readPage($client, $auth, array ('type' => 'page', 'id' => $child->id), $child->type);
-    } elseif ($child->type == "folder") {
+    if ($child->type == strtolower($asset_children_type)) {
+      readPage($client, $auth, array ('type' => $child->type, 'id' => $child->id), $child->type);
+    } elseif ($child->type === strtolower($asset_type)) {
       if (foldertest($child))
-        readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
-    } elseif ($child->type == "assetfactory") {
-      if (assetfactorytest($child))
-        readPage($client, $auth, array ('type' => 'assetfactory', 'id' => $child->id, $child->type));
+        readFolder($client, $auth, array ('type' => $child->type, 'id' => $child->id));
     }
   }
 }
@@ -54,12 +50,30 @@ function readPage($client, $auth, $id, $type) {
   global $asset_type, $asset_children_type, $data;
   $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->readReturn->success == 'true') {
-    $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
+    // For some reason the names of asset differ from the returned object
+    $returned_type = '';
+    foreach ($reply->readReturn->asset as $t => $a) {
+      if (!empty($a)) {$returned_type = $t;}
+    }
+    
+    $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($_POST['asset'] == 'on') {
       echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
     }
     
     if (edittest($asset)) {
+      echo '<div class="page">';
+      if ($_POST['before'] == 'on') {
+        echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
+          print_r($asset); // Shows the page in all its glory
+        echo '</label>';
+      }
+
+      echo "<script type='text/javascript'>var page_".$asset['id']." = ";
+      print_r(json_encode($asset));
+      echo '; console.log(page_'.$asset['id'].')';
+      echo "</script>";
+      
       editPage($client, $auth, $asset);
     }
     
@@ -71,17 +85,6 @@ function readPage($client, $auth, $id, $type) {
 
 function editPage($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed;
-  echo '<div class="page">';
-  if ($_POST['before'] == 'on') {
-    echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
-      print_r($asset); // Shows the page in all its glory
-    echo '</label>';
-  }
-  
-  echo "<script type='text/javascript'>var page_".$asset['id']." = ";
-  print_r(json_encode($asset));
-  echo '; console.log(page_'.$asset['id'].')';
-  echo "</script>";
   
   changes($asset);
   

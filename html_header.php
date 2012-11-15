@@ -51,7 +51,9 @@ if (!isset($data)) {$data = '';}
       <input name="client" placeholder="client" size="8" value="<?php echo $_POST['client']; ?>">
       <select name="type">
         <?php foreach($asset_types as $type) {
-          if ($type_override == $type || ($_POST['type'] == $type && $type_override == null)) {
+          if ($_POST['type'] == $type) {
+            echo '<option value="'.$type.'" selected="selected">'.$type.'</option>';
+          } elseif ($type_override == $type) {
             echo '<option value="'.$type.'" selected="selected">'.$type.'</option>';
           } else {
             echo '<option value="'.$type.'">'.$type.'</option>';
