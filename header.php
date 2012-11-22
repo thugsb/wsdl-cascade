@@ -32,13 +32,14 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $data, $asset_children_type, $asset_type;
+  global $asset_type, $asset_children_type, $data;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
   foreach($asset["children"]->child as $child) {
     if ($child->type == strtolower($asset_children_type)) {
-      readPage($client, $auth, array ('type' => $child->type, 'id' => $child->id), $child->type);
+      if (pagetest($child))
+        readPage($client, $auth, array ('type' => $child->type, 'id' => $child->id), $child->type);
     } elseif ($child->type === strtolower($asset_type)) {
       if (foldertest($child))
         readFolder($client, $auth, array ('type' => $child->type, 'id' => $child->id));
@@ -58,7 +59,9 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($_POST['asset'] == 'on') {
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+      $name = '';
+      if (!$asset['path']) {$name = $asset['name'];}
+      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     
     if (edittest($asset)) {
@@ -75,6 +78,7 @@ function readPage($client, $auth, $id, $type) {
       echo "</script>";
       
       editPage($client, $auth, $asset);
+      echo '</div>';
     }
     
   } else {
@@ -109,8 +113,6 @@ function editPage($client, $auth, $asset) {
     echo '<div class="k">No changes needed</div>';
     $total['k']++;
   }
-  
-  echo '</div>';
 }
 
 
