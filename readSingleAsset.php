@@ -37,7 +37,7 @@ if (array_key_exists('submit',$_POST)) {
       print_r(json_encode($asset));
       echo "; console.log('access')";
       echo "</script>";
-      echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
+      echo '<input type="checkbox" class="hidden" id="Rexpand'.$asset['id'].'"><label class="fullpage" for="Rexpand'.$asset['id'].'">';
       print_r($asset);
       echo '</label>';
     } else {
