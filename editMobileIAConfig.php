@@ -45,6 +45,15 @@ function changes(&$asset) {
   // }
   // if ($exists == 1) {
   foreach ($asset['pageConfigurations']->pageConfiguration as $conf) {
+    if ($conf->name == 'Mobile' ) {
+      if ($conf->publishable != '0') {
+        $conf->publishable = '0';
+        $changed = true;
+      }
+    }
+    if ($conf->name == 'Mobile Dev' ) {
+      echo 'Mobile Dev!';
+    }
     if ($conf->name == 'MobileIA' ) {
       if ($conf->publishable != '1' && $conf->outputExtension != '.html') {
         $conf->publishable = '1';
