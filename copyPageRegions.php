@@ -18,7 +18,7 @@ function foldertest($child) {
     return true;
 }
 function edittest($asset) {
-  if (preg_match('/^[-a-z]+\/index/', $asset['path']) ) // only courses for ugrad
+  // if (preg_match('/^[-a-z]+\/index/', $asset['path']) ) // only courses for ugrad
     return true;
   // This will miss womens-history/faculty/index
 }
@@ -33,6 +33,9 @@ function changes(&$asset) {
   }
   foreach ($asset['pageConfigurations']->pageConfiguration as $conf) {
     if ( $conf->name == 'HTML' ) {
+      if(!is_array($conf->pageRegions->pageRegion)) {
+        $conf->pageRegions->pageRegion = array($conf->pageRegions->pageRegion);
+      }
       foreach ($conf->pageRegions->pageRegion as $region) {
         if ($region->name == 'DEFAULT') {
           $blockId = $region->blockId;
@@ -44,11 +47,17 @@ function changes(&$asset) {
   }
   foreach ($asset['pageConfigurations']->pageConfiguration as $conf) {
     if ( $conf->name == 'MobileIA' ) {
+      if(!is_array($conf->pageRegions->pageRegion)) {
+        $conf->pageRegions->pageRegion = array($conf->pageRegions->pageRegion);
+      }
       foreach ($conf->pageRegions->pageRegion as $region) {
         if ($region->name == 'CONTENT') {
           if ($region->blockId != $blockId) {
             $region->blockId = $blockId;
             $region->blockPath = '';
+            $changed = true;
+          }
+          if ($region->formatId != $formatId) {
             $region->formatId = $formatId;
             $region->formatPath = '';
             $changed = true;
