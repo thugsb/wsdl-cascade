@@ -87,7 +87,9 @@ if (!isset($data)) {$data = '';}
       </div>
     </form>
   </nav>
-  <?php if (array_key_exists('submit',$_POST)) { //If form was submitted 
+  <?php 
+  if (isset($message)) {echo '<div class="k">'.$message.'</div>';}
+  if (array_key_exists('submit',$_POST)) { //If form was submitted 
     $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
     $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
     $ids = explode(',',$_POST['id']);
