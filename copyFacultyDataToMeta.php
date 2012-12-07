@@ -62,9 +62,11 @@ function changes(&$asset) {
   }
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == "first") {
+      $first_name = $fac_first->text;
       if ($dyn->fieldValues->fieldValue->value != $fac_first->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_first->text;
     } elseif ($dyn->name == "last") {
+      $last_name = $fac_last->text;
       if ($dyn->fieldValues->fieldValue->value != $fac_last->text) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $fac_last->text;
     } elseif ($dyn->name == "faculty-title") {
@@ -119,6 +121,11 @@ function changes(&$asset) {
       if ($dyn->fieldValues->fieldValue->value != $data[$links[3]]) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $data[$links[3]];
     }
+  }
+  $full_name = $first_name.' '.$last_name;
+  if ($asset['metadata']->title != $full_name) {
+    $changed = true;
+    $asset['metadata']->title = $full_name;
   }
 }
 
