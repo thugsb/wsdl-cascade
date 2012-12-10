@@ -83,7 +83,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset, $event_n) {
-  global $changed, $events, $event_dupes;
+  global $changed, $events, $event_dupes, $o, $cron;
   $changed = false;
   $detailid = explode('-eid',$event_n);
   for ($i = 0; $i < count($events->event); $i++) {
@@ -116,11 +116,15 @@ function changes(&$asset, $event_n) {
     $summary = $tidy->value;
     $summary = str_replace('&nbsp;','&#160;',$summary);
     $summary = str_replace('<p>&#160;</p>','',$summary);
-    echo '<div class="f">PHP Tidy: '.$tidy->errorBuffer.'</div>';
-    if ($asset["metadata"]->summary != $summary) {
-      $asset["metadata"]->summary = $summary;
-      $changed = true;
+    if ($cron) {
+      $o[1] .= '<div style="color:#900;">PHP Tidy: '.$tidy->errorBuffer."</div>";
+    } else {
+      echo '<div class="f">PHP Tidy: '.$tidy->errorBuffer.'</div>';
     }
+  }  
+  if ($asset["metadata"]->summary != $summary) {
+    $asset["metadata"]->summary = $summary;
+    $changed = true;
   }
   
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
@@ -221,12 +225,16 @@ function changes(&$asset, $event_n) {
 }
 
 
-include('html_header.php');
+if (!$cron) {
+  include('html_header.php');
+}
 
-echo '<input type="checkbox" class="hidden" id="EAexpand'.$asset['id'].'"><label class="fullpage" for="EAexpand'.$asset['id'].'">';
-  print_r($events); // Shows all the events in the XML feeds
-echo '</label>';
-// echo '<h1>Duplicate Events:<br/><pre>';print_r($event_dupes);echo '</pre></h1>';
+if (!$cron) {
+  echo '<input type="checkbox" class="hidden" id="EAexpand'.$asset['id'].'"><label class="fullpage" for="EAexpand'.$asset['id'].'">';
+    print_r($events); // Shows all the events in the XML feeds
+  echo '</label>';
+  // echo '<h1>Duplicate Events:<br/><pre>';print_r($event_dupes);echo '</pre></h1>';
+}
 
 foreach ($event_dupes as $event_n) {
   $detailid = explode('-eid',$event_n);
@@ -234,11 +242,15 @@ foreach ($event_dupes as $event_n) {
   $items = array();
   foreach($events->event as $event) {
     if ($event->detailid == $detailid) {
-      array_push($items, $event);
+      array_push($items, clone $event);
     }
   }
   if (count($items) != 2) {
-    echo '<div class="f">'.$detailid.' is duplicated '.count($items).' times.</div>';
+    if ($cron) {
+      $o[0] .= '<div style="color:#600;">'.$detailid.' is duplicated '.count($items)." times.</div>";
+    } else {
+      echo '<div class="f">'.$detailid.' is duplicated '.count($items).' times.</div>';
+    }
   } else {
     foreach ($items as $event) {
       $event->calendar = '';
@@ -246,11 +258,21 @@ foreach ($event_dupes as $event_n) {
     $obj0 = (string) print_r($items[0], true);
     $obj1 = (string) print_r($items[1], true);
     if ($obj0 != $obj1) {
-      echo '<div class="f">Events are different</div>';
-      echo '<input type="checkbox" class="hidden" id="EAexpand'.$detailid.'"><label class="fullpage" for="EAexpand'.$detailid.'">';
-        print_r($items);
-      echo '</label>';
-    } else {echo '<div class="k">Duplicate events with detailid "'.$detailid.'" are the same</div>';}
+      if ($cron) {
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Events are different with detailid: '.$detailid."</div>";
+      } else {
+        echo '<div class="f">Events are different</div>';
+        echo '<input type="checkbox" class="hidden" id="EAexpand'.$detailid.'"><label class="fullpage" for="EAexpand'.$detailid.'">';
+          print_r($items);
+        echo '</label>';
+      }
+    } else {
+      if ($cron) {
+        $o[3] .= '<div style="color:#009">Duplicate events with detailid '.$detailid." are the same</div>";
+      } else {
+        echo '<div class="k">Duplicate events with detailid "'.$detailid.'" are the same</div>';
+      }
+    }
   }
 }
 
@@ -260,7 +282,7 @@ foreach ($event_dupes as $event_n) {
 <?php
 
 function readFolder($client, $auth, $id) {
-  global $asset_type, $asset_children_type, $data;
+  global $asset_type, $asset_children_type, $data, $o, $cron;
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($folder->readReturn->success == 'true') {
     
@@ -268,18 +290,26 @@ function readFolder($client, $auth, $id) {
     if ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
-    if ($_POST['children'] == 'on') {
+    if ($cron) {
+      $o[4] .= '<div style="color:#009;">Folder: '.$asset["path"]."</div>";
+    }
+
+    if ($_POST['children'] == 'on' && !$cron) {
       echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
         print_r($asset['children']); // Shows all the children of the folder
       echo '</label>';
     }
     indexFolder($client, $auth, $asset);
-  } else {
-    echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+  } else {  
+    if ($cron) {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"]."</div>";
+    } else {
+      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+    }
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $event_names, $total;
+  global $asset_type, $asset_children_type, $data, $event_names, $total, $o, $cron;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
@@ -294,21 +324,29 @@ function indexFolder($client, $auth, $asset) {
         readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www-news-events') ), $asset_children_type, $event_n);
       }
     } else {
-      echo "<div class='k'>".$event_n." will be created.</div>";
+      // echo "<div class='k'>".$event_n." will be created.</div>";
       $destFolder = array ('type' => 'folder', 'id' => $asset['id']);
       $copyParams = array ("newName" => $event_n, 'destinationContainerIdentifier' => $destFolder, "doWorkflow" => false);
       // The asset you're $copying
       $copying = array ('type' => 'page', 'id' => '432f506e7f0000021b1b5de78cbd125c' );	
 
-      if ($_POST['action'] == 'edit') {
+      if ($_POST['action'] == 'edit' || $cron) {
         $copy = $client->copy ( array ('authentication' => $auth, 'identifier' => $copying, 'copyParameters' => $copyParams ) );
       }
       if ($copy->copyReturn->success == 'true') {
-        echo '<div class="s">Created successfully</div>';
+        if ($cron) {
+          $o[2] .= '<div style="color:#090;">Created successfully: '.$event_n."</div>";
+        } else {
+          echo '<div class="s">Created successfully: '.$event_n.'</div>';
+        }
         $total['s']++;
         readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www-news-events') ), $asset_children_type, $event_n);
       } else {
-        echo '<div class="f">Creation failed: '.$event_n.'<div>'.extractMessage($result).'</div></div>';
+        if ($cron) {
+          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation failed: '.$event_n.'<div>'.extractMessage($result)."</div></div>";
+        } else {
+          echo '<div class="f">Creation failed: '.$event_n.'<div>'.extractMessage($result).'</div></div>';
+        }
         $total['f']++;
       }
       
@@ -317,72 +355,97 @@ function indexFolder($client, $auth, $asset) {
 }
 
 function readPage($client, $auth, $id, $type, $event_n) {
-  global $asset_type, $asset_children_type, $data;
+  global $asset_type, $asset_children_type, $data, $o, $cron;
   $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
-    if ($_POST['asset'] == 'on') {
-      $name = '';
-      if (!$asset['path']) {$name = $asset['name'];}
+    $name = '';
+    if (!$asset['path']) {$name = $asset['name'];}
+    if ($_POST['asset'] == 'on' && !$cron) {
       echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+    }
+    if ($cron) {
+      $o[3] .= '<div style="color:#090;"><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></div>";
     }
     
     if (edittest($asset)) {
-      echo '<div class="page">';
-      if ($_POST['before'] == 'on') {
+      if (!$cron) {echo '<div class="page">';}
+      if ($_POST['before'] == 'on' && !$cron) {
         echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
           print_r($asset); // Shows the page in all its glory
         echo '</label>';
+        echo "<script type='text/javascript'>var page_".$asset['id']." = ";
+        print_r(json_encode($asset));
+        echo '; console.log(page_'.$asset['id'].')';
+        echo "</script>";
       }
 
-      echo "<script type='text/javascript'>var page_".$asset['id']." = ";
-      print_r(json_encode($asset));
-      echo '; console.log(page_'.$asset['id'].')';
-      echo "</script>";
       
       editPage($client, $auth, $asset, $event_n);
-      echo '</div>';
+      if (!$cron) {echo '</div>';}
     }
     
-  } else {
-    echo '<div class="f">Failed to read page: '.$id.'</div>';
+  } else {  
+    if ($cron) {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id."</div>";
+    } else {
+      echo '<div class="f">Failed to read page: '.$id.'</div>';
+    }
   }
 }
 
 
 function editPage($client, $auth, $asset, $event_n) {
-  global $total, $asset_type, $asset_children_type, $data, $changed;
+  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   
   changes($asset, $event_n);
   
-  if ($_POST['after'] == 'on') {
+  if ($_POST['after'] == 'on' && !$cron) {
     echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
       print_r($asset); // Shows the page as it will be
     echo '</label>';
   }
   
   if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
     }
     if ($edit->editReturn->success == 'true') {
-      echo '<div class="s">Edit success</div>';
+      if ($cron) {
+        $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+      } else {
+        echo '<div class="s">Edit success</div>';
+      }
       $total['s']++;
       
       $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'unpublish' => false ) );
       if ($publish->publishReturn->success == 'true') {
-        echo '<div class="s">Publish success</div>';
+        if ($cron) {
+          $o[2] .= '<div style="color:#090;">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        } else {
+          echo '<div class="s">Publish success</div>';
+        }
       } else {
-        echo '<div class="f">Publish failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+        if ($cron) {
+          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Publish failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        } else {
+          echo '<div class="f">Publish failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+        }
         $total['f']++;
       }
       
     } else {
-      echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+      if ($cron) {
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+      } else {
+        echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+      }
       $total['f']++;
     }
-  } else {
-    echo '<div class="k">No changes needed</div>';
+  } else {  
+    if (!$cron) {
+      echo '<div class="k">No changes needed</div>';
+    }
     $total['k']++;
   }
 }
