@@ -41,6 +41,7 @@ if (!isset($data)) {$data = '';}
   .odd {background:#eee;}
   .asset {padding:1em;}
   </style>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 </head>
 <body>
   <nav>
