@@ -99,6 +99,7 @@ function changes(&$asset, $event_n) {
     $data = (string)$object->$ofield;
     $data = str_replace('&nbsp;','&#160;',$data);
     $data = str_replace('& ','and ',$data);
+    $data = str_replace('&',' and ',$data);
     $data = strip_tags($data);
     // echo $data;
     if ($asset["metadata"]->$afield != $data) {
@@ -224,6 +225,29 @@ function changes(&$asset, $event_n) {
 
 }
 
+if (array_key_exists('submit',$_POST)) {
+  $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
+  $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
+
+  $all_event_assets = array();
+  // _archived
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '1507b8a37f000002357a73247c2b2ab9') ) );
+  if ($folder->readReturn->success == 'true') {
+    $asset = ( array ) $folder->readReturn->asset->folder;
+    foreach($asset["children"]->child as $child) {
+      array_push($all_event_assets, $child->path);
+    }
+  }
+  // _inactive
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '15082dd87f000002357a73241ce9250e') ) );
+  if ($folder->readReturn->success == 'true') {
+    $asset = ( array ) $folder->readReturn->asset->folder;
+    foreach($asset["children"]->child as $child) {
+      array_push($all_event_assets, $child->path);
+    }
+  }
+}
+
 
 if (!$cron) {
   include('html_header.php');
@@ -309,7 +333,7 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $event_names, $total, $o, $cron;
+  global $asset_type, $asset_children_type, $data, $event_names, $total, $o, $cron, $all_event_assets;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
@@ -323,6 +347,16 @@ function indexFolder($client, $auth, $asset) {
       if (pagetest($event_n)) {
         readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www-news-events') ), $asset_children_type, $event_n);
       }
+
+
+    } else if (in_array($asset['path'].'/_archived/'.$event_n, $all_event_assets) ) {
+      echo '<h4>'.$event_n.'</h4><div class="k">Archived</div>';
+      $total['k']++;
+    } else if (in_array($asset['path'].'/_inactive/'.$event_n, $all_event_assets) ) {
+      echo '<h4>'.$event_n.'</h4><div class="k">Inactive</div>';
+      $total['k']++;
+
+
     } else {
       // echo "<div class='k'>".$event_n." will be created.</div>";
       $destFolder = array ('type' => 'folder', 'id' => $asset['id']);
