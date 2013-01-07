@@ -234,18 +234,28 @@ if (array_key_exists('submit',$_POST)) {
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '1507b8a37f000002357a73247c2b2ab9') ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
+    if (!is_array($asset["children"]->child)) {
+      $asset["children"]->child=array($asset["children"]->child);
+    }
     foreach($asset["children"]->child as $child) {
-      array_push($all_event_assets, $child->path);
+      array_push($all_event_assets, $child->path->path);
     }
   }
   // _inactive
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '15082dd87f000002357a73241ce9250e') ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
+    if (!is_array($asset["children"]->child)) {
+      $asset["children"]->child=array($asset["children"]->child);
+    }
     foreach($asset["children"]->child as $child) {
-      array_push($all_event_assets, $child->path);
+      array_push($all_event_assets, $child->path->path);
     }
   }
+  // Show the Archived and Inactive events
+  // echo '<input type="checkbox" class="hidden" id="archived_inactive"><label class="fullpage" for="archived_inactive">';
+  //   print_r($all_event_assets);
+  // echo '</label>';
 }
 
 
