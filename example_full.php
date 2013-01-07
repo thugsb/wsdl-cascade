@@ -39,7 +39,7 @@ include('html_header.php');
 <?php
 
 function readFolder($client, $auth, $id) {
-  global $asset_type, $asset_children_type, $data;
+  global $asset_type, $asset_children_type, $data, $o, $cron;
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($folder->readReturn->success == 'true') {
     
@@ -58,7 +58,7 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data;
+  global $asset_type, $asset_children_type, $data, $o, $cron;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
@@ -74,7 +74,7 @@ function indexFolder($client, $auth, $asset) {
 }
 
 function readPage($client, $auth, $id, $type) {
-  global $asset_type, $asset_children_type, $data;
+  global $asset_type, $asset_children_type, $data, $o, $cron;
   $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
@@ -108,7 +108,7 @@ function readPage($client, $auth, $id, $type) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total, $asset_type, $asset_children_type, $data, $changed;
+  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   
   changes($asset);
   
