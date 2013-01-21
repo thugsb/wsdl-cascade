@@ -10,8 +10,22 @@ $start_asset = '682153de7f00000269720b2a7e4cd04f';
 // $asset_children_type = 'assetFactory';
 
 function pagetest($child) {
-  if (preg_match('/[a-z]/', $child->path->path) )
+  global $o, $cron;
+  $event_date = strtotime( substr($child->path->path,17,10) );
+  if ($cron) {
+    $o[3] .= '<h4>'.$child->path->path.'</h4>';
+  }
+  if (preg_match('/[0-9]\/20/', $child->path->path) && $event_date < time()-48*3600 ) {
     return true;
+  } else {
+    if (!$cron) {
+      echo $child->path->path.'<br/>';
+      // echo substr($child->path->path,17,10);
+      // echo '<br/>'.$event_date.'<br/>';
+      // echo time()-48*3600;
+      // echo '<br/>';
+    }
+  }
 }
 function foldertest($child) {
   return false;
@@ -22,25 +36,13 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed, $total;
-  $changed = false;
-  
-  $event_date = strtotime( substr($asset['name'],0,10) );
-  // echo $event_date.'<br> ';
-  // echo time().'<br> ';
-  // echo time()-24*3600;
-  if ($event_date < time()-48*3600) {
-    $changed = true;
-  } else {
-    echo '<div class="k">This event is too recent, exiting...</div>';
-    $total['k']++;
-    echo '<div class="totals">Successes: '.$total['s'].' Failures: '.$total['f'].' Skipped: '.$total['k'].'</div>';
-    exit;
-  }
+  global $changed, $total, $cron;
+  $changed = true;
 }
 
 
-include('html_header.php');
+if (!$cron)
+  include('html_header.php');
 
 ?>
 
@@ -53,17 +55,23 @@ function readFolder($client, $auth, $id) {
   if ($folder->readReturn->success == 'true') {
     
     $asset = ( array ) $folder->readReturn->asset->$asset_type;
-    if ($_POST['folder'] == 'on') {
+    if ($cron) {
+      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+    } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
-    if ($_POST['children'] == 'on') {
+    if ($_POST['children'] == 'on' && !$cron) {
       echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
         print_r($asset["children"]); // Shows all the children of the folder
       echo '</label>';
     }
     indexFolder($client, $auth, $asset);
   } else {
-    echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+    if ($cron) {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+    } else {
+      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+    }
   }
 }
 function indexFolder($client, $auth, $asset) {
@@ -87,31 +95,39 @@ function readPage($client, $auth, $id, $type) {
   $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
-    if ($_POST['asset'] == 'on') {
-      $name = '';
-      if (!$asset['path']) {$name = $asset['name'];}
+    $name = '';
+    if (!$asset['path']) {$name = $asset['name'];}
+    if ($cron) {
+      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+    } elseif ($_POST['asset'] == 'on') {
       echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     
     if (edittest($asset)) {
-      echo '<div class="page">';
-      if ($_POST['before'] == 'on') {
+      if (!$cron) {echo '<div class="page">';}
+      if ($_POST['before'] == 'on' && !$cron) {
         echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
           print_r($asset); // Shows the page in all its glory
         echo '</label>';
       }
 
-      echo "<script type='text/javascript'>var page_".$asset['id']." = ";
-      print_r(json_encode($asset));
-      echo '; console.log(page_'.$asset['id'].')';
-      echo "</script>";
+      if (!$cron) {
+        echo "<script type='text/javascript'>var page_".$asset['id']." = ";
+        print_r(json_encode($asset));
+        echo '; console.log(page_'.$asset['id'].')';
+        echo "</script>";
+      }
       
       editPage($client, $auth, $asset);
-      echo '</div>';
+      if (!$cron) {echo '</div>';}
     }
     
   } else {
-    echo '<div class="f">Failed to read page: '.$id.'</div>';
+    if ($cron) {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
+    } else {
+      echo '<div class="f">Failed to read page: '.$id.'</div>';
+    }
   }
 }
 
@@ -121,14 +137,14 @@ function editPage($client, $auth, $asset) {
   
   changes($asset);
   
-  if ($_POST['after'] == 'on') {
+  if ($_POST['after'] == 'on' && !$cron) {
     echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
       print_r($asset); // Shows the page as it will be
     echo '</label>';
   }
 
   if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'1507b8a37f000002357a73247c2b2ab9'), 'doWorkflow'=>false) ) );
     }
     if ($move->moveReturn->success == 'true') {
@@ -147,7 +163,7 @@ function editPage($client, $auth, $asset) {
       $total['f']++;
     }
   } else {
-    echo '<div class="k">No changes needed</div>';
+    if (!$cron) {echo '<div class="k">No changes needed</div>';}
     $total['k']++;
   }
 }
