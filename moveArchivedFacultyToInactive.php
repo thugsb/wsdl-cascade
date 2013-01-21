@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 $title = 'Move Archived Faculty to the _inactive folder';
 
 // $type_override = 'page';
@@ -20,7 +21,15 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  $asset["metadata"]->teaser = 'test';
+  global $changed, $total, $cron;
+  $changed = false;
+  foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
+    if ($dyn->name == 'status') {
+      if ($dyn->fieldValues->fieldValue->value != 'Active') {
+        $changed = true;
+      }
+    }
+  }
 }
 
 if (!$cron)
@@ -100,7 +109,7 @@ function readPage($client, $auth, $id) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total, $asset_type, $asset_children_type, $data, $o, $cron;
+  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   if (!$cron) {echo '<div class="page">';}
   if ($_POST['before'] == 'on' && !$cron) {
     echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
@@ -115,15 +124,17 @@ function editPage($client, $auth, $asset) {
     echo "</script>";
   }
   
+  changes($asset);
+  
   if ($_POST['after'] == 'on' && !$cron) {
     echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
       print_r($asset); // Shows the page as it will be
     echo '</label>';
   }
 
-  if ($asset["structuredData"]->structuredDataNodes->structuredDataNode[0]->structuredDataNodes->structuredDataNode[6]->text == "Archived") {
+  if ($changed == true) {
     if (!$cron) {echo '<div class="f">This faculty is inactive</div>';}
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'6824bab27f00000101b7715d4c99fd4c'), 'doWorkflow'=>false) ) );
       if ($move->moveReturn->success == 'true') {
         if ($cron) {
