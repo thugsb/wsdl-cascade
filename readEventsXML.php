@@ -69,6 +69,8 @@ $start_asset = '682153de7f00000269720b2a7e4cd04f';
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
+$publish = array();
+
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
 // $asset_children_type = 'assetFactory';
@@ -225,10 +227,18 @@ function changes(&$asset, $event_n) {
 
 }
 
-if (array_key_exists('submit',$_POST)) {
-  $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
-  $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
-
+if (array_key_exists('submit',$_POST) || $cron) {
+  if ($cron) {
+    $o[1] .= 'asdasdasdasd';
+  }
+  if ($cron) {
+    $client = new SoapClient ( 'https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl', array ('trace' => 1 ) );	
+    $auth = array ('username' => $username, 'password' => $password );  
+  } else {
+    $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );
+    $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
+  }
+  
   $all_event_assets = array();
   // _archived
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '1507b8a37f000002357a73247c2b2ab9') ) );
@@ -261,6 +271,25 @@ if (array_key_exists('submit',$_POST)) {
 
 if (!$cron) {
   include('html_header.php');
+}
+
+
+foreach ($publish as $id) {
+  $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $id), 'unpublish' => false ) );
+  if ($publish->publishReturn->success == 'true') {
+    if ($cron) {
+      $o[2] .= '<div style="color:#090;">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
+    } else {
+      echo '<div class="s">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
+    }
+  } else {
+    if ($cron) {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Publish failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
+    } else {
+      echo '<div class="f">Publish failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a><div>'.extractMessage($result).'</div></div>';
+    }
+    $total['f']++;
+  }
 }
 
 if (!$cron) {
@@ -440,7 +469,7 @@ function readPage($client, $auth, $id, $type, $event_n) {
 
 
 function editPage($client, $auth, $asset, $event_n) {
-  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
+  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron, $publish;
   
   changes($asset, $event_n);
   
@@ -462,21 +491,7 @@ function editPage($client, $auth, $asset, $event_n) {
       }
       $total['s']++;
       
-      $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'unpublish' => false ) );
-      if ($publish->publishReturn->success == 'true') {
-        if ($cron) {
-          $o[2] .= '<div style="color:#090;">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
-        } else {
-          echo '<div class="s">Publish success</div>';
-        }
-      } else {
-        if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Publish failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
-        } else {
-          echo '<div class="f">Publish failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
-        }
-        $total['f']++;
-      }
+      array_push($publish, $asset["id"]);
       
     } else {
       if ($cron) {

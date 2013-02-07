@@ -3,14 +3,8 @@
 error_reporting(0);
 
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
-if ($_GET['s']) {
-  $cron = true;
-  include($_GET['s']);
-} else {
-  exit;
-}
 
-
+$o = array('','','','','');
 
 include("web_services_util.php");
 
@@ -21,11 +15,19 @@ if (file_exists($_GET['c'])) {
   exit;
 }
 
+if ($_GET['s']) {
+  $cron = true;
+  include($_GET['s']);
+} else {
+  exit;
+}
+
+
+
+
+
 $asset_types = array("folder", "page", "assetfactory", "assetfactorycontainer", "block", "block_FEED", "block_INDEX", "block_TEXT", "block_XHTML_DATADEFINITION", "block_XML", "connectorcontainer", "twitterconnector", "facebookconnector", "wordpressconnector", "googleanalyticsconnector", "contenttype", "contenttypecontainer", "destination", "file", "group", "message", "metadataset", "metadatasetcontainer", "pageconfigurationset", "pageconfiguration", "pageregion", "pageconfigurationsetcontainer", "publishset", "publishsetcontainer", "reference", "role", "datadefinition", "datadefinitioncontainer", "format", "format_XSLT", "format_SCRIPT", "site", "sitedestinationcontainer", "symlink", "target", "template", "transport", "transport_fs", "transport_ftp", "transport_db", "transportcontainer", "user", "workflow", "workflowdefinition", "workflowdefinitioncontainer");
 $total = array('s' => 0, 'f' => 0, 'k' => 0);
-
-$o = array('','','','','');
-
 
 // If it's not a folder, you need to set the correct $asset_type (camelCase)
 if (!isset($asset_type)) {
