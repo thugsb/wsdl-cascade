@@ -24,6 +24,7 @@ if (!isset($data)) {$data = '';}
   .hidden {display:none;}
   .s {color:#090;}
   .k {color:#009;}
+  .d {color:#900;}
   .f {padding:1em;font-size:1em;color:#fff;background:#c00;}
   .left_label {display:inline-block;width:50%;}
   
