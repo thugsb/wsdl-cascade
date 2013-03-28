@@ -1,6 +1,9 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
+// To update for each year, change this and change the $from and $to (below)
+$yearpath = 'events/2012-2013/';
+
 // Function from http://php.net/manual/en/function.simplexml-load-string.php#48814
 function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
   // convert SimpleXML objects into DOM ones
@@ -32,9 +35,6 @@ if (isset($_GET['to'])) {
 
 $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 $private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
-// The full year
-// $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from=2012-09-01&to=2013-08-31', 'SimpleXMLElement',LIBXML_NOCDATA);
-// $private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from=2012-09-01&to=2013-08-31', 'SimpleXMLElement',LIBXML_NOCDATA);
 
 // Merging the private into the public means the public events will be the ones created
 simplexml_merge($events, $private_events);
@@ -66,60 +66,23 @@ $title = 'Delete event pages that have been removed from the events xml feeds';
 $type_override = 'folder';
 $start_asset = '682153de7f00000269720b2a7e4cd04f';
 
-$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
+$message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
 $children = array();
 
-function pagetest($child) {
-  // global $event_names;
-  // if (in_array($child->name, $event_names))
-    return false;
-}
-function foldertest($child) {
-  // if (preg_match('/^_[a-z]/', $child->path->path))
-    return false;
-}
-function edittest($asset) {
-  // if (preg_match('/[a-z]/', $asset["contentTypePath"]))
-    return true;
-}
-
-function changes(&$asset) {
-  /* If you wish to use $changed, make sure it's global, and set it to false. 
-   * When something is changed, it becomes true: */
-  // global $changed;
-  // $changed = false;
-  // if ($asset["metadata"]->teaser != 'test') {$changed = true;}
-  // $asset["metadata"]->teaser = 'test';
-}
 
 
-if (!$cron) {
+
+if (!isset($cron)) {
+  $cron=false;
   include('html_header.php');
-}
-
-foreach ($children as $child) {
-  $name = str_replace('events/2012-2013/','',$child->path->path);
-  if (in_array($name, $event_names) ) {
-    echo '<div class="k">'.$name.' will be kept</div>';
-  } else {
-    if ($_POST['action'] == 'edit' || $cron) {
-      $delete = $client->delete ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ) ) );
-      if ($delete->deleteReturn->success == 'true') {
-        echo '<div class="s">'.$name.' was deleted</div>';
-      } else {
-        echo '<div class="f">'.$name.' could not be deleted</div>';
-        print_r($delete);
-      }
-    } else {
-      echo '<div class="d">'.$name.' will be deleted</div>';
-    }
-  }
 }
 
 if (!$cron) {
   echo '<input type="checkbox" class="hidden" id="EAexpand'.$asset['id'].'"><label class="fullpage" for="EAexpand'.$asset['id'].'">';
+    echo 'Pages in cascade: ';
     print_r($children);
+    echo '<br><br>Events in XML: ';
     print_r($event_names);
     // print_r($events); // Shows all the events in the XML feeds
   echo '</label>';
@@ -140,96 +103,98 @@ function readFolder($client, $auth, $id) {
     if ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
-    if ($_POST['children'] == 'on') {
+    if ($cron) {
+      $o[4] .= '<div style="color:#009;">Folder: '.$asset["path"]."</div>";
+    }
+    
+    if ($_POST['children'] == 'on' && !$cron) {
       echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
         print_r($asset["children"]); // Shows all the children of the folder
       echo '</label>';
     }
     indexFolder($client, $auth, $asset);
   } else {
-    echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+    if ($cron) {
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"]."</div>";
+    } else {
+      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+    }
   }
 }
+
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $o, $cron, $children;
+  global $asset_type, $asset_children_type, $data, $o, $cron, $children, $yearpath, $event_names, $total;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
   foreach($asset["children"]->child as $child) {
-    if ($child->path->path != 'events/2012-2013/_archived' && $child->path->path != 'events/2012-2013/_inactive' && $child->path->path != 'events/2012-2013/index') {
+    if ($child->path->path != $yearpath.'_archived' && $child->path->path != $yearpath.'_inactive' && $child->path->path != $yearpath.'index') {
       array_push($children, $child);
     }
-    if ($child->type == strtolower($asset_children_type)) {
-      if (pagetest($child))
-        readPage($client, $auth, array ('type' => $child->type, 'id' => $child->id), $child->type);
-    } elseif ($child->type === strtolower($asset_type)) {
-      if (foldertest($child))
-        readFolder($client, $auth, array ('type' => $child->type, 'id' => $child->id));
-    }
   }
-}
-
-function readPage($client, $auth, $id, $type) {
-  global $asset_type, $asset_children_type, $data, $o, $cron;
-  $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
-  if ($reply->readReturn->success == 'true') {
-    $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
-    if ($_POST['asset'] == 'on') {
-      $name = '';
-      if (!$asset['path']) {$name = $asset['name'];}
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
-    }
-    
-    if (edittest($asset)) {
-      echo '<div class="page">';
-      if ($_POST['before'] == 'on') {
-        echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
-          print_r($asset); // Shows the page in all its glory
-        echo '</label>';
+  
+  
+  foreach ($children as $child) {
+    $name = str_replace($yearpath,'',$child->path->path);
+    if (in_array($name, $event_names) ) {
+      if ($cron) {
+        $o[3] .= $name.'<br>';
+      } else {
+        echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
       }
-
-      echo "<script type='text/javascript'>var page_".$asset['id']." = ";
-      print_r(json_encode($asset));
-      echo '; console.log(page_'.$asset['id'].')';
-      echo "</script>";
-      
-      editPage($client, $auth, $asset);
-      echo '</div>';
-    }
-    
-  } else {
-    echo '<div class="f">Failed to read page: '.$id.'</div>';
-  }
-}
-
-
-function editPage($client, $auth, $asset) {
-  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
-  
-  changes($asset);
-  
-  if ($_POST['after'] == 'on') {
-    echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
-      print_r($asset); // Shows the page as it will be
-    echo '</label>';
-  }
-  
-  if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
-      $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
-    }
-    if ($edit->editReturn->success == 'true') {
-      echo '<div class="s">Edit success</div>';
-      $total['s']++;
+      $total['k']++;
     } else {
-      echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
-      $total['f']++;
+      if ($_POST['action'] == 'edit' || $cron) {
+        $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
+        if ($publish->publishReturn->success == 'true') {
+          if ($cron) {
+            $o[2] .= $name.' was unpublished<br>';
+          } else {
+            echo '<div class="s">'.$name.' was unpublished</div>';
+          }
+          $total['s']++;
+        } else {
+          if ($cron) {
+            $o[1] .= $name.' FAILED to unpublish<br>';
+          } else {
+            echo '<div class="f">'.$name.' could not be unpublished</div>';
+            print_r($publish);
+          }
+          $total['f']++;
+        }
+      } else {
+        echo '<div class="d">'.$name.' will be deleted</div>';
+        $total['k']++;
+      }
     }
-  } else {
-    echo '<div class="k">No changes needed</div>';
-    $total['k']++;
   }
-}
+  sleep(10);
+  foreach ($children as $child) {
+    $name = str_replace($yearpath,'',$child->path->path);
+    if (!in_array($name, $event_names) ) {
+      if ($_POST['action'] == 'edit' || $cron) {
+        $delete = $client->delete ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ) ) );
+        if ($delete->deleteReturn->success == 'true') {
+          if ($cron) {
+            $o[2] .= $name.' was deleted<br>';
+          } else {
+            echo '<div class="s">'.$name.' was deleted</div>';
+          }
+          $total['s']++;
+        } else {
+          if ($cron) {
+            $o[1] .= $name.' FAILED to delete<br>';
+          } else {
+            echo '<div class="f">'.$name.' could not be deleted</div>';
+          }
+          print_r($delete);
+          $total['f']++;
+        }
+      }
+    }
+  }
 
+  
+}
 
 ?>
