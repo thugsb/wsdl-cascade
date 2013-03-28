@@ -1,1 +1,6 @@
 _credentials.php
+.htaccess
+index.php
+info.php
+metaDataSets.html
+readFolderMetadataSet.php
