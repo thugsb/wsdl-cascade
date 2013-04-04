@@ -389,10 +389,18 @@ function indexFolder($client, $auth, $asset) {
 
 
     } else if (in_array($asset['path'].'/_archived/'.$event_n, $all_event_assets) ) {
-      echo '<h4>'.$event_n.'</h4><div class="k">Archived</div>';
+      if ($cron) {
+        $o[3] .= '<h4>'.$event_n.' (Archived)</h4>';
+      } else {
+        echo '<h4>'.$event_n.'</h4><div class="k">Archived</div>';
+      }
       $total['k']++;
     } else if (in_array($asset['path'].'/_inactive/'.$event_n, $all_event_assets) ) {
-      echo '<h4>'.$event_n.'</h4><div class="k">Inactive</div>';
+      if ($cron) {
+        $o[3] .= '<h4>'.$event_n.' (Inactive)</h4>';
+      } else {
+        echo '<h4>'.$event_n.'</h4><div class="k">Inactive</div>';
+      }
       $total['k']++;
 
 
