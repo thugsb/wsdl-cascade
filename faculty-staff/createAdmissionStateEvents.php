@@ -6,7 +6,7 @@ $start_asset = '1c07f8bb7f0000024124dc483414e60f';
 
 
 
-include('html_header.php');
+include('../html_header.php');
 
 function readFolder($client, $auth, $id) {
   global $total;

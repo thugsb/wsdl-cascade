@@ -142,6 +142,6 @@ $data = array (
 
 
 if (!$cron)
-  include('header.php');
+  include('../header.php');
 
 ?>

@@ -10,7 +10,7 @@
 </head>
 <body>
 <?php
-include("web_services_util.php");
+include("../web_services_util.php");
 
 $client = new SoapClient ( "https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl", array ('trace' => 1 ) );	
 $auth = array ('username' => '', 'password' => '' );

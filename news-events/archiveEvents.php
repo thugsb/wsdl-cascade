@@ -42,7 +42,7 @@ function changes(&$asset) {
 
 
 if (!$cron)
-  include('html_header.php');
+  include('../html_header.php');
 
 ?>
 

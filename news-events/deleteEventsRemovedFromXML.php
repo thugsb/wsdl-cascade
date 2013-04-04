@@ -75,7 +75,7 @@ $children = array();
 
 if (!isset($cron)) {
   $cron=false;
-  include('html_header.php');
+  include('../html_header.php');
 }
 
 if (!$cron) {

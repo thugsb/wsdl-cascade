@@ -189,5 +189,5 @@ function addEvent($id, $pos, $event) {
   $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[1]->text = $event["End"];
 }
 
-include('html_header.php');
+include('../html_header.php');
 ?>

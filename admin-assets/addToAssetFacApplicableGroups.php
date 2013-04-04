@@ -25,6 +25,6 @@ function changes(&$asset) {
 
 
 if (!$cron)
-  include('header.php');
+  include('../header.php');
 
 ?>

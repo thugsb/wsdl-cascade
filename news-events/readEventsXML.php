@@ -270,7 +270,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
 
 
 if (!$cron) {
-  include('html_header.php');
+  include('../html_header.php');
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-include("web_services_util.php");
+include("../web_services_util.php");
 
 $client = new SoapClient ( "http://dev.cascadeserver.com/ws/services/AssetOperationService?wsdl", array ('trace' => 1 ) );  
 $auth = array ('username' => '', 'password' => '' );

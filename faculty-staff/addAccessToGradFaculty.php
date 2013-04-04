@@ -22,7 +22,7 @@ function edittest($asset) {
     return true;
 }
 
-include('html_header.php');
+include('../html_header.php');
 
 
 

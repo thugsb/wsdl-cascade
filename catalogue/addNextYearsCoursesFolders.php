@@ -11,7 +11,7 @@ $prev_year = '/2011-2012$/';
 $next_year = "2012-2013";
 
 
-include('html_header.php');
+include('../html_header.php');
 
 function readFolder($client, $auth, $id) {
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
