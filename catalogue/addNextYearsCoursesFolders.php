@@ -1,14 +1,14 @@
 <?php
 $title = 'Copy the base asset used for course folders';
 /* This script will copy the base asset used for course folders into the /courses/ folder
-   of each discipline. Just change $prev_year and $next_year.
+   of each discipline. Just change $lastyear and $nextyear.
 */
 
 // $type_override = 'page';
 $start_asset = '817373157f00000101f92de5bea1554a';
 
-$prev_year = '/2011-2012$/';
-$next_year = "2012-2013";
+$lastyear = '/2012-2013$/';
+$nextyear = "2013-2014";
 
 
 include('../html_header.php');
@@ -31,13 +31,13 @@ function readFolder($client, $auth, $id) {
 }
 
 function indexFolder($client, $auth, $asset) {
-  global $total, $prev_year, $next_year;
+  global $total, $lastyear, $nextyear;
   if (is_array($asset["children"]->child)) {
     foreach($asset["children"]->child as $child) {
       if ($child->type == "folder") {
         
         // The current/previous year:
-        if (preg_match($prev_year, $child->path->path)) {
+        if (preg_match($lastyear, $child->path->path)) {
           
           // Copy asset
           if ($_POST['asset'] == 'on') {
@@ -46,7 +46,7 @@ function indexFolder($client, $auth, $asset) {
           
           $destFolder = array ('type' => 'folder', 'id' => $asset["id"]);
           // The next year:
-          $copyParams = array ("newName" => $next_year, 'destinationContainerIdentifier' => $destFolder, "doWorkflow" => false);
+          $copyParams = array ("newName" => $nextyear, 'destinationContainerIdentifier' => $destFolder, "doWorkflow" => false);
           $baseAsset = array ('type' => 'folder', 'id' => '857434137f00000101f92de5518ef553' );
           $params = array ('authentication' => $auth, 'identifier' => $baseAsset, 'copyParameters' => $copyParams );
           
