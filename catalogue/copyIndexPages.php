@@ -30,21 +30,21 @@ function changes(&$asset) {
   global $changed, $nextyear, $descBlockID;
   $changed = true;
   
-  echo $descBlockID;
-  
-  foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $group) {
-    if ($group->identifier == 'main_column') {
-      foreach ($group->structuredDataNodes->structuredDataNode as $field) {
-        if ($field->identifier == 'data-definition-block') {
-          if ($field->blockId != $descBlockID) {
-            $field->blockId = $descBlockID;
-            $field->blockPath = '';
-            $changed = true;
-          }
-        }
-      }
-    }
-  }
+  // echo $descBlockID;
+  // 
+  // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $group) {
+  //   if ($group->identifier == 'main_column') {
+  //     foreach ($group->structuredDataNodes->structuredDataNode as $field) {
+  //       if ($field->identifier == 'data-definition-block') {
+  //         if ($field->blockId != $descBlockID) {
+  //           $field->blockId = $descBlockID;
+  //           $field->blockPath = '';
+  //           $changed = true;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 
@@ -79,11 +79,11 @@ function indexFolder($client, $auth, $asset) {
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
-  foreach($asset["children"]->child as $child) {
-    if (preg_match('/description-'.$nextyear.'$/',$child->path->path)) {
-      $descBlockID = $child->id;
-    }
-  }
+  // foreach($asset["children"]->child as $child) {
+  //   if (preg_match('/description-'.$nextyear.'$/',$child->path->path)) {
+  //     $descBlockID = $child->id;
+  //   }
+  // }
   foreach($asset["children"]->child as $child) {
     if ($child->type == strtolower($asset_children_type)) {
       if (pagetest($child))
@@ -155,16 +155,16 @@ function editPage($client, $auth, $asset) {
     }
     
     // ...Then replace the description block in the index
-    if ($_POST['action'] == 'edit') {
-      $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
-    }
-    if ($edit->editReturn->success == 'true') {
-      echo '<div class="s">Edit success</div>';
-      $total['s']++;
-    } else {
-      echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
-      $total['f']++;
-    }
+    // if ($_POST['action'] == 'edit') {
+    //   $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
+    // }
+    // if ($edit->editReturn->success == 'true') {
+    //   echo '<div class="s">Edit success</div>';
+    //   $total['s']++;
+    // } else {
+    //   echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+    //   $total['f']++;
+    // }
   } else {
     echo '<div class="k">No changes needed</div>';
     $total['k']++;
