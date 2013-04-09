@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set('America/New_York');
-$title = 'Copy Ugrad Catalogue Discipline Index Pages';
+$title = 'Copy Grad Catalogue Program Index Pages';
 
 // $type_override = 'page';
-$start_asset = '817373157f00000101f92de5bea1554a';
+$start_asset = '4e9e12a97f000001015d84e03ea3fb26';
 
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
@@ -14,11 +14,11 @@ $nextyear = '2013-2014';
 $descBlockID = '';
 
 function pagetest($child) {
-  if (preg_match('/index$/', $child->path->path) && substr_count($child->path->path,'/') > 1)
+  if (preg_match('/index$/', $child->path->path) && substr_count($child->path->path,'/') == 1)
     return true;
 }
 function foldertest($child) {
-  if (preg_match('/^[a-z]/', $child->path->path) && substr_count($child->path->path,'/') < 3)
+  if (preg_match('/^[a-z]/', $child->path->path) && substr_count($child->path->path,'/') < 1)
     return true;
 }
 function edittest($asset) {
