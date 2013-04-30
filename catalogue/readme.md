@@ -1,5 +1,6 @@
 # To add a new year to the undergrad catalogue
 
+* Disable the www and mobile destinations on the catalogue, grad-catalogue, www-undergrad, www-grad and faculty sites.
 * Edit the $lastyear and $nextyear in copyIndexPages, and run it.
 * Make the newly-created humanities/modern-lang/20xx-20xx not indexable.
 * Edit the display name of the cat-admin/_admin/asset-factories/course-folder folder.
@@ -9,6 +10,9 @@
 * Update the $academicYear.
 * Edit undergraduate-courses_ to use the previous $academicYear (until courses are ready).
 
+The above gets the site ready for adding courses to.
+
+* Change the year in the editAllCoursesMaintenance and editAllGradCourses scripts.
 * Edit the $old and $new in renameCoursesPageHeadlines and run it.
 * Edit undergraduate-courses_ to use the included $academicYear.
 
