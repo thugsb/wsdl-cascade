@@ -25,14 +25,14 @@ function edittest($asset) {
 function changes(&$asset) {
   /* If you wish to use $changed, make sure it's global, and set it to false. 
    * When something is changed, it becomes true: */
-  // global $changed;
-  // $changed = false;
-  // if ($asset["metadata"]->teaser != 'test') {$changed = true;}
-  $asset["metadata"]->teaser = 'test';
+  global $changed;
+  $changed = false;
+  // if ($asset["metadata"]->teaser != 'test') {
+  //    $changed = true;
+  //    $asset["metadata"]->teaser = 'test';
+  // }
 }
 
-
-if (!$cron)
-  include('header.php');
+if (!$cron) {include('header.php');}
 
 ?>
