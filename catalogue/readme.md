@@ -12,6 +12,7 @@
 
 The above gets the site ready for adding courses to.
 
+* Edit the academicYear in each of the catalogue/_reports XSLT, and make sure the publish-set is publishing hourly. Inform the content-creators.
 * Change the year in the editAllCoursesMaintenance and editAllGradCourses scripts.
 * Edit the $old and $new in renameCoursesPageHeadlines and run it.
 * Edit undergraduate-courses_ to use the included $academicYear.
