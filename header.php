@@ -124,7 +124,9 @@ function editPage($client, $auth, $asset) {
       }
       $total['s']++;
     } else {
-      $result = $client->__getLastResponse();
+      if ($_POST['debug'] == 'on') {
+        $result = $client->__getLastResponse();
+      }
       if ($cron) {
         $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
       } else {

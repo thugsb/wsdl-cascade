@@ -86,6 +86,9 @@ if (!isset($data)) {$data = '';}
         <label for="after">
           <input type="checkbox" name="after" id="after" accesskey="a" <?php if ($_POST['after'] == 'on') {echo "checked";} ?>> Show <u>A</u>fter
         </label>
+        <label for="debug">
+          <input type="checkbox" name="debug" id="debug" accesskey="d" <?php if ($_POST['debug'] == 'on') {echo "checked";} ?>> <u>D</u>ebug
+        </label>
       </div>
     </form>
   </nav>
