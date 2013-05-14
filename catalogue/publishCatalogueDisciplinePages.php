@@ -108,7 +108,7 @@ function editPage($client, $auth, $asset) {
   }
   
   if ($_POST['action'] == 'edit') {
-    $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"], 'destination' => 'prince'), 'unpublish' => false ) );
+    $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $asset["id"], 'destination' => 'prince'), 'unpublish' => false ) ) );
   }
   
   
