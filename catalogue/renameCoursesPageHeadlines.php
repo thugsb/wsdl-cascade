@@ -26,8 +26,8 @@ function changes(&$asset) {
    * When something is changed, it becomes true: */
   global $changed;
   $changed = false;
-  $old = '/^2011-2012/';
-  $new = '2012-2013';
+  $old = '/^2012-2013/';
+  $new = '2013-2014';
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == "page-heading") {
       if (preg_match($old, $dyn->fieldValues->fieldValue->value)) {
