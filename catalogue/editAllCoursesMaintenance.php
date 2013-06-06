@@ -23,7 +23,7 @@ $year = '2013-2014';
 function pagetest($child) {
   global $year;
   // if (preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'\/primary\/[a-zA-Z]/',$child->path->path))
-  if (preg_match('/^[a-z][-a-z\/]+\/courses\/'.$year.'\/primary\/[a-zA-Z]/',$child->path->path))
+  if (preg_match('/^[a-z][-a-z\/]+\/courses\/'.$year.'\/primary\/[a-zA-Z0-9]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
