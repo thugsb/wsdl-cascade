@@ -65,7 +65,7 @@ foreach ($events->event as $i=>$event) {
 $title = 'Create event pages for events in the xml feeds';
 
 $type_override = 'folder';
-$start_asset = '682153de7f00000269720b2a7e4cd04f';
+$start_asset = 'e7fad51b7f000002781205b8981ed26d';
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
