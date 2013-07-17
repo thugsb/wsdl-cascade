@@ -22,12 +22,12 @@ function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
 if (isset($_GET['from'])) {
   $from = $_GET['from'];
 } else {
-  $from = '2012-09-01';
+  $from = '';
 }
 if (isset($_GET['to'])) {
   $to = $_GET['to'];
 } else {
-  $to = '2012-09-02';
+  $to = '';
 }
 
 $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
