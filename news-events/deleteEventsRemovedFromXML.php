@@ -64,7 +64,7 @@ foreach ($events->event as $i=>$event) {
 $title = 'Delete event pages that have been removed from the events xml feeds';
 
 $type_override = 'folder';
-$start_asset = '682153de7f00000269720b2a7e4cd04f';
+$start_asset = 'e7fad51b7f000002781205b8981ed26d';
 
 $message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
