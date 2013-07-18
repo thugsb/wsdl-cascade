@@ -11,7 +11,7 @@ E.g. https://cms.slc.edu:8443/entity/open.act?id=e7fe1fc07f000002781205b87e3ee0c
 Make it a public event, but hide the "open to public" label with CSS in news.css:
 E.g. #event2013-08-30-opening_day-eid000001 .label {display:none;}
 
-Edit the $start_asset ID in readEventsXML.php WSDL script, to have the ID of the new 20xx-20xx folder.
+Edit the $start_asset ID in the readEventsXML.php, archiveEvents.php and deleteEventsRemovedFromXML.php WSDL scripts, to have the ID of the new 20xx-20xx folder, along with editing the IDs of the _archived and _inactive folders (in readEventsXML.php).
 
 Edit the crontab on the server (login and use `crontab -e`). You'll want to change the years that each of the scripts look to, and make sure they are running on appropriate days of the week. You'll probably want to edit these at the end of the summer too, to make sure the scripts are running frequently enough (but not too frequently). In general, upcoming months should be running daily, and previous months should be running weekly. The script for today should run hourly.
 

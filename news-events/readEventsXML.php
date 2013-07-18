@@ -241,7 +241,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
   
   $all_event_assets = array();
   // _archived
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '1507b8a37f000002357a73247c2b2ab9') ) );
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e7fad90e7f000002781205b858f6b96e') ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
@@ -252,7 +252,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
     }
   }
   // _inactive
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '15082dd87f000002357a73241ce9250e') ) );
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e7fad9437f000002781205b8ac89680f') ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
