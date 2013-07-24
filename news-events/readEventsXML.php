@@ -275,7 +275,7 @@ if (!$cron) {
 
 
 foreach ($publish as $id) {
-  $publish = $client->publish ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $id), 'unpublish' => false ) );
+  $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $id), 'unpublish' => false ) ) );
   if ($publish->publishReturn->success == 'true') {
     if ($cron) {
       $o[2] .= '<div style="color:#090;">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
