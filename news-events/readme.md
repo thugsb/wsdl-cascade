@@ -16,3 +16,5 @@ Edit the $start_asset ID in the readEventsXML.php, archiveEvents.php and deleteE
 Edit the crontab on the server (login and use `crontab -e`). You'll want to change the years that each of the scripts look to, and make sure they are running on appropriate days of the week. You'll probably want to edit these at the end of the summer too, to make sure the scripts are running frequently enough (but not too frequently). In general, upcoming months should be running daily, and previous months should be running weekly. The script for today should run hourly.
 
 Once you have 'real' imported events for the new year, you can move the placeholder event into _archived.
+
+Copy the index page from the previous year into the new year (important for breadcrumbs). Then edit the news-events/events/.htaccess file to redirect the index.html to the events stream.
