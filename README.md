@@ -2,4 +2,4 @@
 
 See example.php and example_full.php for usage.
 
-Also, see the [docs][./docs/]
+Also, see the [docs](./docs/)
