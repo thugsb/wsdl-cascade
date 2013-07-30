@@ -32,5 +32,5 @@ If `$changed` is always true, the script will always edit every asset, even when
 The simple `example.php` calls in `header.php`, which in turn calls in `html_header.php` (which calls in `web_services_util.php`).
 On the other hand, `example_full.php` directly calls `html_header.php`, as it wants to avoid the functions defined in `header.php`.
 The `html_header.php` is the script that calls the function that actually reads the assets (either `readFolder()` or `readPage()`), and so at least one of these is required (generally both).
-`readFolder()`, `indexFolder`, `readPage()` and `editPage()` are either defined in `header.php`, `cron.php` or the script that you are making (if you based it on `example_full.php`).
+`readFolder()`, `indexFolder()`, `readPage()` and `editPage()` are either defined in `header.php`, `cron.php` or the script that you are making (if you based it on `example_full.php`).
 
