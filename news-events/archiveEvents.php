@@ -145,7 +145,7 @@ function editPage($client, $auth, $asset) {
 
   if ($changed == true) {
     if ($_POST['action'] == 'edit' || $cron) {
-      $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'1507b8a37f000002357a73247c2b2ab9'), 'doWorkflow'=>false) ) );
+      $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'e7fad90e7f000002781205b858f6b96e'), 'doWorkflow'=>false) ) );
     }
     if ($move->moveReturn->success == 'true') {
       if ($cron) {
