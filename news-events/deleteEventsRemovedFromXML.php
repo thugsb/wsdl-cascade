@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 
 // To update for each year, change this and change the $from and $to (below)
-$yearpath = 'events/2012-2013/';
+$yearpath = 'events/2013-2014/';
 
 // Function from http://php.net/manual/en/function.simplexml-load-string.php#48814
 function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
