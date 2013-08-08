@@ -4,6 +4,8 @@ Follow these steps to get the site ready for adding courses to.
 
 * Disable the www and mobile destinations on the catalogue, grad-catalogue, www-undergrad, www-grad and faculty sites.
 * Edit the $lastyear and $nextyear in `copyIndexPages.php`, and run it.
+* Make sure that the index/year pages are next to each other in the folder order, so the mobile nav neighbours show up (they should be last, unless new assets were created).
+* Change the `$year` in `renameOldProgramLandingPages.php` to the old year and run it.
 * Make the newly-created humanities/modern-lang/20xx-20xx not indexable.
 * Edit the display name of the cat-admin/_admin/asset-factories/course-folder folder.
 * Edit the $lastyear and $nextyear in `addNextYearsCoursesFolders.php`, make sure the $start_asset is the ugrad folder, and run it.
@@ -26,6 +28,8 @@ If the course naming plugin stops work, `renamePagesBasedOnTitle.php` should hel
 # To add a new year to the grad catalogue
 
 * Edit the $lastyear and $nextyear in `copyGradIndexPages.php`, and run it.
+* Make sure that the index/year pages are next to each other in the folder order, so the mobile nav neighbours show up.
+* Make sure the `$year` in `renameOldProgramLandingPages.php` is the old year and run it using the $start_asset `4e9e12a97f000001015d84e03ea3fb26` (the grad-catalogue base folder).
 * Change the $start_asset in `addNextYearsCoursesFolders.php` to be the grad folder, and run it.
 * Update the title of the grad-cat/index
 * Edit the $start_asset and foldertest=false in `editAssetFactoryContainer.php` and run it.
