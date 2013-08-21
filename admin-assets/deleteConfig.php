@@ -14,7 +14,7 @@ function pagetest($child) {
   return true;
 }
 function foldertest($child) {
-  if ($child->path->path != 'mobile-pages' && $child->path->path != 'wwww_archived')
+  if ($child->path->path != 'mobile-pages')
     return true;
 }
 function edittest($asset) {
