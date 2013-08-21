@@ -8,6 +8,8 @@ $start_asset = '1697b0d97f00000101f92de526b6ff9b';
 $asset_type = 'pageConfigurationSetContainer';
 $asset_children_type = 'pageConfigurationSet';
 
+$configID = '';
+
 function pagetest($child) {
   return true;
 }
@@ -20,7 +22,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed;
+  global $changed, $configID;
   $changed = false;
   
   if(!is_array($asset['pageConfigurations']->pageConfiguration)) {
@@ -28,7 +30,7 @@ function changes(&$asset) {
   }
   foreach ($asset['pageConfigurations']->pageConfiguration as $key => $conf) {
     if ($conf && $conf->name == 'MobileIA') {
-      unset($asset['pageConfigurations']->pageConfiguration[$key]);
+      $configID = $conf->id;
       $changed = true;
       break;
     }
@@ -109,7 +111,7 @@ function readPage($client, $auth, $id, $type) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total, $asset_type, $asset_children_type, $data, $changed;
+  global $total, $asset_type, $asset_children_type, $data, $changed, $configID;
   
   changes($asset);
   
@@ -120,16 +122,16 @@ function editPage($client, $auth, $asset) {
   }
   
   if ($changed == true) {
+    echo $configID;
     
     if ($_POST['action'] == 'edit') {
-      echo $asset['name'];
-      $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
+      $delete = $client->delete ( array ('authentication' => $auth, 'identifier' => array('id' => $configID, 'type' => 'pageconfiguration') ) );
     }
-    if ($edit->editReturn->success == 'true') {
-      echo '<div class="s">Edit success</div>';
+    if ($delete->deleteReturn->success == 'true') {
+      echo '<div class="s">Delete success</div>';
       $total['s']++;
     } else {
-      echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+      echo '<div class="f">Delete failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       $total['f']++;
     }
   } else {
