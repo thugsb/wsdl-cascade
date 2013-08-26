@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/New_York');
-$title = 'Just read all pages, looking for ones with videos';
+$title = 'Just read all pages, looking for ones with Forms';
 
 // $type_override = 'page';
 $start_asset = '019ab6c77f00000101f92de57a5e5aaf,019b3b507f000002221c3dfed24ee171,047360737f00000101f92de55e007d02,0499307f7f0000020102c06596359dc2,052704657f00000215fab3c519b8e6a9,0760b47d7f00000101fa0f190ef7de81,0ffd1b5f7f00000101f92de5f1bee48e';
@@ -41,22 +41,14 @@ function changes(&$asset) {
   
   if ($asset["structuredData"]) {
     foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $group) {
-      if ($group->identifier == 'video-container') {
+      if ($group->identifier == 'php-dynamic') {
         foreach ($group->structuredDataNodes->structuredDataNode as $field) {
-          if ($field->identifier == 'video') {
-            foreach ($field->structuredDataNodes->structuredDataNode as $video) {
-              if ($video->identifier == 'desktop') {
-                foreach ($video->structuredDataNodes->structuredDataNode as $desktop) {
-                  if ($desktop->identifier == 'path' && $desktop->text != '') {
-                    $myFile = "videos.html";
-                    $fh = fopen($myFile, 'a') or die("can't open file");
-                    $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '.$desktop->text."</div>\n";
-                    fwrite($fh, $str);
-                    fclose($fh);
-                  }
-                }
-              }
-            }
+          if ($field->identifier == 'config' && $field->text == 'Form') {
+            $myFile = "forms.html";
+            $fh = fopen($myFile, 'a') or die("can't open file");
+            $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+            fwrite($fh, $str);
+            fclose($fh);
           }
         }
       }
