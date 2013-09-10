@@ -41,24 +41,26 @@ function changes(&$asset, $type) {
   global $changed;
   $changed = false;
   
-  if ($asset["shouldBePublished"] != 1 && $asset["shouldBeIndexed"] != 1) {
-    $myFile = "none.html";
-    $fh = fopen($myFile, 'a') or die("can't open file");
-    $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.strtoupper($type).': '.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
-    fwrite($fh, $str);
-    fclose($fh);
-  } else if ($asset["shouldBePublished"] != 1) {
-    $myFile = "pub.html";
-    $fh = fopen($myFile, 'a') or die("can't open file");
-    $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.strtoupper($type).': '.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
-    fwrite($fh, $str);
-    fclose($fh);
-  } else if ($asset["shouldBeIndexed"] != 1) {
-    $myFile = "ind.html";
-    $fh = fopen($myFile, 'a') or die("can't open file");
-    $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.strtoupper($type).': '.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
-    fwrite($fh, $str);
-    fclose($fh);
+  if ($_POST['action'] == 'edit') {
+    if ($asset["shouldBePublished"] != 1 && $asset["shouldBeIndexed"] != 1) {
+      $myFile = "none.html";
+      $fh = fopen($myFile, 'a') or die("can't open file");
+      $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.strtoupper($type).': '.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+      fwrite($fh, $str);
+      fclose($fh);
+    } else if ($asset["shouldBePublished"] != 1) {
+      $myFile = "pub.html";
+      $fh = fopen($myFile, 'a') or die("can't open file");
+      $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.strtoupper($type).': '.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+      fwrite($fh, $str);
+      fclose($fh);
+    } else if ($asset["shouldBeIndexed"] != 1) {
+      $myFile = "ind.html";
+      $fh = fopen($myFile, 'a') or die("can't open file");
+      $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.strtoupper($type).': '.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+      fwrite($fh, $str);
+      fclose($fh);
+    }
   }
   
 }

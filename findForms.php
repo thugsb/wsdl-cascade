@@ -44,11 +44,13 @@ function changes(&$asset) {
       if ($group->identifier == 'php-dynamic') {
         foreach ($group->structuredDataNodes->structuredDataNode as $field) {
           if ($field->identifier == 'config' && $field->text == 'Form') {
-            $myFile = "forms.html";
-            $fh = fopen($myFile, 'a') or die("can't open file");
-            $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
-            fwrite($fh, $str);
-            fclose($fh);
+            if ($_POST['action'] == 'edit') {
+              $myFile = "forms.html";
+              $fh = fopen($myFile, 'a') or die("can't open file");
+              $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+              fwrite($fh, $str);
+              fclose($fh);
+            }
           }
         }
       }
