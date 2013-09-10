@@ -325,7 +325,7 @@ foreach ($event_dupes as $event_n) {
         $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Events are different with detailid: '.$detailid."</div>";
       } else {
         echo '<div class="f">Events are different</div>';
-        echo '<button class="btn" href="#aModal'.$detailid.'" data-toggle="modal">View After</button><div id="aModal'.$detailid.'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+        echo '<button class="btn" href="#dModal'.$detailid.'" data-toggle="modal">View Events</button><div id="dModal'.$detailid.'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
           print_r($items);
         echo '</div></div>';
       }
@@ -483,7 +483,7 @@ function editPage($client, $auth, $asset, $event_n) {
   
   if ($_POST['after'] == 'on' && !$cron) {
     echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
-      print_r($asset); // Shows the page in all its glory
+      print_r($asset); // Shows the page as it will be
     echo '</div></div>';
   }
   

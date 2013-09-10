@@ -5,14 +5,13 @@ $title = 'Add access to all grad faculty';
 $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
 
 function pagetest($child) {
-  if ($child->type == "page" && $child->path->path != 'index' && preg_match('/^be[a-z]/',$child->path->path))
+  if ($child->type == "page" && $child->path->path != 'index' && preg_match('/^[a-z]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
   return false;
 }
 function edittest($asset) {
-  return true;
   $grad = false;
   for ($i = 11;$i <= 17;$i = $i+2) {
     if (preg_match('/slc-catalogue-graduate/', $asset["metadata"]->dynamicFields->dynamicField[$i]->fieldValues->fieldValue->value)) {

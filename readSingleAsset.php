@@ -38,7 +38,7 @@ if (array_key_exists('submit',$_POST)) {
       echo "; console.log('access')";
       echo "</script>";
       echo '<button class="btn" href="#rModal'.$asset['id'].'" data-toggle="modal">View Access</button><div id="rModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
-        print_r($asset); // Shows the page in all its glory
+        print_r($asset); // Shows the page access rights
       echo '</div></div>';
     } else {
       echo '<div class="f">Access Read failed</div>';
