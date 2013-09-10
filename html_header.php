@@ -120,9 +120,9 @@ if (!isset($data)) {$data = '';}
     $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );	
     $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
     $ids = explode(',',$_POST['id']);
-    
-    echo '<label class="checkbox inline"><input type="checkbox" id="expandAll" accesskey="x">E<u>x</u>pand All</label>';
     ?>
+    <label for="expandAll" class="checkbox inline">E<u>x</u>pand All</label>
+    <input type="checkbox" id="expandAll" accesskey="x">
     <section class="output">
       <?php if ($_POST['type'] == 'folder' || preg_match('/container/', $_POST['type']) ) {
         foreach($ids as $id) {
