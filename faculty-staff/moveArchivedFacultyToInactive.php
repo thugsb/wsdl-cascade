@@ -128,7 +128,7 @@ function editPage($client, $auth, $asset) {
   
   if ($_POST['after'] == 'on' && !$cron) {
     echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
-      print_r($asset); // Shows the page in all its glory
+      print_r($asset); // Shows the page as it will be
     echo '</div></div>';
   }
 
