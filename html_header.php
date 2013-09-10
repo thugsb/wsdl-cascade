@@ -18,10 +18,15 @@ if (!isset($data)) {$data = '';}
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
   <title>WSDL - <?php echo $title; ?></title>
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <style type="text/css">
+  body {padding:1em;}
   a {text-decoration:none;color:#334}
+  input[type=text], input[type=password], select {width:120px;}
   .right {float:right;}
   .hidden {display:none;}
+  .s, .k, .d, .f {display:inline-block;margin:0 1em;}
   .s {color:#090;}
   .k {color:#009;}
   .d {color:#900;}
@@ -37,20 +42,24 @@ if (!isset($data)) {$data = '';}
   
   .fullpage {display:block;white-space:pre;height:4.5em;padding:0.2em;overflow:hidden;box-shadow:inset 0 0 5px #000;}
   input:checked + .fullpage {height:auto;}
-  #expandAll:checked + section .fullpage {height:auto;}
+  #expandAll:checked + section .modal {display:block !important;position:static;width:90%;margin:0 auto;}
   
   .odd {background:#eee;}
   .asset {padding:1em;}
+  
+  .modal {width:100%;left:0;margin-left:0;}
+  .modal-body {max-height:500px;white-space:pre;}
   </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 </head>
 <body>
   <nav>
     <form id="options" method="POST">
       <a href="./">./</a>
-      <input name="login" placeholder="username" size="8" value="<?php echo $_POST['login']; ?>">
+      <input name="login" type="text" placeholder="username" size="8" value="<?php echo $_POST['login']; ?>">
       <input name="password" type="password" size="8" placeholder="password" value="<?php echo $_POST['password']; ?>">
-      <input name="client" placeholder="client" size="8" value="<?php echo $_POST['client']; ?>">
+      <input name="client" type="text" placeholder="client" size="8" value="<?php echo $_POST['client']; ?>">
       <select name="type">
         <?php foreach($asset_types as $type) {
           if ($_POST['type'] == $type) {
@@ -62,31 +71,31 @@ if (!isset($data)) {$data = '';}
           }
         } ?>
       </select>
-      <input name="id" placeholder="Asset ID" value="<?php if ($_POST['id'] == null) {echo $start_asset;} else {echo $_POST['id'];} ?>">
-      <label for="read">
+      <input name="id" type="text" placeholder="Asset ID" value="<?php if ($_POST['id'] == null) {echo $start_asset;} else {echo $_POST['id'];} ?>">
+      <label for="read" class="checkbox inline">
         <input name="action" id="read" type="radio" value="read" accesskey="r" checked="checked"> <u>R</u>ead only
       </label>
-      <label for="edit">
+      <label for="edit" class="checkbox inline">
         <input name="action" id="edit" type="radio" value="edit" accesskey="e"> <u>E</u>dit
       </label>
-      <button name="submit" accesskey="s"><u>S</u>ubmit</button>
+      <button name="submit" accesskey="s" class="btn"><u>S</u>ubmit</button>
       <div class="advanced">
-        <label for="children">
+        <label for="children" class="checkbox inline">
           <input type="checkbox" name="children" id="children" accesskey="c" <?php if ($_POST['children'] == 'on') {echo "checked";} ?>> Show <u>C</u>hildren
         </label>
-        <label for="folder">
+        <label for="folder" class="checkbox inline">
           <input type="checkbox" name="folder" id="folder" accesskey="f" <?php if ($_POST['folder'] == 'on') {echo "checked";} ?>> Show <u>F</u>older Names
         </label>
-        <label for="asset">
+        <label for="asset" class="checkbox inline">
           <input type="checkbox" name="asset" id="asset" accesskey="n" <?php if ($_POST['asset'] == 'on' || !array_key_exists('submit',$_POST)) {echo "checked";} ?>> Show Asset <u>N</u>ames
         </label>
-        <label for="before">
+        <label for="before" class="checkbox inline">
           <input type="checkbox" name="before" id="before" accesskey="b" <?php if ($_POST['before'] == 'on') {echo "checked";} ?>> Show <u>B</u>efore
         </label>
-        <label for="after">
+        <label for="after" class="checkbox inline">
           <input type="checkbox" name="after" id="after" accesskey="a" <?php if ($_POST['after'] == 'on') {echo "checked";} ?>> Show <u>A</u>fter
         </label>
-        <label for="debug">
+        <label for="debug" class="checkbox inline">
           <input type="checkbox" name="debug" id="debug" accesskey="d" <?php if ($_POST['debug'] == 'on') {echo "checked";} ?>> <u>D</u>ebug
         </label>
       </div>
@@ -99,8 +108,7 @@ if (!isset($data)) {$data = '';}
     $auth = array ('username' => $_POST['login'], 'password' => $_POST['password'] );
     $ids = explode(',',$_POST['id']);
     
-    if ($_POST['before'] == 'on' || $_POST['after'] == 'on')
-      echo 'E<u>x</u>pand All <input type="checkbox" id="expandAll" accesskey="x">';
+    echo 'E<u>x</u>pand All <input type="checkbox" id="expandAll" accesskey="x">';
     ?>
     <section class="output">
       <?php if ($_POST['type'] == 'folder' || preg_match('/container/', $_POST['type']) ) {

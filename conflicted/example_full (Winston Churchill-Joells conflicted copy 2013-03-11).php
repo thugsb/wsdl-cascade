@@ -48,9 +48,9 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     if ($_POST['children'] == 'on') {
-      echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
+      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset["children"]); // Shows all the children of the folder
-      echo '</label>';
+      echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
   } else {
@@ -99,9 +99,9 @@ function editPage($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed;
   echo '<div class="page">';
   if ($_POST['before'] == 'on') {
-    echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
+    echo '<button class="btn" href="#bModal'.$asset['id'].'" data-toggle="modal">View Before</button><div id="bModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
       print_r($asset); // Shows the page in all its glory
-    echo '</label>';
+    echo '</div></div>';
   }
   
   echo "<script type='text/javascript'>var page_".$asset['id']." = ";
@@ -112,9 +112,9 @@ function editPage($client, $auth, $asset) {
   changes($asset);
   
   if ($_POST['after'] == 'on') {
-    echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
-      print_r($asset); // Shows the page as it will be
-    echo '</label>';
+    echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+      print_r($asset); // Shows the page in all its glory
+    echo '</div></div>';
   }
   
   if ($changed == true) {

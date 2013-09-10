@@ -41,9 +41,9 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     if ($_POST['children'] == 'on') {
-      echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
+      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset["children"]); // Shows all the children of the folder
-      echo '</label>';
+      echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
   } else {

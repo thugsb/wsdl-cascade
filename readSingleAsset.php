@@ -37,9 +37,9 @@ if (array_key_exists('submit',$_POST)) {
       print_r(json_encode($asset));
       echo "; console.log('access')";
       echo "</script>";
-      echo '<input type="checkbox" class="hidden" id="Rexpand'.$asset['id'].'"><label class="fullpage" for="Rexpand'.$asset['id'].'">';
-      print_r($asset);
-      echo '</label>';
+      echo '<button class="btn" href="#rModal'.$asset['id'].'" data-toggle="modal">View Access</button><div id="rModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+        print_r($asset); // Shows the page in all its glory
+      echo '</div></div>';
     } else {
       echo '<div class="f">Access Read failed</div>';
     }

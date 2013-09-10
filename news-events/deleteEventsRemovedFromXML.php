@@ -25,12 +25,12 @@ function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
 if (isset($_GET['from'])) {
   $from = $_GET['from'];
 } else {
-  $from = '2012-09-01';
+  $from = '2013-09-01';
 }
 if (isset($_GET['to'])) {
   $to = $_GET['to'];
 } else {
-  $to = '2013-08-31';
+  $to = '2014-08-31';
 }
 
 $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
@@ -79,13 +79,13 @@ if (!isset($cron)) {
 }
 
 if (!$cron) {
-  echo '<input type="checkbox" class="hidden" id="EAexpand'.$asset['id'].'"><label class="fullpage" for="EAexpand'.$asset['id'].'">';
-    echo 'Pages in cascade: ';
+  echo '<button class="btn" href="#pModal'.$asset['id'].'" data-toggle="modal">Pages in cascade</button><div id="pModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
     print_r($children);
-    echo '<br><br>Events in XML: ';
+  echo '</div></div>';
+  echo '<button class="btn" href="#eModal'.$asset['id'].'" data-toggle="modal">Events in XML</button><div id="eModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
     print_r($event_names);
     // print_r($events); // Shows all the events in the XML feeds
-  echo '</label>';
+  echo '</div></div>';
   // echo '<h1>Duplicate Events:<br/><pre>';print_r($event_dupes);echo '</pre></h1>';
 }
 
@@ -108,9 +108,9 @@ function readFolder($client, $auth, $id) {
     }
     
     if ($_POST['children'] == 'on' && !$cron) {
-      echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
+      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset["children"]); // Shows all the children of the folder
-      echo '</label>';
+      echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
   } else {

@@ -293,9 +293,9 @@ foreach ($publish as $id) {
 }
 
 if (!$cron) {
-  echo '<input type="checkbox" class="hidden" id="EAexpand'.$asset['id'].'"><label class="fullpage" for="EAexpand'.$asset['id'].'">';
+  echo '<button class="btn" href="#eModal'.$asset['id'].'" data-toggle="modal">View Events</button><div id="eModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
     print_r($events); // Shows all the events in the XML feeds
-  echo '</label>';
+  echo '</div></div>';
   // echo '<h1>Duplicate Events:<br/><pre>';print_r($event_dupes);echo '</pre></h1>';
 }
 
@@ -325,9 +325,9 @@ foreach ($event_dupes as $event_n) {
         $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Events are different with detailid: '.$detailid."</div>";
       } else {
         echo '<div class="f">Events are different</div>';
-        echo '<input type="checkbox" class="hidden" id="EAexpand'.$detailid.'"><label class="fullpage" for="EAexpand'.$detailid.'">';
+        echo '<button class="btn" href="#aModal'.$detailid.'" data-toggle="modal">View After</button><div id="aModal'.$detailid.'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
           print_r($items);
-        echo '</label>';
+        echo '</div></div>';
       }
     } else {
       if ($cron) {
@@ -358,9 +358,9 @@ function readFolder($client, $auth, $id) {
     }
 
     if ($_POST['children'] == 'on' && !$cron) {
-      echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
+      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset['children']); // Shows all the children of the folder
-      echo '</label>';
+      echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
   } else {  
@@ -452,9 +452,9 @@ function readPage($client, $auth, $id, $type, $event_n) {
     if (edittest($asset)) {
       if (!$cron) {echo '<div class="page">';}
       if ($_POST['before'] == 'on' && !$cron) {
-        echo '<input type="checkbox" class="hidden" id="Bexpand'.$asset['id'].'"><label class="fullpage" for="Bexpand'.$asset['id'].'">';
+        echo '<button class="btn" href="#bModal'.$asset['id'].'" data-toggle="modal">View Before</button><div id="bModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
           print_r($asset); // Shows the page in all its glory
-        echo '</label>';
+        echo '</div></div>';
         echo "<script type='text/javascript'>var page_".$asset['id']." = ";
         print_r(json_encode($asset));
         echo '; console.log(page_'.$asset['id'].')';
@@ -482,9 +482,9 @@ function editPage($client, $auth, $asset, $event_n) {
   changes($asset, $event_n);
   
   if ($_POST['after'] == 'on' && !$cron) {
-    echo '<input type="checkbox" class="hidden" id="Aexpand'.$asset['id'].'"><label class="fullpage" for="Aexpand'.$asset['id'].'">';
-      print_r($asset); // Shows the page as it will be
-    echo '</label>';
+    echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+      print_r($asset); // Shows the page in all its glory
+    echo '</div></div>';
   }
   
   if ($changed == true) {
