@@ -22,7 +22,7 @@ $message = 'Warning: This script only copes with a single layer of subfolders';
 if (file_exists('/Users/stu')) {
   $path = '/Users/stu/Sites/web-services/';
 } else {
-  $path = '/svr/www/htdocs/__web-services/';
+  $path = '/srv/www/htdocs/__web-services/';
 }
 
 function pagetest($child) {
