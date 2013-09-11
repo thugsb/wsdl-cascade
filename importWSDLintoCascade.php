@@ -65,7 +65,7 @@ function readScripts($link, $files, $folders, $subFolder) {
               echo "<div class='k'>$entry folder doesn't exist.</div>\n";
             }
             
-            if ($_POST['action'] == 'edit') {
+            if ($_POST['action'] == 'edit' || $cron) {
               createFolder($entry, $subFolder);
             }
             
@@ -79,7 +79,7 @@ function readScripts($link, $files, $folders, $subFolder) {
               echo "<div class='k'>$entry file doesn't exist.</div>\n";
             }
             
-            if ($_POST['action'] == 'edit') {
+            if ($_POST['action'] == 'edit' || $cron) {
               createFile($entry, $subFolder);
             }
           } else {
@@ -111,7 +111,7 @@ function createFile($entry, $subFolder) {
   $baseAsset = array ('type' => 'file', 'id' => '09b331277f000002315b5b68fdc840a1' );
   $params = array ('authentication' => $auth, 'identifier' => $baseAsset, 'copyParameters' => $copyParams );
 
-  if ($_POST['action'] == 'edit') {
+  if ($_POST['action'] == 'edit' || $cron) {
     $reply = $client->copy ( $params );
   }
   
@@ -156,7 +156,7 @@ function createFolder($entry, $subFolder) {
   $baseAsset = array ('type' => 'folder', 'id' => '09b3c7fe7f000002315b5b68c2dce107' );
   $params = array ('authentication' => $auth, 'identifier' => $baseAsset, 'copyParameters' => $copyParams );
 
-  if ($_POST['action'] == 'edit') {
+  if ($_POST['action'] == 'edit' || $cron) {
     $reply = $client->copy ( $params );
   }
   
@@ -291,7 +291,7 @@ function editPage($client, $auth, $asset, $entry, $code) {
   }
   
   if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
     }
     if ($edit->editReturn->success == 'true') {
