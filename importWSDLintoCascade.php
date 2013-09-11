@@ -8,6 +8,8 @@ the folder that gets read locally. If the file doesn't exist, create it, and edi
 it to fill in the content. If it does exist, check whether it needs to be changed,
 and if so, edit it.
 The script then needs to work recursively through the subfolders.
+If a new folder is added, the script will need to be run twice in order for
+the contained files to be imported.
 */
 
 // $type_override = 'page';
