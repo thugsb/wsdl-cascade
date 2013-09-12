@@ -1,4 +1,4 @@
-# Documentation: Adding a new year of events
+# Documentation - Adding a new year of events
 
 This should be done once all the events of the year have disappeared from the feed, probably June or July each year.
 
