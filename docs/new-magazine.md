@@ -11,3 +11,4 @@
 * Update the [covers block](https://cms.slc.edu:8443/entity/open.act?id=1637fca97f000002357a73240dff02f1&type=block).
 * Publish: The new folder (including its media), the archives page, the previous magazine index (so the Archives cover updates), and the [News-Events homepage](https://cms.slc.edu:8443/entity/open.act?id=392f69ce7f00000237022ee5ec6b40d8&type=page&).
 * Change the [.htaccess](https://cms.slc.edu:8443/entity/open.act?id=e44751db7f000002255ec1f21949360c&type=file&) to make /magazine/ redirect to the new magazine.
+* Change the [search quicklink](http://www.siteimprove.com/searchimprove/setup/pagerankingpretext.aspx?pckid=1405240315&prid=1407367679&kid=1407370176)
