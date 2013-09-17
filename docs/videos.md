@@ -15,7 +15,7 @@ If you wish the video to start playing as soon as the page is loaded, add the fo
 
 If you wish to insert multiple videos, you can do so by creating a playlist in Youtube and embedding the playlist.
 
-### Making a Youtube playlist
+### Inserting a Youtube playlist
 
 To make a playlist, go to the [Youtube video manager playlist page](http://www.youtube.com/view_all_playlists) and click `New Playlist`.
 You can then enter a name and description for the playlist (you may wish to put the URL that the playlist will be embedded on in the description) and click `Create Playlist`.
