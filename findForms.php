@@ -45,7 +45,7 @@ function changes(&$asset) {
         foreach ($group->structuredDataNodes->structuredDataNode as $field) {
           if ($field->identifier == 'config' && $field->text == 'Form') {
             if ($_POST['action'] == 'edit') {
-              $myFile = "forms.html";
+              $myFile = "indexes/forms.html";
               $fh = fopen($myFile, 'a') or die("can't open file");
               $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
               fwrite($fh, $str);
