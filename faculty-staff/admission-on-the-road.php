@@ -4,6 +4,7 @@ $title = 'Putting the Data into the Admissions events';
 // $type_override = 'page';
 $start_asset = '1c07f8bb7f0000024124dc483414e60f';
 
+$asset_type = 'folder';
 $asset_children_type = 'xhtmlDataDefinitionBlock';
 
 class CSVData{
@@ -45,8 +46,11 @@ class CSVData{
 }
 
 $o=new CSVData();
-$o->getData('events2.csv');
+$o->getData('events-2013.csv');
 $data=$o->data;
+// echo '<pre>';
+// print_r($data);
+// echo '</pre>';
 // echo $data[0]["City"]."<br>";
 
 
@@ -83,7 +87,7 @@ function indexFolder($client, $auth, $asset) {
     // print_r($child);
     if ($child->type == "block_XHTML_DATADEFINITION") {
       readPage($client, $auth, array ('type' => 'block_XHTML_DATADEFINITION', 'id' => $child->id));
-    } elseif ($child->type == "folder" && $child->name != "West Coast") {
+    } elseif ($child->type == "folder") {
       readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
     }
   }
@@ -123,14 +127,13 @@ function editPage($client, $auth, $asset) {
   
   foreach ($data as $event) {
     if ($event["State"] == $asset["name"]) {
-      $match = $event["State"];
       
       if (gettype($asset["structuredData"]->structuredDataNodes->structuredDataNode) == "array") {
         $already = count($asset["structuredData"]->structuredDataNodes->structuredDataNode);
         addEvent($asset, $already, $event);
       } else {
         // Now test if there's already some content (i.e. test if there's a counselor)
-        if ($asset["structuredData"]->structuredDataNodes->structuredDataNode->structuredDataNodes->structuredDataNode[0]->text == '') {
+        if ($asset["structuredData"]->structuredDataNodes->structuredDataNode->structuredDataNodes->structuredDataNode[1]->text == '') {
           $asset["structuredData"]->structuredDataNodes->structuredDataNode=array($asset["structuredData"]->structuredDataNodes->structuredDataNode);
           addEvent($asset, 0, $event);
         } else {
@@ -157,7 +160,10 @@ function editPage($client, $auth, $asset) {
   if ($edit->editReturn->success == 'true') {
     echo '<div class="s">Edit success</div>';
     $total['s']++;
-  } else {
+  } else {  
+    if ($_POST['debug'] == 'on') {
+      $result = $client->__getLastResponse();
+    }
     echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
     $total['f']++;
   }
@@ -171,22 +177,25 @@ function addEvent($id, $pos, $event) {
   $ev = $id["structuredData"]->structuredDataNodes->structuredDataNode[$pos];
   $ev->identifier = "event";
   $ev->structuredDataNodes->structuredDataNode[0]->type = "text";
-  $ev->structuredDataNodes->structuredDataNode[0]->identifier = "counselor";
-  $ev->structuredDataNodes->structuredDataNode[0]->text = $event["Rep"];
+  $ev->structuredDataNodes->structuredDataNode[0]->identifier = "display";
+  $ev->structuredDataNodes->structuredDataNode[0]->text = 'Yes';
   $ev->structuredDataNodes->structuredDataNode[1]->type = "text";
-  $ev->structuredDataNodes->structuredDataNode[1]->identifier = "venue-event";
-  $ev->structuredDataNodes->structuredDataNode[1]->text = $event["Event"];
+  $ev->structuredDataNodes->structuredDataNode[1]->identifier = "counselor";
+  $ev->structuredDataNodes->structuredDataNode[1]->text = $event["Rep"];
   $ev->structuredDataNodes->structuredDataNode[2]->type = "text";
-  $ev->structuredDataNodes->structuredDataNode[2]->identifier = "city";
-  $ev->structuredDataNodes->structuredDataNode[2]->text = $event["City"];
-  $ev->structuredDataNodes->structuredDataNode[3]->type = "group";
-  $ev->structuredDataNodes->structuredDataNode[3]->identifier = "date";
-  $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[0]->type = "text";
-  $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[0]->identifier = "start";
-  $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[0]->text = $event["Start"];
-  $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[1]->type = "text";
-  $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[1]->identifier = "end";
-  $ev->structuredDataNodes->structuredDataNode[3]->structuredDataNodes->structuredDataNode[1]->text = $event["End"];
+  $ev->structuredDataNodes->structuredDataNode[2]->identifier = "venue-event";
+  $ev->structuredDataNodes->structuredDataNode[2]->text = $event["Event"];
+  $ev->structuredDataNodes->structuredDataNode[3]->type = "text";
+  $ev->structuredDataNodes->structuredDataNode[3]->identifier = "city";
+  $ev->structuredDataNodes->structuredDataNode[3]->text = $event["City"];
+  $ev->structuredDataNodes->structuredDataNode[4]->type = "group";
+  $ev->structuredDataNodes->structuredDataNode[4]->identifier = "date";
+  $ev->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[0]->type = "text";
+  $ev->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[0]->identifier = "start";
+  $ev->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[0]->text = $event["Start"];
+  $ev->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[1]->type = "text";
+  $ev->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[1]->identifier = "end";
+  $ev->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[1]->text = $event["End"];
 }
 
 include('../html_header.php');
