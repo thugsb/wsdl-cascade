@@ -38,3 +38,7 @@ This is the key that connects the two blocks, and so the dropdown must be kept i
 Unfortunately this means the Data Definitions need to be edited any time a new counsellor is added (or removed).
 
 The Reading Areas assigned in `/admission-counselors` does NOT necessarily correlate with the on-the-road area events.
+
+## Todo
+
+The import script should check to see if the times are set, and if not, should set the "Display Times?" radio button to No.
