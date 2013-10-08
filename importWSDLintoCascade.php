@@ -59,6 +59,7 @@ function readScripts($link, $files, $folders, $subFolder) {
     while (false !== ($entry = readdir($handle))) {
       if (!preg_match('/^\./', $entry)) {
         if (is_dir($entry) ) {
+          $o[0] .= "<h4>$entry is a folder";
           if (!in_array("__web-services".$folderPath."$entry", $folders) ) {
             
             if ($cron) {
@@ -73,6 +74,7 @@ function readScripts($link, $files, $folders, $subFolder) {
             
           }
         } else {
+          $o[0] .= "<h4>$entry is NOT a folder";
           if (!in_array("__web-services".$folderPath."$entry", $files) ) {
             
             if ($cron) {
