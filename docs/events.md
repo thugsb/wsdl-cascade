@@ -18,4 +18,6 @@ Edit the crontab on the server (login and use `crontab -e`). You'll want to chan
 
 Once you have 'real' imported events for the new year, you can move the placeholder event into _archived.
 
+Edit the events/event.ics file to look in the folder of the new year.
+
 Copy the index page from the previous year into the new year (important for breadcrumbs). Then edit the news-events/events/.htaccess file to redirect the index.html to the events stream.
