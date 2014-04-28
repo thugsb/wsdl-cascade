@@ -14,6 +14,7 @@ $year = '2012-2013';
 
 function pagetest($child) {
   global $year;
+  // if (preg_match('/^[a-z][-a-z]+\/[-a-z]+\/2012-2013/',$child->path->path) || preg_match('/^humanities\/languages-and-literatures\/[-a-z]+\/2012-2013$/',$child->path->path))
   if (preg_match('/^[a-z][-a-z]+\/[-a-z]+\/index/',$child->path->path) || preg_match('/^humanities\/languages-and-literatures\/[-a-z]+\/index$/',$child->path->path))
     return true;
 }
