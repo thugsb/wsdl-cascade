@@ -17,7 +17,7 @@ Follow these steps to get the site ready for adding courses to.
 Now you're ready to add the courses to cascade.
 
 12. Edit the $academicYear in each of the catalogue/_reports XSLT, and make sure the publish-set is publishing hourly. Inform the content-creators.
-13. Change the years in `copyIndexPages.php` and run it.
+13. Change the years in `copyIndexPages.php` and run it. Fix the folder order to make sure the left navigation is correct. Unfortunately this must be done manually, folder by folder (if we're removing previous years of catalogues, this step isn't required).
 13. Change the year in the `editAllCoursesMaintenance.php` and `editAllGradCourses.php` scripts.
 14. Edit the $old and $new in `renameCoursesPageHeadlines.php` and run it.
 15. Edit undergraduate-courses_ (and graduate-courses_) to use the included $academicYear.

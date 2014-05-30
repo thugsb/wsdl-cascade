@@ -8,6 +8,8 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 // $asset_type = 'assetFactoryContainer';
 // $asset_children_type = 'assetFactory';
 
+// Note: Change the year in the regex below. $move_to is meant to be blank
+
 $move_to = '';
 
 function pagetest($child) {
@@ -47,7 +49,7 @@ function indexFolder($client, $auth, $asset) {
   }
   foreach($asset["children"]->child as $child) {
     if ($child->type == "folder") {
-      if (preg_match('/^[a-z][-a-z\/]+2011-2012/', $child->path->path) ) {
+      if (preg_match('/^[a-z][-a-z\/]+2012-2013/', $child->path->path) ) {
         foreach($asset["children"]->child as $ch) {
           if (preg_match('/^[a-z][-a-z\/]+_archived$/',$ch->path->path) ) {
             $move_to = $ch;
