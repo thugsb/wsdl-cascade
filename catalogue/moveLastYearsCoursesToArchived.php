@@ -49,7 +49,7 @@ function indexFolder($client, $auth, $asset) {
   }
   foreach($asset["children"]->child as $child) {
     if ($child->type == "folder") {
-      if (preg_match('/^[a-z][-a-z\/]+2013-2014/', $child->path->path) ) {
+      if (preg_match('/^[a-z][-a-z\/]+2012-2013/', $child->path->path) ) {
         foreach($asset["children"]->child as $ch) {
           if (preg_match('/^[a-z][-a-z\/]+_archived$/',$ch->path->path) ) {
             $move_to = $ch;
