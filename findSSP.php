@@ -42,38 +42,23 @@ function changes(&$asset) {
   
   if ($asset["structuredData"]) {
     foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $group) {
-      if ($group->identifier == 'video-container') {
+      if ($group->identifier == 'ssp') {
         foreach ($group->structuredDataNodes->structuredDataNode as $field) {
-          if ($field->identifier == 'video') {
-            foreach ($field->structuredDataNodes->structuredDataNode as $video) {
-              if ($video->identifier == 'desktop') {
-                foreach ($video->structuredDataNodes->structuredDataNode as $desktop) {
-                  if ($desktop->identifier == 'path' && $desktop->text != '') {
-                    if ($_POST['action'] == 'edit') {
-                      $myFile = "indexes/videos.html";
-                      $fh = fopen($myFile, 'a') or die("can't open file");
-                      $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '.$desktop->text."</div>\n";
-                      fwrite($fh, $str);
-                      fclose($fh);
-                    }
-                  }
+          if ($field->identifier == 'embed') {
+            if ($field->text == 'Yes') {
+                if ($_POST['action'] == 'edit') {
+                  $myFile = "indexes/ssp.html";
+                  $fh = fopen($myFile, 'a') or die("can't open file");
+                  $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '.$desktop->text."</div>\n";
+                  fwrite($fh, $str);
+                  fclose($fh);
                 }
-              }
             }
           }
         }
       }
     }
   }
-  
-  // Finding edgecast and blip.tv relics
-  // $text = print_r($asset, true);
-  // if (preg_match('/edgecast/si',$text) or preg_match('/blip/si',$text) ) {
-  //   $name = '';
-  //   if (!$asset['path']) {$name = $asset['name'];}
-  //   echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path'].$name." (".(preg_match_count('/edgecast/si',$text)+preg_match_count('/blip/si',$text))." matches)</a></h4>";
-  //   
-  // }
 }
 
 if (!$cron) {include('header.php');}

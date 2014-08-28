@@ -28,7 +28,7 @@ function pagetest($child) {
     return true;
 }
 function foldertest($child) {
-  if (!preg_match('/^events\/2012/', $child->path->path))
+  if (!preg_match('/^events\/20/', $child->path->path))
     return true;
 }
 function edittest($asset) {

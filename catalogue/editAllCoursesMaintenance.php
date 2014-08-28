@@ -50,6 +50,8 @@ function changes(&$asset) {
   }
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
     if ($field->identifier == 'description') {
+      $field->text = str_replace('&amp;nbsp;',' ',$field->text);
+      $field->text = str_replace('&amp;#160;',' ',$field->text);
       if ($asset["metadata"]->teaser != $field->text) {$changed = true;}
       $asset["metadata"]->teaser = $field->text;
     } elseif ($field->identifier == 'faculty-set') {
