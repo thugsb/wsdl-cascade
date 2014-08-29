@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 
 // To update for each year, change this and change the $from and $to (below)
-$yearpath = 'events/2013-2014/';
+$yearpath = 'events/2014-2015/';
 
 // Function from http://php.net/manual/en/function.simplexml-load-string.php#48814
 function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
@@ -25,12 +25,12 @@ function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
 if (isset($_GET['from'])) {
   $from = $_GET['from'];
 } else {
-  $from = '2013-09-01';
+  $from = '2014-09-01';
 }
 if (isset($_GET['to'])) {
   $to = $_GET['to'];
 } else {
-  $to = '2014-08-31';
+  $to = '2015-08-31';
 }
 
 $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
