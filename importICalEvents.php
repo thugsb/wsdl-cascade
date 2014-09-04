@@ -98,7 +98,7 @@ function iCalendarToXML($icalendarData) {
             // This line modified to remove escaping-backslashes
             $xml.='>';
             if ($propertyName == 'DTSTART' || $propertyName == 'DTEND' || $propertyName == 'DTSTAMP') {
-              $xml.=iCalDateToUnixTimestamp($value);
+              $xml.=iCalDateToUnixTimestamp($value)*1000;
             } else {
               $xml.=str_replace("\\",'',htmlspecialchars($value));
             }
