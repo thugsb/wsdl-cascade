@@ -2,7 +2,7 @@
 
 if (!isset($_GET['user'])) {exit;}
 
-// Function found at http://evertpot.com/248/
+// Function found at http://evertpot.com/248/ (modified, see below)
 function iCalendarToXML($icalendarData) {
 
     // Detecting line endings
@@ -65,7 +65,9 @@ function iCalendarToXML($icalendarData) {
                 }
             }
 
-            $xml.='>'. htmlspecialchars($value) . '</' . $propertyName . ">\n";
+            // This line modified to remove escaping-backslashes
+            $xml.='>'. str_replace("\\",'',htmlspecialchars($value)) . '</' . $propertyName . ">\n";
+            // Original: $xml.='>'. htmlspecialchars($value) . '</' . $propertyName . ">\n";
 
         }
 
