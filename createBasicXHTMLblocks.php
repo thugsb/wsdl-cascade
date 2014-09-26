@@ -746,7 +746,7 @@ function readFolder($client, $auth, $id) {
       $total['s']++;
       
       
-      $block = $client->read ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'path' => array ('path' => '_editorial/dump/'.$name, 'siteName' => 'www-style-guide') ) ) );
+      $block = $client->read ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'path' => array ('path' => '_editorial/dump/'.$name, 'siteName' => 'www.slc.edu+style-guide') ) ) );
       if ($block->readReturn->success == 'true') {
         $asset = ( array ) $block->readReturn->asset->xhtmlDataDefinitionBlock;
 

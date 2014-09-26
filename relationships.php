@@ -98,7 +98,7 @@ function readPage($client, $auth, $id, $type, $child) {
         if ($_POST['before'] == 'on' && !$cron) {
           echo '<button class="btn" href="#bModal'.$id['id'].'" data-toggle="modal">View Before</button><div id="bModal'.$id['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
             foreach ($subscribers['assetIdentifier'] as $rel) {
-              if ($rel->path->siteName == 'www-admission') {
+              if ($rel->path->siteName == 'www.slc.edu+admission') {
                 echo '<h4 style="font-weight:normal"><a href="https://cms.slc.edu:8443/entity/open.act?id='.$rel->id.'&type='.$rel->type.'#highlight">'.$rel->path->path."</a></h4>";
               } else {
                 echo '<h4 style="font-weight:normal"><a href="https://cms.slc.edu:8443/entity/open.act?id='.$rel->id.'&type='.$rel->type.'#highlight"><strong>'.$rel->path->siteName.'</strong> '.$rel->path->path."</a></h4>";

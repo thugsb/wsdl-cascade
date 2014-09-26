@@ -384,7 +384,7 @@ function indexFolder($client, $auth, $asset) {
     if (in_array($asset['path'].'/'.$event_n, $children)) {
       // echo "<div class='k'>".$event_n." exists</div>";
       if (pagetest($event_n)) {
-        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www-news-events') ), $asset_children_type, $event_n);
+        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.slc.edu+news-events') ), $asset_children_type, $event_n);
       }
 
 
@@ -421,7 +421,7 @@ function indexFolder($client, $auth, $asset) {
           echo '<div class="s">Created successfully: '.$event_n.'</div>';
         }
         $total['s']++;
-        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www-news-events') ), $asset_children_type, $event_n);
+        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.slc.edu+news-events') ), $asset_children_type, $event_n);
       } else {
         if ($cron) {
           $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation failed: '.$event_n.'<div>'.extractMessage($result)."</div></div>";

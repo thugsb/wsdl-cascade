@@ -1,7 +1,7 @@
 # To add a new magazine
 
 * Use the `New->Magazine Issue` asset factory to create the new folder.
-* Changed the folder order of the [www-magazine base folder](https://cms.slc.edu:8443/entity/open.act?id=ab880f697f0000021a23b0063cc5fd6f&type=folder&), to make sure this folder is at the top (they should be in chronological order).
+* Changed the folder order of the [www.slc.edu+magazine base folder](https://cms.slc.edu:8443/entity/open.act?id=ab880f697f0000021a23b0063cc5fd6f&type=folder&), to make sure this folder is at the top (they should be in chronological order).
 * Edit the content in the folder, such as the index header, the intro block and the content in `/_featured and news`.
 * Edit the [News-Magazine asset factory page](https://cms.slc.edu:8443/entity/open.act?id=5d1d937e7f000002310aff0edd2d9e63&type=page&) to point to the correct magazine folder and have the correct thumbnails.
 * Add the articles in the news-events site, using the asset-factory.

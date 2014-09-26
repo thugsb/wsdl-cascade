@@ -2,7 +2,7 @@
 
 Follow these steps to get the site ready for adding courses to.
 
-1. Disable the www destination on the catalogue and grad-catalogue site. You may also want to disable the www destination for the www-undergrad, www-grad and faculty sites too, although be warned that this might cause problems.
+1. Disable the www destination on the catalogue and grad-catalogue site. You may also want to disable the www destination for the www+undergrad, www+grad and faculty sites too, although be warned that this might cause problems.
 2. Edit the $lastyear and $nextyear in `copyIndexPages.php`, and run it.
 3. Make sure that the index/year pages are next to each other in the folder order, so the mobile nav neighbours show up (they should be last, unless new assets were created).
 4. Change the `$year` in `renameOldProgramLandingPages.php` to the old year and run it (make sure the $start_asset is `817373157f00000101f92de5bea1554a`).
