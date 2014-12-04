@@ -65,6 +65,8 @@ if (!isset($data)) {$data = '';}
     });
   });
   </script>
+  
+  <?php if (isset($script)) {echo '<script>'.$script.'</script>';} ?>
 </head>
 <body>
   <nav>
