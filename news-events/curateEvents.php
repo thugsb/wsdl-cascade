@@ -18,13 +18,15 @@ $(function() {
   $('.event-form.undecided').prepend('<div class="btn-group pull-right"><input type="submit" name="submit" class="btn btn-success" value="Activate"/><input type="submit" name="submit" class="btn btn-warning" value="De-activate"/></div>');
   
   $('.event-form .btn-success').click(function(e) {
-    if ( $(this).is('.disabled') ) { e.preventDefault(); }
+    if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','activate.php');
+    $(this).closest('form').prepend('<div class="label label-success pull-right">Activated</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
   $('.event-form .btn-warning').click(function(e) {
-    if ( $(this).is('.disabled') ) { e.preventDefault(); }
+    if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','deactivate.php');
+    $(this).closest('form').prepend('<div class="label label-important pull-right">Deactivated</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
 });
