@@ -126,11 +126,19 @@ function readPage($client, $auth, $id, $type) {
         if ($dyn->name == 'visible') {
           if ($dyn->fieldValues->fieldValue->value == 'Yes') {$visible = true;}
         }
+        if ($dyn->name == 'calendar') {
+          if ($dyn->fieldValues->fieldValue->value == 'Events Open to Public') {$public = true;}
+        }
       }
       if ($visible) {
         echo '<form class="event-form visible" method="POST" target="result">';
       } else {
         echo '<form class="event-form undecided" method="POST" target="result">';
+      }
+      if ($public) {
+        echo '<div class="label label-success pull-left">Public</div>';
+      } else {
+        echo '<div class="label label-info pull-left">Private</div>';
       }
       echo '<input type="hidden" name="id"cat: /tmp/TextMate-ScratchSnippet.txt: No such file or directory
        value="'.$asset['id'].'"/>'.'<h4>'.$asset['metadata']->title.'</h4>'.$asset['path'].$name."</form>";
