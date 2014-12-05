@@ -57,7 +57,7 @@ function iCalendarToXML($icalendarData) {
 
     }
 
-    $xml = '<?xml version="1.0" ""?>' . "\n";
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 
     $spaces = 0;
     foreach($lines2 as $line) {
