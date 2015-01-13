@@ -1,5 +1,7 @@
 # Admission
 
+NOTE: These instructions are outdated.
+
 ## On The Road
 
 ### Counsellor changes

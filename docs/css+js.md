@@ -1,4 +1,7 @@
 # CSS and JS Setup
+
+NOTE: These instructions are outdated.
+
 The slc.edu website uses [minify](https://code.google.com/p/minify/) to, well, minify the CSS and JS.
 The site uses the groupsConfig.php to pull in groups.
 
