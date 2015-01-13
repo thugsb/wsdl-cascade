@@ -135,10 +135,29 @@ function editPage($client, $auth, $asset) {
   if ($changed == true) {
     if (!$cron) {echo '<div class="f">This faculty is inactive</div>';}
     if ($_POST['action'] == 'edit' || $cron) {
+      $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $asset["id"]), 'unpublish' => true ) ) );
+      if ($publish->publishReturn->success == 'true') {
+        if ($cron) {
+          $o[2] .= $name.' was unpublished<br>';
+        } else {
+          echo '<div class="s">'.$name.' was unpublished</div>';
+        }
+        $total['s']++;
+      } else {
+        if ($cron) {
+          $o[1] .= $name.' FAILED to unpublish<br>';
+        } else {
+          echo '<div class="f">'.$name.' could not be unpublished</div>';
+          print_r($publish);
+        }
+        $total['f']++;
+      }
+      
       $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'6824bab27f00000101b7715d4c99fd4c'), 'doWorkflow'=>false) ) );
       if ($move->moveReturn->success == 'true') {
         if ($cron) {
           $o[2] .= '<div style="color:#090;">Move success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+          mail("45bd091b@opayq.com", "SLC Faculty Member Archived", "https://cms.slc.edu:8443/entity/open.act?id=".$asset['id']."&type=page");
         } else {
           echo '<div class="s">Move success</div>';
         }
