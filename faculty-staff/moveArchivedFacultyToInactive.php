@@ -10,8 +10,15 @@ $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
 // $asset_children_type = 'assetFactory';
 
 function pagetest($child) {
-  if (preg_match('/^[a-z]/',$child->path->path) && $child->path->path != 'index')
-    return true;
+  if (isset($_GET['name'])) {
+    if (preg_match("/^".$_GET['name']."[a-z]/",$child->path->path)) {
+      return true;
+    }
+  } else {
+    if ($child->path->path != 'index' && preg_match('/^[a-z]/',$child->path->path)) {
+      return true;
+    }
+  }
 }
 function foldertest($child) {
   return false;
@@ -138,21 +145,22 @@ function editPage($client, $auth, $asset) {
       $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $asset["id"]), 'unpublish' => true ) ) );
       if ($publish->publishReturn->success == 'true') {
         if ($cron) {
-          $o[2] .= $name.' was unpublished<br>';
+          $o[2] .= $asset['name'].' was unpublished<br>';
         } else {
-          echo '<div class="s">'.$name.' was unpublished</div>';
+          echo '<div class="s">'.$asset['name'].' was unpublished</div>';
         }
         $total['s']++;
       } else {
         if ($cron) {
-          $o[1] .= $name.' FAILED to unpublish<br>';
+          $o[1] .= $asset['name'].' FAILED to unpublish<br>';
         } else {
-          echo '<div class="f">'.$name.' could not be unpublished</div>';
+          echo '<div class="f">'.$asset['name'].' could not be unpublished</div>';
           print_r($publish);
         }
         $total['f']++;
       }
       
+      sleep(5);
       $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'6824bab27f00000101b7715d4c99fd4c'), 'doWorkflow'=>false) ) );
       if ($move->moveReturn->success == 'true') {
         if ($cron) {
