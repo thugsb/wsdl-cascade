@@ -1,4 +1,6 @@
-# Explanation of variables
+# WSDL Scripts - basics
+
+## Explanation of variables
 
 Unless stated otherwise, variables are optional.
 
@@ -16,7 +18,7 @@ Page and folder are default, but you could, for example, want to target files wi
 These determine what the `readFolder()`, `indexFolder()` and `readPage()` functions search for.
 If you wish to search for multiple asset types (e.g. pages and files) then you will either need to edit the functions, or use two scripts.
 
-# Explanation of functions
+## Explanation of functions
 
 These functions are required: `pagetest()`, `foldertest()`, `edittest()`, `changes()`.
 
