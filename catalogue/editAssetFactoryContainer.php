@@ -30,9 +30,9 @@ function edittest($asset) {
 function changes(&$asset) {
   global $changed;
   $changed = false;
-  if (!preg_match('/2014-2015/', $asset['placementFolderPath'])) {
+  if (!preg_match('/2015-2016/', $asset['placementFolderPath'])) {
     $asset['placementFolderId'] = '';
-    $asset['placementFolderPath'] = preg_replace('/2013-2014/','2014-2015',$asset['placementFolderPath']);
+    $asset['placementFolderPath'] = preg_replace('/2014-2015/','2015-2016',$asset['placementFolderPath']);
     $changed = true;
   }
 }
