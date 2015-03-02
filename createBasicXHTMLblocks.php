@@ -716,7 +716,7 @@ $web_repeats = ["CD" => "<p>(no periods, acceptable on first reference to a comp
 "pulldown menu" => "<p>(no hyphen)</p>",
 "upload" => "<p>(one word, no hyphen)</p>",
 "URL and e-mail address punctuation" => "<p>No space follows a period (a.k.a. dot) or other punctuation (underscore, hyphen, slash, colon, etc.) in URL or e-mail addresses. Home page and other directory-level URLs end with a forward slash.</p>",
-"URL and e-mail address line breaks" => "<ul><li>Where it is necessary to break a URL or e-mail address, no hyphen should be used. The break should be made between elements, after a colon, a slash, a double slash, or the symbol @ but before a period or any other punctuation or symbols. To avoid confusion, a URL that contains a hyphen should never be broken at the hyphen. If a particularly long element must be broken, it should be broken between words or syllables. For example: <ul><li>http://<br/> www.metromagazine.com</li><li>http://www<br/> .metromagazine.com</li><li>http://www.metro<br/> magazine.com</li></ul></li><li>When an address is at the close of a sentence, use the normal ending punctuation, but try to reconfigure when possible to avoid this construction. When the address is on its own line, even if it completes a sentence, do not use end punctuation. For example: <ul><li>To learn more about Sarah Lawrence, visit:<br/> www.slc.edu</li></ul></li></ul>",
+"URL and e-mail address line breaks" => "<ul><li>Where it is necessary to break a URL or e-mail address, no hyphen should be used. The break should be made between elements, after a colon, a slash, a double slash, or the symbol @ but before a period or any other punctuation or symbols. To avoid confusion, a URL that contains a hyphen should never be broken at the hyphen. If a particularly long element must be broken, it should be broken between words or syllables. For example: <ul><li>http://<br/> www.metromagazine.com</li><li>http://www<br/> .metromagazine.com</li><li>http://www.metro<br/> magazine.com</li></ul></li><li>When an address is at the close of a sentence, use the normal ending punctuation, but try to reconfigure when possible to avoid this construction. When the address is on its own line, even if it completes a sentence, do not use end punctuation. For example: <ul><li>To learn more about Sarah Lawrence, visit:<br/> www.sarahlawrence.edu</li></ul></li></ul>",
 "Web page, Web site, Web browser" => "<p>(capitalize Web)</p>",
 "webcam, webcast, webinar, webmaster" => "<p>(lowercase)</p>",
 "word processing" => "<p>(two words, lowercase)</p>",
@@ -746,7 +746,7 @@ function readFolder($client, $auth, $id) {
       $total['s']++;
       
       
-      $block = $client->read ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'path' => array ('path' => '_editorial/dump/'.$name, 'siteName' => 'www.slc.edu+style-guide') ) ) );
+      $block = $client->read ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'path' => array ('path' => '_editorial/dump/'.$name, 'siteName' => 'www.sarahlawrence.edu+style-guide') ) ) );
       if ($block->readReturn->success == 'true') {
         $asset = ( array ) $block->readReturn->asset->xhtmlDataDefinitionBlock;
 

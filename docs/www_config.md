@@ -18,7 +18,7 @@ For more information on outputting non-XML code, see the [HH kb](http://www.hann
 
 ## Formats
 
-Most of the slc.edu website uses XSLT formats, with the occasional use of Velocity where XSLT doesn't perform so well (such as string manipulation and escaping content).
+Most of the sarahlawrence.edu website uses XSLT formats, with the occasional use of Velocity where XSLT doesn't perform so well (such as string manipulation and escaping content).
 
 The XSLT formats have a naming convention, where the scripts that start with an underscore are scripts that are _included_ by other scripts, and scripts that end with an underscore are scripts that _include_ other scripts.
 This is done because the include paths in XSLT are hard-coded, and so moving/renaming the XSLT would result in the scripts breaking if the included/including scripts weren't modified to match.

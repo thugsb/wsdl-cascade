@@ -140,7 +140,7 @@ function readPage($client, $auth, $id, $type) {
           if ( !preg_match('/charset/', $contents) ) {
             fwrite($fh, "<!DOCTYPE html>\n<html>\n<head>\n  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>\n</head>\n<body>\n");
           }
-          $str = "<div><a href='http://www.slc.edu/$site_folder/".$asset['path']."'>&raquo;</a>";
+          $str = "<div><a href='https://www.sarahlawrence.edu/$site_folder/".$asset['path']."'>&raquo;</a>";
           if ( !strstr($file_list, $asset['path'])) {
             $str .= " x";
           }

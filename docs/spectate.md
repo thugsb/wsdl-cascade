@@ -13,5 +13,5 @@ The strangeness is to do with their architecture. Instead of users being a singl
 5. Create other users as you desire for that site.
 6. Create Custom Fields are you desire.
 7. And create the form.
-8. Remember that in "More Options" you are likely to want to put `@import url(http://www.slc.edu/core/v5.0/css/a/spectate.css);` in the Custom CSS field.
+8. Remember that in "More Options" you are likely to want to put `@import url(https://www.sarahlawrence.edu/core/v5.0/css/a/spectate.css);` in the Custom CSS field.
 

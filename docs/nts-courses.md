@@ -4,7 +4,7 @@ The NTS courses are available for purchase [here](http://nts.slc.edu/modules/sho
 
 These courses are brought into cascade via an [XML feed](http://my.slc.edu/nts/coursefeed.aspx) that does some processing.
 This feed is controlled by IT at SLC.
-It is pulled into cascade via `www.slc.edu+ce/NTS feed`.
+It is pulled into cascade via `www.sarahlawrence.edu+ce/NTS feed`.
 
 That feed block is then pulled into course pages as `External structured content`, and the `Teaser` metadata field is used to link it to the kinds of course that should be shown on that particular page.
 The `Teaser` field should contain the `OfferingID`.

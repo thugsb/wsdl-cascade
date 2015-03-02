@@ -49,7 +49,7 @@ function readPage($client, $auth, $id) {
     
     // If you want to only edit some pages, choose them here:
     // echo $asset["contentTypePath"]."<br>";
-    // if ($asset["contentTypePath"] == "www.slc.edu+about/Level 2 Page") {
+    // if ($asset["contentTypePath"] == "www.sarahlawrence.edu+about/Level 2 Page") {
       
       editPage($client, $auth, $asset);
       
