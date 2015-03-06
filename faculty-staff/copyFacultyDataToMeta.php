@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 $title = 'Copy Faculty Structured Data to Metadata';
 
 // $type_override = 'page';
@@ -21,7 +22,6 @@ function foldertest($child) {
 function edittest($asset) {
   return true;
 }
-
 
 function changes(&$asset) {
   global $changed, $data;
