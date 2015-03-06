@@ -162,13 +162,11 @@ function editPage($client, $auth, $asset) {
     foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
       if ($sdnode->identifier == "info-block") {
         if (!preg_match('/[0-9]/', $sdnode->blockId) ) {
-          echo 'hi';
           createAssignAccess($client, $auth, $asset);
         }
       }
     }
   } else {
-    echo 'sdf';
     createAssignAccess($client, $auth, $asset);
   }
 }
@@ -179,48 +177,65 @@ function editPage($client, $auth, $asset) {
 function createAssignAccess($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   if ($_POST['action'] == 'edit' || $cron) {
-    $copy = $client->copy ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'id' => 'e05452df7f000002357063689eb57431'), 'copyParameters' => array('newName'=> $asset['name'], 'destinationContainerIdentifier' => array('id' =>'e0550c0a7f00000235706368275431ca', type => 'folder'), 'doWorkflow'=>false) ) );
-    if ($copy->copyReturn->success == 'true') {
-      
-      if ($cron) {
-        $o[3] .= '<div>Info Block Copy success for '.$asset['name'].'</div>';
-      } else {
-        echo '<div class="s">Info Block Copy success</div>';
+    
+    // Test to see if an Info block already exists with the same name
+    $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e0550c0a7f00000235706368275431ca' ) ) );
+    if ($folder->readReturn->success == 'true') {
+      $children = ( array ) $folder->readReturn->asset->folder;
+      $blockID = '';
+      foreach($children["children"]->child as $child) {
+        if ($child->path->path == 'faculty-blocks/'.$asset['name']) {
+          $blockID = $child->id;
+        }
       }
       
-      $total['s']++;
+      if ($blockID == '') { // If a faculty block doesn't exist for that faculty member already, create one...
+        $copy = $client->copy ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'id' => 'e05452df7f000002357063689eb57431'), 'copyParameters' => array('newName'=> $asset['name'], 'destinationContainerIdentifier' => array('id' =>'e0550c0a7f00000235706368275431ca', type => 'folder'), 'doWorkflow'=>false) ) );
+        if ($copy->copyReturn->success == 'true') {
 
-      $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e0550c0a7f00000235706368275431ca' ) ) );
-      if ($folder->readReturn->success == 'true') {
-        $children = ( array ) $folder->readReturn->asset->folder;
-        $blockID = '';
-        foreach($children["children"]->child as $child) {
-          if ($child->path->path == 'faculty-blocks/'.$asset['name']) {
-            $blockID = $child->id;
+          if ($cron) {
+            $o[3] .= '<div>Info Block Copy success for '.$asset['name'].'</div>';
+          } else {
+            echo '<div class="s">Info Block Copy success</div>';
           }
-        }
-      } else {
-        
-        if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read info blocks folder</div>';
+          $total['s']++;
+          
+          // Get the ID of the newly-created Info block
+          $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e0550c0a7f00000235706368275431ca' ) ) );
+          if ($folder->readReturn->success == 'true') {
+            $children = ( array ) $folder->readReturn->asset->folder;
+            foreach($children["children"]->child as $child) {
+              if ($child->path->path == 'faculty-blocks/'.$asset['name']) {
+                $blockID = $child->id;
+              }
+            }
+          } else {
+            if ($cron) {
+              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read info blocks folder to find the ID of the block</div>';
+            } else {
+              echo '<div class="f">Failed to read info blocks folder to find the ID of the block</div>';
+            }
+          }
         } else {
-          echo '<div class="f">Failed to read info blocks folder</div>';
+          if ($cron) {
+            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Info Block Copy failed: '.$asset['path'].'</div>';
+          } else {
+            $result = $client->__getLastResponse();
+            echo '<div class="f">Info Block Copy failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+          }
+          $total['f']++;
         }
-        
       }
     } else {
-      
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Info Block Copy failed: '.$asset['path'].'</div>';
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read info blocks folder to see if a faculty block existed</div>';
       } else {
-        $result = $client->__getLastResponse();
-        echo '<div class="f">Info Block Copy failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+        echo '<div class="f">Failed to read info blocks folder to see if a faculty block existed</div>';
       }
-      
-      $total['f']++;
     }
   }
 
+  // Assign the Info block to the faculty page
   changes($asset, $blockID);
 
   if ($_POST['after'] == 'on' && !$cron) {
@@ -241,6 +256,7 @@ function createAssignAccess($client, $auth, $asset) {
       }
       $total['s']++;
 
+      // Find out if there's an email username (and so by extension, a Cascade user)
       $email = false;
       foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
         if ($sdnode->identifier == "bio") {
@@ -252,6 +268,7 @@ function createAssignAccess($client, $auth, $asset) {
         }
       }
 
+      // If there is an email, we assign there's a Cascade user by the same name and assign that user Write access to the Info block
       if ($email) {
         $blockAsset = array ('type' => 'block_XHTML_DATADEFINITION', 'id' => $blockID );
         $reply = $client->readAccessRights ( array ('authentication' => $auth, 'identifier' => $blockAsset ) );
