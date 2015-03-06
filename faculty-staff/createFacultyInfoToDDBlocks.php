@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/New_York');
-$title = 'For each faculty member page, create an Info DD block, assign it, and grant access';
+$title = 'Cron job to create an Info DD block, assign it, and grant access to faculty pages that do not have one';
 
 // $type_override = 'page';
 $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
@@ -158,12 +158,38 @@ function readPage($client, $auth, $id, $type) {
 function editPage($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   
-  if ($_POST['action'] == 'edit') {
+  if ( arrayContainsInfoBlock($asset["structuredData"]->structuredDataNodes->structuredDataNode, "info-block") ) {
+    foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
+      if ($sdnode->identifier == "info-block") {
+        if (!preg_match('/[0-9]/', $sdnode->blockId) ) {
+          echo 'hi';
+          createAssignAccess($client, $auth, $asset);
+        }
+      }
+    }
+  } else {
+    echo 'sdf';
+    createAssignAccess($client, $auth, $asset);
+  }
+}
+
+
+
+
+function createAssignAccess($client, $auth, $asset) {
+  global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
+  if ($_POST['action'] == 'edit' || $cron) {
     $copy = $client->copy ( array ('authentication' => $auth, 'identifier' => array('type' => 'block_XHTML_DATADEFINITION', 'id' => 'e05452df7f000002357063689eb57431'), 'copyParameters' => array('newName'=> $asset['name'], 'destinationContainerIdentifier' => array('id' =>'e0550c0a7f00000235706368275431ca', type => 'folder'), 'doWorkflow'=>false) ) );
     if ($copy->copyReturn->success == 'true') {
-      echo '<div class="s">Info Block Copy success</div>';
-      $total['s']++;
       
+      if ($cron) {
+        $o[3] .= '<div>Info Block Copy success for '.$asset['name'].'</div>';
+      } else {
+        echo '<div class="s">Info Block Copy success</div>';
+      }
+      
+      $total['s']++;
+
       $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e0550c0a7f00000235706368275431ca' ) ) );
       if ($folder->readReturn->success == 'true') {
         $children = ( array ) $folder->readReturn->asset->folder;
@@ -174,25 +200,37 @@ function editPage($client, $auth, $asset) {
           }
         }
       } else {
-        echo '<div class="f">Failed to read info blocks folder</div>';
+        
+        if ($cron) {
+          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read info blocks folder</div>';
+        } else {
+          echo '<div class="f">Failed to read info blocks folder</div>';
+        }
+        
       }
     } else {
-      $result = $client->__getLastResponse();
-      echo '<div class="f">Info Block Copy failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+      
+      if ($cron) {
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Info Block Copy failed: '.$asset['path'].'</div>';
+      } else {
+        $result = $client->__getLastResponse();
+        echo '<div class="f">Info Block Copy failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+      }
+      
       $total['f']++;
     }
   }
-  
+
   changes($asset, $blockID);
-  
+
   if ($_POST['after'] == 'on' && !$cron) {
     echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
       print_r($asset); // Shows the page as it will be
     echo '</div></div>';
   }
-  
+
   if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
     }
     if ($edit->editReturn->success == 'true') {
@@ -202,7 +240,7 @@ function editPage($client, $auth, $asset) {
         echo '<div class="s">Edit success</div>';
       }
       $total['s']++;
-      
+
       $email = false;
       foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
         if ($sdnode->identifier == "bio") {
@@ -213,13 +251,13 @@ function editPage($client, $auth, $asset) {
           }
         }
       }
-      
+
       if ($email) {
         $blockAsset = array ('type' => 'block_XHTML_DATADEFINITION', 'id' => $blockID );
         $reply = $client->readAccessRights ( array ('authentication' => $auth, 'identifier' => $blockAsset ) );
         if ($reply->readAccessRightsReturn->success == 'true') {
           $accessRightsInformation = $reply->readAccessRightsReturn->accessRightsInformation;
-          
+  
           $accessToAdd = array('level' => 'write', 'type' => 'user', 'name' => $email);
 
           if (!is_array($accessRightsInformation->aclEntries->aclEntry))
@@ -228,20 +266,41 @@ function editPage($client, $auth, $asset) {
 
           $editAccess = $client->editAccessRights ( array ('authentication' => $auth, 'accessRightsInformation' => $accessRightsInformation, 'applyToChildren' => false ) );
           if ($editAccess->editAccessRightsReturn->success == 'true') {
-            echo '<div class="s">Edit rights success</div>';
+            if ($cron) {
+              $o[2] .= '<div style="color:#090;">Edit rights success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$blockID.'&type=block_XHTML_DATADEFINITION#highlight">'.$asset['path']."</a></div>";
+            } else {
+              echo '<div class="s">Edit rights success</div>';
+            }
+            
             $total['s']++;
           } else {
-            echo '<div class="f">Edit rights failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+            
+            if ($cron) {
+              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit rights failed: '.$asset['path'].'</div>';
+            } else {
+              $result = $client->__getLastResponse();
+              echo '<div class="f">Edit rights failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+            }
+            
             $total['f']++;
           }
 
         } else {
-          echo '<div class="f">Access Read failed</div>';
+          if ($cron) {
+            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Access Read failed</div>';
+          } else {
+            echo '<div class="f">Access Read failed</div>';
+          }
+          
         }
-      } else {
-        echo 'No email, no access!';
+      } else {  
+        if ($cron) {
+          $o[1] .= '<div>No email, no access!</div>';
+        } else {
+          echo 'No email, no access!';
+        }
       }
-      
+
     } else {
       if ($_POST['debug'] == 'on') {
         $result = $client->__getLastResponse();
@@ -258,5 +317,7 @@ function editPage($client, $auth, $asset) {
     $total['k']++;
   }
 }
+
+
 
 ?>
