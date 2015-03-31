@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 $title = 'Adding an Applicable Group to Asset Factories in their AFcontainer';
 
 $type_override = 'assetfactorycontainer';
@@ -6,6 +7,10 @@ $type_override = 'assetfactorycontainer';
 // Note, also change the foldertest to TRUE for undergrad and FALSE for grad
 $start_asset = '859908207f00000101f92de53e7c4d71,8598eabf7f00000101f92de5a7354dea,8562da157f00000101f92de5a835ef7d,859869be7f00000101f92de5fdd29102,8598b47d7f00000101f92de5f0838d0e'; // Undergrad
 // $start_asset = '4e9e12dc7f000001015d84e0032be71f'; // Grad
+
+$lastyear = '/2014-2015/';
+$nextyearregex = '/2015-2016/';
+$nextyear = '2015-2016';
 
 $asset_type = 'assetFactoryContainer';
 $asset_children_type = 'assetFactory';
@@ -30,9 +35,9 @@ function edittest($asset) {
 function changes(&$asset) {
   global $changed;
   $changed = false;
-  if (!preg_match('/2015-2016/', $asset['placementFolderPath'])) {
+  if (!preg_match($nextyearregex, $asset['placementFolderPath'])) {
     $asset['placementFolderId'] = '';
-    $asset['placementFolderPath'] = preg_replace('/2014-2015/','2015-2016',$asset['placementFolderPath']);
+    $asset['placementFolderPath'] = preg_replace($lastyear,$nextyear,$asset['placementFolderPath']);
     $changed = true;
   }
 }

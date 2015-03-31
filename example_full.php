@@ -63,7 +63,7 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $o, $cron;
+  global $asset_type, $asset_children_type, $data, $o, $cron, $total;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }

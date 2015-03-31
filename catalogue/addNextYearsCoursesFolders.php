@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/New_York');
 $title = 'Copy the base asset used for course folders';
 /* This script will copy the base asset used for course folders into the /courses/ folder
    of each discipline. Just change $lastyear and $nextyear.
@@ -11,6 +12,10 @@ $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 $lastyear = '/2014-2015$/';
 $nextyear = "2015-2016";
 
+function foldertest($child) {
+  if (preg_match('/^[a-z]/', $child->path->path) && !preg_match('/\/*\//', $child->path->path))
+    return true;
+}
 
 include('../html_header.php');
 
@@ -22,8 +27,10 @@ function readFolder($client, $auth, $id) {
     if ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
-    if ($_POST['children'] == 'on') {
-      print_r($asset["children"]); // Shows all the children of the folder
+    if ($_POST['children'] == 'on' && !$cron) {
+      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+        print_r($asset["children"]); // Shows all the children of the folder
+      echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
   } else {
@@ -42,7 +49,7 @@ function indexFolder($client, $auth, $asset) {
 
           // Copy asset
           if ($_POST['asset'] == 'on') {
-            echo 'Copying: '.$child->path->path;
+            echo 'Creating: '.substr($child->path->path,0,strpos($child->path->path, '/')).'/'.$nextyear;
           }
 
           $destFolder = array ('type' => 'folder', 'id' => $asset["id"]);
@@ -52,19 +59,21 @@ function indexFolder($client, $auth, $asset) {
           $params = array ('authentication' => $auth, 'identifier' => $baseAsset, 'copyParameters' => $copyParams );
 
           if ($_POST['action'] == 'edit') {
-            $reply = $client->copy ( $params );
+            $copy = $client->copy ( $params );
           }
 
-          if ($reply->copyReturn->success == 'true') {
-            echo '<div class="s">Copy success: '.$child->path->path.'</div>';
-            $asset = ( array ) $reply->readReturn->asset->folder;
+          if ($copy->copyReturn->success == 'true') {
+            echo '<div class="s">Copy success: '.substr($child->path->path,0,strpos($child->path->path, '/')).'/'.$nextyear.'</div>';
             $total['s']++;
           } else {
-            echo '<div class="f">Copy Failed: '.$child->path->path.'</div>';
+            echo '<div class="f">Copy Failed: '.substr($child->path->path,0,strpos($child->path->path, '/')).'/'.$nextyear.'</div>';
             $total['f']++;
           }
+          echo '<hr/>';
         }
-        readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
+        if (foldertest($child)) {
+          readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
+        }
       }
     }
   }

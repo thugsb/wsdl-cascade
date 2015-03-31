@@ -11,6 +11,7 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 // Note: Change the year in the regex below. $move_to is meant to be blank
 
 $move_to = '';
+$lastYear = '2014-2015';
 
 function pagetest($child) {
   return false;
@@ -43,13 +44,13 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $move_to;
+  global $move_to, $lastYear;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
   foreach($asset["children"]->child as $child) {
     if ($child->type == "folder") {
-      if (preg_match('/^[a-z][-a-z\/]+2013-2014/', $child->path->path) ) {
+      if (preg_match('/^anthr[a-z][-a-z\/]+'.$lastYear.'/', $child->path->path) ) {
         foreach($asset["children"]->child as $ch) {
           if (preg_match('/^[a-z][-a-z\/]+_archived$/',$ch->path->path) ) {
             $move_to = $ch;
@@ -57,7 +58,7 @@ function indexFolder($client, $auth, $asset) {
         }
         editPage($client, $auth, array ('type' => 'folder', 'id' => $child->id));
       }
-      if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) )
+      if (!preg_match('/_/',$child->path->path) && !preg_match('/\//',$child->path->path) )
         readFolder($client, $auth, array ('type' => 'folder', 'id' => $child->id));
     }
   }
@@ -66,7 +67,7 @@ function indexFolder($client, $auth, $asset) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total, $move_to;
+  global $total, $move_to, $lastYear;
   
   /* This is unnecessary, but useful for checking the $asset is correct * /
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array('id'=>$asset['id'], 'type'=>'folder') ) );
@@ -108,10 +109,10 @@ function editPage($client, $auth, $asset) {
   
   
   if ($move->moveReturn->success == 'true') {
-    echo '<div class="s">Edit success</div>';
+    echo '<div class="s">Move success: '.$lastYear.' to '.$move_to->path->path.'</div>';
     $total['s']++;
   } else {
-    echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
+    echo '<div class="f">Move failed: '.$lastYear.' to '.$move_to->path->path.'<div>'.extractMessage($result).'</div></div>';
     $total['f']++;
   }
   echo '</div>';
