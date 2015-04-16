@@ -38,7 +38,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed, $total;
+  global $changed, $total, $discNames, $relatedIDs, $year, $auth, $client;
   $changed = false;
   $newTitle = trim($asset['metadata']->title);
   $newTitle = preg_replace('/& /','and ',$newTitle);
@@ -80,11 +80,156 @@ function changes(&$asset) {
           }
         }
       }
+    } elseif ($field->identifier == 'related-to') {
+      if (strstr($field->text, '::CONTENT-XML-CHECKBOX::') ) {
+        $related = explode('::CONTENT-XML-CHECKBOX::', $field->text);
+        array_shift($related);
+        foreach($related as $disc) {
+          $discFolder = $discNames[$disc];
+          if ($discFolder) {
+            if ($relatedIDs[$discFolder]) {
+              
+              $reference = array(
+                'reference' => array(
+                  'name' => $asset['name'],
+                  'parentFolderId' => $relatedIDs[$discFolder],
+                  'referencedAssetId' => $asset['id'],
+                  'siteName' => 'www.sarahlawrence.edu+catalogue',
+                  'referencedAssetType' => 'page'
+                )
+              );
+
+              $read = $client->read(array ('authentication' => $auth, 'identifier' => array('id'=>$relatedIDs[$discFolder], 'type' => 'folder') ) );
+              if ($read->readReturn->success == 'true') {
+                $dest = ( array ) $read->readReturn->asset->folder;
+                if ($_POST['children'] == 'on' && !$cron) {
+                  echo '<button class="btn" href="#cModal'.$dest['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$dest['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+                    print_r($dest["children"]); // Shows all the children of the folder
+                  echo '</div></div>';
+                }
+                $matchNew = false;
+                foreach ($dest["children"] as $existingRef) {
+                  if (basename($existingRef->path->path) == $asset['name']) {
+                    $matchNew = true;
+                    if (!$cron) {echo '<div>A reference for '.$asset['name'].' already exists in '.$dest['path'].'.</div>';}
+                  }
+                }
+              } else {
+                if ($cron) {
+                  $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+                } else {
+                  echo '<div class="f">Failed to read folder: '.$discFolder.'</div>';
+                }
+              }
+
+              if (!$matchNew) {
+                if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
+                
+                // Create the new reference
+                if ($_POST['action'] == 'edit') {
+                  $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
+                }
+                if ($create->createReturn->success == 'true') {
+                  if ($cron) {
+                    $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
+                  } else {
+                    echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
+                  }
+                  $total['s']++;
+                } else {
+                  if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
+                  if ($cron) {
+                    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+                  } else {
+                    echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+                  }
+                  $total['f']++;
+                }
+              }
+              
+            } else {  
+              if ($cron) {
+                $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline related folder ID does not exist: '.$disc.'</div>';
+              } else {
+                echo '<div class="f">Discipline related folder ID does not exist: '.$disc.'</div>';
+              }
+            }
+          } else {  
+            if ($cron) {
+              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
+            } else {
+              echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
+            }
+          }
+        }
+      }
     }
   }
 }
 
-if (!$cron)
+include('relatedIDs.php');
+
+$discNames = array (
+"Africana Studies" => "africana-studies",
+"Anthropology" => "anthropology",
+"Art History" => "art-history",
+"Asian Studies" => "asian-studies",
+"Biology" => "biology",
+"Chemistry" => "chemistry",
+"Chinese" => "chinese",
+"Classics" => "classics",
+"Cognitive and Brain Science" => "cognitive-and-brain-science",
+"Computer Science" => "computer-science",
+"Dance" => "dance",
+"Architecture and Design Studies" => "design-studies",
+"Development Studies" => "development-studies",
+"Economics" => "economics",
+"Environmental Studies" => "environmental-studies",
+"Ethnic and Diasporic Studies" => "ethnic-and-diasporic-studies",
+"Film History" => "film-history",
+"Filmmaking, Screenwriting and Media Arts" => "filmmaking-screenwriting-media-arts",
+"French" => "french",
+"Games, Interactivity, and Playable Media" => "games-interactive-media",
+"Gender and Sexuality Studies" => "gender-and-sexuality-studies",
+"Geography" => "geography",
+"German" => "german",
+"Global Studies" => "global-studies",
+"Greek (Ancient)" => "greek",
+"Health, Science, and Society" => "health-science-society",
+"History" => "history",
+"International Studies" => "international-studies",
+"Italian" => "italian",
+"Japanese" => "japanese",
+"Modern and Classical Languages and Literatures" => "languages-and-literatures",
+"Latin" => "latin",
+"Latin American and Latino/a Studies" => "latin-american-and-latinoa-studies",
+"Lesbian, Gay, Bisexual, and Transgender Studies" => "lesbian-gay-bisexual-and-transgender-studies",
+"Literature" => "literature",
+"Mathematics" => "mathematics",
+"Middle Eastern and Islamic Studies" => "middle-eastern-and-islamic-studies",
+"Music" => "music",
+"Philosophy" => "philosophy",
+"Physics" => "physics",
+"Political Economy" => "political-economy",
+"Politics" => "politics",
+"Pre-Health Program" => "pre-health-program",
+"Psychology" => "psychology",
+"Public Policy" => "public-policy",
+"Religion" => "religion",
+"Russian" => "russian",
+"Science and Mathematics" => "science-and-mathematics",
+"Science, Technology, and Society" => "science-technology-and-society",
+"Social Science" => "social-science",
+"Sociology" => "sociology",
+"Spanish" => "spanish",
+"Theatre" => "theatre",
+"Urban Studies" => "urban-studies",
+"Visual Arts" => "visual-arts",
+"Writing" => "writing"
+);
+
+if (!$cron) {
   include('../header.php');
+}
 
 ?>
