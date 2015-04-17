@@ -12,6 +12,9 @@ $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 
 $year = '2014-2015';
 
+
+$message = "<div class='f'>Warning, this is a legacy script that may have undesirable consequences in undergrad.</div>";
+
 function pagetest($child) {
   global $year;
   if (preg_match("/$year/", $child->path->path))

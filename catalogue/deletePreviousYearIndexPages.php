@@ -6,6 +6,8 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 
 $year_to_delete = "/2014-2015/";
 
+$message = "<div class='f'>Warning, this is a legacy script that may have undesirable consequences.</div>";
+
 function pagetest($child) {
   global $year_to_delete;
   if (preg_match($year_to_delete, $child->path->path))

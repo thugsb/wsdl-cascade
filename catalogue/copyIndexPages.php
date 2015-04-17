@@ -13,6 +13,8 @@ $lastyear = '2014-2015';
 $nextyear = '2015-2016';
 $descBlockID = '';
 
+$message = "<div class='f'>Warning, this is a legacy script that may have undesirable consequences.</div>";
+
 function pagetest($child) {
   if (preg_match('/index$/', $child->path->path) && substr_count($child->path->path,'/') > 1)
     return true;
