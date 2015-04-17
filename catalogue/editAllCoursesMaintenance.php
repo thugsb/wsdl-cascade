@@ -38,7 +38,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed, $total, $discNames, $relatedIDs, $year, $auth, $client;
+  global $changed, $total, $discNames, $relatedIDs, $year, $auth, $client, $cron;
   $changed = false;
   $newTitle = trim($asset['metadata']->title);
   $newTitle = preg_replace('/& /','and ',$newTitle);
