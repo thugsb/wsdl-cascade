@@ -12,7 +12,8 @@ Follow these steps to get the site ready for adding courses to.
 Now you're ready to add the courses to cascade.
 
 7. Edit the $academicYear in each of the catalogue/_reports XSLT, and make sure the publish-set is publishing hourly. Inform the content-creators.
-8. Change the year in the `editAllCoursesMaintenance.php` and script.
+8. Change the year in `createRelatedIDarray.php` and run it, ensuring that `relatedIDs.php` gets updated. *This script needs to be run whenever a discipline is added or renamed*.
+8. Change the year in the `editAllCoursesMaintenance.php` script.
 9. Edit the $old and $new in `renameCoursesPageHeadlines.php` and run it.
 10. Edit the `undergradCoursesYear` variable in the [_academic-year XSLT](https://cms.slc.edu:8443/entity/open.act?id=cc0aa4387f0000021c8ad4ac3f12f79b&type=format&).
 11. If you haven't done so, re-enable the www destinations and publish!
@@ -34,7 +35,7 @@ Note: If the course naming plugin stops work, `renamePagesBasedOnTitle.php` shou
 You might be able to see the grad courses on this site: https://my.slc.edu/ics/Academics/Course_Schedules/graduate.jnz
 
 
-## Legacy:
+## Legacy: DELETE THIS FROM DOCS?
 
 13. If you want the previous years of catalogues, do the following:
     1. Edit the $lastyear and $nextyear in `copyIndexPages.php`, and run it.

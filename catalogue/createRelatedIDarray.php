@@ -20,19 +20,27 @@ function foldertest($child) {
 
 
 $disciplines = array();
+$disciplineNames = array();
 
 if (!$cron) {include('../html_header.php');}
 
-print_r($disciplines);
-
-if ($_POST['action'] == 'edit') {
-  $str = '<?php $relatedIDs = array(';
-  foreach($disciplines as $key => $value) {
-    $str .= "'".$key."' => ".$value.",\n";
-  }
-  $str .= "); ?>";
-  file_put_contents("relatedIDs.php", $str);
+$str = "<?php \n".'$relatedIDs = array(';
+foreach($disciplines as $key => $value) {
+  $str .= "'".$key."' => ".$value.",\n";
 }
+$str .= "); \n\n".'$discNames = array (';
+foreach($disciplineNames as $key => $value) {
+  $str .= '"'.$key.'" => '.$value.",\n";
+}
+$str .= "); \n?>";
+if ($_POST['action'] == 'edit') {
+  if (file_put_contents("relatedIDs.php", $str) === false) {
+    echo '<div class="f">Failed to write to file</div>';
+  } else {
+    echo '<div class="s">Successfully written to file</div>';
+  }
+}
+echo $str;
 
 function readFolder($client, $auth, $id) {
   global $asset_type, $asset_children_type, $data, $o, $cron;
@@ -60,13 +68,16 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $o, $cron, $total, $disciplines;
+  global $asset_type, $asset_children_type, $data, $o, $cron, $total, $disciplines, $disciplineNames;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
   foreach($asset["children"]->child as $child) {
     if ($child->type === strtolower($asset_type)) {
       if (foldertest($child)) {
+        if (!preg_match('/\//', $asset['path'])) {
+          $disciplineNames[$asset['metadata']->displayName] = '"'.$asset['path'].'"';
+        }
         readFolder($client, $auth, array ('type' => $child->type, 'id' => $child->id));
       } elseif (preg_match('/\/related$/', $child->path->path) ) {
         $disciplines[$asset['parentFolderPath']] = "'".$child->id."'";

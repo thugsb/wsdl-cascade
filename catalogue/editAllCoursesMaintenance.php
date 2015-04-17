@@ -111,7 +111,7 @@ function changes(&$asset) {
                 foreach ($dest["children"] as $existingRef) {
                   if (basename($existingRef->path->path) == $asset['name']) {
                     $matchNew = true;
-                    if (!$cron) {echo '<div>A reference for '.$asset['name'].' already exists in '.$dest['path'].'.</div>';}
+                    if (!$cron) {echo '<div class="k">A reference for '.$asset['name'].' already exists in '.$dest['path'].'.</div>';}
                   }
                 }
               } else {
@@ -169,64 +169,6 @@ function changes(&$asset) {
 
 include('relatedIDs.php');
 
-$discNames = array (
-"Africana Studies" => "africana-studies",
-"Anthropology" => "anthropology",
-"Art History" => "art-history",
-"Asian Studies" => "asian-studies",
-"Biology" => "biology",
-"Chemistry" => "chemistry",
-"Chinese" => "chinese",
-"Classics" => "classics",
-"Cognitive and Brain Science" => "cognitive-and-brain-science",
-"Computer Science" => "computer-science",
-"Dance" => "dance",
-"Architecture and Design Studies" => "design-studies",
-"Development Studies" => "development-studies",
-"Economics" => "economics",
-"Environmental Studies" => "environmental-studies",
-"Ethnic and Diasporic Studies" => "ethnic-and-diasporic-studies",
-"Film History" => "film-history",
-"Filmmaking, Screenwriting and Media Arts" => "filmmaking-screenwriting-media-arts",
-"French" => "french",
-"Games, Interactivity, and Playable Media" => "games-interactive-media",
-"Gender and Sexuality Studies" => "gender-and-sexuality-studies",
-"Geography" => "geography",
-"German" => "german",
-"Global Studies" => "global-studies",
-"Greek (Ancient)" => "greek",
-"Health, Science, and Society" => "health-science-society",
-"History" => "history",
-"International Studies" => "international-studies",
-"Italian" => "italian",
-"Japanese" => "japanese",
-"Modern and Classical Languages and Literatures" => "languages-and-literatures",
-"Latin" => "latin",
-"Latin American and Latino/a Studies" => "latin-american-and-latinoa-studies",
-"Lesbian, Gay, Bisexual, and Transgender Studies" => "lesbian-gay-bisexual-and-transgender-studies",
-"Literature" => "literature",
-"Mathematics" => "mathematics",
-"Middle Eastern and Islamic Studies" => "middle-eastern-and-islamic-studies",
-"Music" => "music",
-"Philosophy" => "philosophy",
-"Physics" => "physics",
-"Political Economy" => "political-economy",
-"Politics" => "politics",
-"Pre-Health Program" => "pre-health-program",
-"Psychology" => "psychology",
-"Public Policy" => "public-policy",
-"Religion" => "religion",
-"Russian" => "russian",
-"Science and Mathematics" => "science-and-mathematics",
-"Science, Technology, and Society" => "science-technology-and-society",
-"Social Science" => "social-science",
-"Sociology" => "sociology",
-"Spanish" => "spanish",
-"Theatre" => "theatre",
-"Urban Studies" => "urban-studies",
-"Visual Arts" => "visual-arts",
-"Writing" => "writing"
-);
 
 if (!$cron) {
   include('../header.php');
