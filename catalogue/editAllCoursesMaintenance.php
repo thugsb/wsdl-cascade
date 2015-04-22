@@ -80,10 +80,11 @@ function changes(&$asset) {
           }
         }
       }
-    } elseif ($field->identifier == 'related-to') {
+    } elseif (preg_match('/^related-to-/', $field->identifier) ) {
       if (strstr($field->text, '::CONTENT-XML-CHECKBOX::') ) {
         $related = explode('::CONTENT-XML-CHECKBOX::', $field->text);
         array_shift($related);
+        if ($related[0] != '') {
         foreach($related as $disc) {
           $discFolder = $discNames[$disc];
           if ($discFolder) {
@@ -161,6 +162,7 @@ function changes(&$asset) {
               echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
             }
           }
+        }
         }
       }
     }
