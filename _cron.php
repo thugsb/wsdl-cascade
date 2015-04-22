@@ -148,7 +148,7 @@ $output = "<h1>Script: ".$_GET['s']."</h1>\n<h2>Summary</h2>".$o[0].'<h2>Errors<
 
 // $full_details = '<h2>Children of the folders</h2>'.$o[5].'<h2>Edited Asset Content (before and after)</h2>'.$o[6];
 
-$subject = 'WSDL Cron ';
+$subject = 'Re: WSDL Cron ';
 if ($total['f'] > 0) {$subject .= 'FAILED ';}
 $subject .= $_GET['s'];
 
