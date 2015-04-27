@@ -1,46 +1,44 @@
 # Asset ID lists
 
-Updated: 2015-02-19
+Updated: 2015-04-27
 
 ## Base folders: (the Global root folder id='ROOT')
 
 1697b03b7f00000101f92de5bdae9213,Config
 019ab6c77f00000101f92de57a5e5aaf,Core
-6361bcb57f00000238a0931699d22881,Home-gateway
 019b3b507f000002221c3dfed24ee171,Home-message
 d89892d67f0000022e208d44695f11af,Htaccess
 7f71bcd77f00000244642cae55ea94a9,Htaccess - Pending
 cc912c097f0000020102c065cff41289,SLC.edu
+ 289c1ac97f00000101b7715d14978ffc,Student Catalogue Admin
+ bf007dc77f0000025c6a3cb1be0484cc,Vanity URL
 1304eb1e7f0000022b80da556a82a730,WSDL
 cd67add77f00000101f92de53c71ae3e,www.sarahlawrence.edu
 c621c0d17f00000101f92de5212d40b7,www.sarahlawrence.edu+about
-636641937f00000238a093168e3ef487,www.sarahlawrence.edu+about-gateway
 636943577f00000238a09316081f537a,www.sarahlawrence.edu+academics
 75e224457f00000101f92de500562ba4,www.sarahlawrence.edu+admission
 6369209d7f00000238a09316be6aa2e9,www.sarahlawrence.edu+admission-gateway
 5b2c1f137f00000250abe6dcc7f763b9,www.sarahlawrence.edu+admitted
-a5784ced7f00000101f92de5e263be1b,www.sarahlawrence.edu+admitted-students
 85ebc5af7f00000257316e85c1c16610,www.sarahlawrence.edu+alumni
 f95157927f000002672330a666e12472,www.sarahlawrence.edu+apply
 548fa6e57f00000101f92de5767a87bd,www.sarahlawrence.edu+athletics
 b732376b7f00000251436a90408943ae,www.sarahlawrence.edu+campbellcorner
 9810140b7f00000100279c883b64b2cd,www.sarahlawrence.edu+cards
 661d4e427f00000226f3bbadcced726a,www.sarahlawrence.edu+career-services
-289c1ac97f00000101b7715d14978ffc,www.sarahlawrence.edu+catalogue-admin
 77bd3c077f00000101f92de5ba74a03c,www.sarahlawrence.edu+cdi
 047360737f00000101f92de55e007d02,www.sarahlawrence.edu+ce
 1f3dbc877f0000024a873afa56b38976,www.sarahlawrence.edu+college-town
 2bd741d47f0000021312656bde305a48,www.sarahlawrence.edu+counselors
 a551401d7f00000274a0ceef3d1113fc,www.sarahlawrence.edu+directory
 94a215b67f000001015d84e00c037aaf,www.sarahlawrence.edu+documentation
-b70b131e7f00000100279c88b0ebe56f,www.sarahlawrence.edu+email
+ e78cab187f0000022ed14f80726fff35,www.sarahlawrence.edu+end-of-life-care
 2f7dcabc7f00000101f92de527bf1fa7,www.sarahlawrence.edu+errors
 f7cfec677f0000024ae410ca99ed2e30,www.sarahlawrence.edu+explore
 2829e1f07f0000021312656b9b656c5d,www.sarahlawrence.edu+faculty-directory
-6369593e7f00000238a0931601deacbb,www.sarahlawrence.edu+faculty-gateway
 77462bbe7f00000204876d423af89708,www.sarahlawrence.edu+fb
 cb699b287f0000026c8256cb44f0222d,www.sarahlawrence.edu+gilberto-perez
 63e913ea7f00000101f92de5a15894ea,www.sarahlawrence.edu+giving
+fb8617fc7f000002143a8aa2814ead0d,www.sarahlawrence.edu+grad-admitted
 778ad1ae7f00000101f92de5c4381945,www.sarahlawrence.edu+graduate
 8e0a7b777f00000278855613817cf6ed,www.sarahlawrence.edu+high-school
 b168f6d87f0000026aa9f1d00e55b0f7,www.sarahlawrence.edu+IAPO
@@ -62,6 +60,7 @@ da7f18f97f00000246446e0ceeee5ecb,www.sarahlawrence.edu+poetry-festival
 e02d9e887f000002095adf3c628dd7d9,www.sarahlawrence.edu+site
 640f30657f00000101f92de54b4647e7,www.sarahlawrence.edu+studentlife
 def503967f00000204ada1dcfca14657,www.sarahlawrence.edu+style-guide
+ e6d6de5e7f0000022dbb43dd72d0c4b7,www.sarahlawrence.edu+svr
 5272debc7f00000101f92de5f336e998,www.sarahlawrence.edu+undergraduate
 a2382acd7f00000265312942b0e50490,www.sarahlawrence.edu+uniqueness
 f940a60d7f000002672330a663045257,www.sarahlawrence.edu+visit
@@ -69,8 +68,12 @@ c3d213c17f00000101f92de53291da62,www.sarahlawrence.edu+why
 931fa1d97f0000020f1c572aef743886,www.sarahlawrence.edu+writing-portal
 0501a25c7f00000262deaa2ed25b9c83,www.sarahlawrence.edu+writing-semester
 0499307f7f0000020102c06596359dc2,z-faculty.slc.edu
+ 6361bcb57f00000238a0931699d22881,z-Home-gateway
 c62291407f00000101f92de5b4b37193,z-Sitemaps
+ a5784ced7f00000101f92de5e263be1b,z-admitted-students
 51d8cb0d7f00000101f92de5c3401157,z-Dev
+ b70b131e7f00000100279c88b0ebe56f,z-email
+ 6369593e7f00000238a0931601deacbb,z-faculty-gateway
 8cba587a7f0000025a3b8730fb8a4620,z-pages.slc.edu
 9a5e1c257f00000101f92de5153a7b69,z-archived
 3bb277007f00000209340e798d372f55,z-library-databases
@@ -79,6 +82,7 @@ af3e1a647f000001016a5ae9e825dd0f,z-library.slc.edu
 052704657f00000215fab3c519b8e6a9,z-mobile.slc.edu
 0ffd1b5f7f00000101f92de5f1bee48e,z-V4-Dev
 40b3d26d7f000002017feaf9495c23d9,z-Mosaic
+ 636641937f00000238a093168e3ef487,z-www.sarahlawrence.edu+about-gateway
 ### Grad programs:
 dde177857f00000246be153906311094,www.sarahlawrence.edu+child-development
 ddf2c1847f00000246be153972e0fa42,www.sarahlawrence.edu+dance-mfa
