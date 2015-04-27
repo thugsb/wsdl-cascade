@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/New_York');
-$title = 'Just read all pages, looking for ones with videos';
+$title = 'Just read all pages, looking for ones with iframes';
 
 // $type_override = 'page';
 // Site IDs updated 2015-02-19
@@ -40,17 +40,21 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed;
+  global $changed, $total;
   $changed = false;
   
   if (strpos(json_encode($asset), '<iframe' ) ) {
     echo 'iframe found';
-    if ($_POST['action'] == 'edit') {
-      $myFile = "indexes/iframes.html";
-      $fh = fopen($myFile, 'a') or die("can't open file");
-      $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '."</div>\n";
-      fwrite($fh, $str);
-      fclose($fh);
+    preg_match('/<iframe.+<\/\iframe>/', print_r($asset, true), $iframes);
+    $t = print_r($iframes, true);
+    echo str_replace("\n",'',htmlspecialchars($t));
+    $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '. str_replace("\n",'',htmlspecialchars($t)) ."</div>\n";
+    if ($_POST['action'] == 'edit' && file_put_contents("indexes/iframes.html", $str, FILE_APPEND) !== false) {
+      $total['s']++;
+      echo '<div class="s">Written to iframes.html</div>';
+    } else {
+      $total['f']++;
+      echo '<div class="f">Failed to write to iframes.html</div>';
     }
   } else {echo 'nope';}
 }
