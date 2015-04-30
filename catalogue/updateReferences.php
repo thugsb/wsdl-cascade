@@ -6,6 +6,9 @@ $title = 'Create references for the new course folders, and remove the oldest on
 $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 // $start_asset = '4e9e12a97f000001015d84e03ea3fb26'; // Grad
 
+$siteName = 'www.sarahlawrence.edu+catalogue';
+// $siteName = 'www.sarahlawrence.edu+grad-catalogue';
+
 $oldyear = '2011-2012';
 $nextyear = '2015-2016';
 
@@ -36,7 +39,7 @@ function readFolder($client, $auth, $id) {
 }
 
 function indexFolder($client, $auth, $asset) {
-  global $total, $oldyear, $nextyear;
+  global $total, $oldyear, $nextyear, $siteName;
   if (is_array($asset["children"]->child)) {
     foreach($asset["children"]->child as $child) {
       if ($child->type == "folder") {
@@ -56,7 +59,7 @@ function indexFolder($client, $auth, $asset) {
               'name' => $nextyear,
               'parentFolderPath' => $discFolder.'_indexes',
               'referencedAssetId' => $child->id,
-              'siteName' => 'www.sarahlawrence.edu+catalogue',
+              'siteName' => $siteName,
               'referencedAssetType' => 'folder'
             )
           );
@@ -78,7 +81,7 @@ function indexFolder($client, $auth, $asset) {
           
           // Delete the old reference
           if ($_POST['action'] == 'edit') {
-            $delete = $client->delete(array ('authentication' => $auth, 'identifier' => array('path' => array( 'path' => $discFolder.'_indexes/'.$oldyear, 'siteName' => 'www.sarahlawrence.edu+catalogue' ), 'type' => 'reference') ) );
+            $delete = $client->delete(array ('authentication' => $auth, 'identifier' => array('path' => array( 'path' => $discFolder.'_indexes/'.$oldyear, 'siteName' => $siteName ), 'type' => 'reference') ) );
           }
           if ($delete->deleteReturn->success == 'true') {
             echo '<div class="s">Deletion success: '.$discFolder.'_indexes/'.$oldyear.'</div>';

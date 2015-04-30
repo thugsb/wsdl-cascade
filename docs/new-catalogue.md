@@ -16,7 +16,7 @@ Cascade is now ready for the new years' courses to be added.
 
 ## Once the courses have been added
 
-1. We-enable the www destinations and publish each discipline folder!
+1. Archive the /catalogue/ folder on the server via FTP, re-enable the www destinations and publish each discipline folder!
 2. Edit the $old and $new in `renameCoursesPageHeadlines.php` and run it. Edit the `undergradCoursesYear` variable in the [_academic-year XSLT](https://cms.slc.edu:8443/entity/open.act?id=cc0aa4387f0000021c8ad4ac3f12f79b&type=format&).
 3. Edit the `$lastYear` in `moveLastYearsCoursesToArchived.php` and run it.
 4. Edit `FacultyPagesCurrentYear` and `FacultyPagesFutureYear` in `_academic-year` and republish the faculty site.
