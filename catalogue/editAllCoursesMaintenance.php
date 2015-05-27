@@ -101,7 +101,7 @@ function changes(&$asset) {
                 );
 
                 $read = $client->read(array ('authentication' => $auth, 'identifier' => array('id'=>$relatedIDs[$discFolder], 'type' => 'folder') ) );
-                if ($read->readReturn->success == 'true') {
+                if ($read->readReturn->success === 'true') {
                   $dest = ( array ) $read->readReturn->asset->folder;
                   if ($_POST['children'] == 'on' && !$cron) {
                     echo '<button class="btn" href="#cModal'.$dest['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$dest['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
@@ -109,12 +109,47 @@ function changes(&$asset) {
                     echo '</div></div>';
                   }
                   $matchNew = false;
-                  foreach ($dest["children"] as $existingRef) {
-                    if (basename($existingRef->path->path) == $asset['name']) {
+                  if (count($dest["children"]->child) === 0) {
+                    $dest["children"]->child=array($dest["children"]->child);
+                  }
+                  if (!is_array($dest["children"]->child)) {
+                    $child = $dest["children"]->child;
+                    $dest["children"]->child = array();
+                    $dest["children"]->child[0] = $child;
+                  }
+                  foreach ($dest["children"]->child as $key=>$existingRef) {
+                    if (strcmp(basename($existingRef->path->path), $asset['name']) === 0) {
                       $matchNew = true;
-                      if (!$cron) {echo '<div class="k">A reference for '.$asset['name'].' already exists in '.$dest['path'].'.</div>';}
+                      if (!$cron) {echo '<div class="k">A reference for '.$asset['name'].' already exists in <strong>'.$dest['path'].'</strong>.</div>';}
                     }
                   }
+
+                  if (!$matchNew) {
+                    $matchNew = false;
+                    if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
+
+                    // Create the new reference
+                    if ($_POST['action'] == 'edit') {
+                      $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
+                    }
+                    if ($create->createReturn->success === 'true') {
+                      if ($cron) {
+                        $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
+                      } else {
+                        echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
+                      }
+                      $total['s']++;
+                    } else {
+                      if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
+                      if ($cron) {
+                        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+                      } else {
+                        echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+                      }
+                      $total['f']++;
+                    }
+                  }
+                    
                 } else {
                   if ($cron) {
                     $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
@@ -122,32 +157,6 @@ function changes(&$asset) {
                     echo '<div class="f">Failed to read folder: '.$discFolder.'</div>';
                   }
                 }
-
-                if (!$matchNew) {
-                  if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
-                
-                  // Create the new reference
-                  if ($_POST['action'] == 'edit') {
-                    $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
-                  }
-                  if ($create->createReturn->success == 'true') {
-                    if ($cron) {
-                      $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
-                    } else {
-                      echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
-                    }
-                    $total['s']++;
-                  } else {
-                    if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
-                    if ($cron) {
-                      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
-                    } else {
-                      echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
-                    }
-                    $total['f']++;
-                  }
-                }
-              
               } else {  
                 if ($cron) {
                   $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline related folder ID does not exist: '.$disc.'</div>';
