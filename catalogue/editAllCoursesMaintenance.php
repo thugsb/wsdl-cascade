@@ -109,15 +109,10 @@ function changes(&$asset) {
                     echo '</div></div>';
                   }
                   $matchNew = false;
-                  if (count($dest["children"]->child) === 0) {
-                    $dest["children"]->child=array($dest["children"]->child);
-                  }
-                  if (!is_array($dest["children"]->child)) {
-                    $child = $dest["children"]->child;
-                    $dest["children"]->child = array();
-                    $dest["children"]->child[0] = $child;
-                  }
-                  foreach ($dest["children"]->child as $key=>$existingRef) {
+                  
+                  $children_array = is_object($dest["children"]->child) ? array($dest["children"]->child) : $dest["children"]->child;
+                  
+                  foreach ($children_array as $key=>$existingRef) {
                     if (strcmp(basename($existingRef->path->path), $asset['name']) === 0) {
                       $matchNew = true;
                       if (!$cron) {echo '<div class="k">A reference for '.$asset['name'].' already exists in <strong>'.$dest['path'].'</strong>.</div>';}
