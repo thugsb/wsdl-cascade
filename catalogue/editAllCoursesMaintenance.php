@@ -159,7 +159,10 @@ function changes(&$asset) {
                   echo '<div class="f">Discipline related folder ID does not exist: '.$disc.'</div>';
                 }
               }
-            } else {  
+            } else {
+              if ($disc !== 'Global Studies' && $disc !== 'Science, Technology, and Society') {
+                $total['f']++;
+              }
               if ($cron) {
                 $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
               } else {
