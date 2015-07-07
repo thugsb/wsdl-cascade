@@ -3,7 +3,7 @@ date_default_timezone_set('America/New_York');
 $title = 'Just read all pages, looking for ones with Forms';
 
 // $type_override = 'page';
-//$start_asset = 'cc912c097f0000020102c065cff41289,1304eb1e7f0000022b80da556a82a730,cd67add77f00000101f92de53c71ae3e,c621c0d17f00000101f92de5212d40b7,636641937f00000238a093168e3ef487,636943577f00000238a09316081f537a,75e224457f00000101f92de500562ba4,6369209d7f00000238a09316be6aa2e9,5b2c1f137f00000250abe6dcc7f763b9';
+$start_asset = 'cc912c097f0000020102c065cff41289,1304eb1e7f0000022b80da556a82a730,cd67add77f00000101f92de53c71ae3e,c621c0d17f00000101f92de5212d40b7,636641937f00000238a093168e3ef487,636943577f00000238a09316081f537a,75e224457f00000101f92de500562ba4,6369209d7f00000238a09316be6aa2e9,5b2c1f137f00000250abe6dcc7f763b9';
 // $start_asset = 'a5784ced7f00000101f92de5e263be1b,85ebc5af7f00000257316e85c1c16610,f95157927f000002672330a666e12472,548fa6e57f00000101f92de5767a87bd,b732376b7f00000251436a90408943ae,9810140b7f00000100279c883b64b2cd,661d4e427f00000226f3bbadcced726a,289c1ac97f00000101b7715d14978ffc,77bd3c077f00000101f92de5ba74a03c';
 // $start_asset = '047360737f00000101f92de55e007d02,1f3dbc877f0000024a873afa56b38976,2bd741d47f0000021312656bde305a48,a551401d7f00000274a0ceef3d1113fc,94a215b67f000001015d84e00c037aaf,b70b131e7f00000100279c88b0ebe56f,2f7dcabc7f00000101f92de527bf1fa7,f7cfec677f0000024ae410ca99ed2e30,2829e1f07f0000021312656b9b656c5d';
 // $start_asset = '6369593e7f00000238a0931601deacbb,77462bbe7f00000204876d423af89708,cb699b287f0000026c8256cb44f0222d,63e913ea7f00000101f92de5a15894ea,778ad1ae7f00000101f92de5c4381945,8e0a7b777f00000278855613817cf6ed,b168f6d87f0000026aa9f1d00e55b0f7,73fa785a7f00000250ffdf132efb9565,1f03d6187f0000020b4b6df0dd3a7907';
@@ -16,7 +16,7 @@ $title = 'Just read all pages, looking for ones with Forms';
 // $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
 // $start_asset = '4e9e12a97f000001015d84e03ea3fb26';
 // $start_asset = 'ab880f697f0000021a23b0063cc5fd6f';
- $start_asset = 'b1e7beea7f00000100279c882788d82e';
+// $start_asset = 'b1e7beea7f00000100279c882788d82e';
 
 
 function preg_match_count($pattern, $input) {
@@ -43,15 +43,18 @@ function changes(&$asset) {
   
   if ($asset["structuredData"]) {
     foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $group) {
-      if ($group->identifier == 'php-dynamic') {
-        foreach ($group->structuredDataNodes->structuredDataNode as $field) {
-          if ($field->identifier == 'config' && $field->text == 'Form') {
-            if ($_POST['action'] == 'edit') {
-              $myFile = "indexes/forms.html";
-              $fh = fopen($myFile, 'a') or die("can't open file");
-              $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
-              fwrite($fh, $str);
-              fclose($fh);
+      if ($group->identifier == 'forms') {
+        $children_array = is_object($group->structuredDataNodes->structuredDataNode) ? array($group->structuredDataNodes->structuredDataNode) : $group->structuredDataNodes->structuredDataNode;
+        foreach ($children_array as $form) {
+          foreach ($form->structuredDataNodes->structuredDataNode as $field) {
+            if ($field->identifier == 'id' && $field->text != '') {
+              if ($_POST['action'] == 'edit') {
+                $myFile = "indexes/forms.html";
+                $fh = fopen($myFile, 'a') or die("can't open file");
+                $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+                fwrite($fh, $str);
+                fclose($fh);
+              }
             }
           }
         }
