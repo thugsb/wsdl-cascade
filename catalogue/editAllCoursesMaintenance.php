@@ -62,7 +62,7 @@ function changes(&$asset) {
       if ($max > 5) { /* If you want to allow more faculty, make sure to to add the fields to the metadata set and then up these numbers to match */
         $max = 5;
         $total['f']++;
-        echo '<div class="f">There are too many faculty connections for the metadata to take.</div>';
+        if (!$cron) {echo '<div class="f">There are too many faculty connections for the metadata to take.</div>'};
       }
       for ($i = 0;$i <= $max; $i++) {
         // echo 'Type: '.gettype($field->structuredDataNodes->structuredDataNode[$i]).'<br>';
@@ -121,27 +121,31 @@ function changes(&$asset) {
 
                   if (!$matchNew) {
                     $matchNew = false;
-                    if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
-
-                    // Create the new reference
-                    if ($_POST['action'] == 'edit') {
-                      $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
-                    }
-                    if ($create->createReturn->success === 'true') {
-                      if ($cron) {
-                        $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
-                      } else {
-                        echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
-                      }
-                      $total['s']++;
+                    if (explode('/',$asset['path'])[0] == $discFolder) {
+                      if (!$cron) {echo "<div class='f'>Ooopsie, this course is trying to be related to its own discipline.</div>";}
                     } else {
-                      if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
-                      if ($cron) {
-                        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
-                      } else {
-                        echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+                      if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
+
+                      // Create the new reference
+                      if ($_POST['action'] == 'edit') {
+                        $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
                       }
-                      $total['f']++;
+                      if ($create->createReturn->success === 'true') {
+                        if ($cron) {
+                          $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
+                        } else {
+                          echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
+                        }
+                        $total['s']++;
+                      } else {
+                        if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
+                        if ($cron) {
+                          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+                        } else {
+                          echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+                        }
+                        $total['f']++;
+                      }
                     }
                   }
                     
