@@ -62,7 +62,7 @@ function changes(&$asset) {
       if ($max > 5) { /* If you want to allow more faculty, make sure to to add the fields to the metadata set and then up these numbers to match */
         $max = 5;
         $total['f']++;
-        if (!$cron) {echo '<div class="f">There are too many faculty connections for the metadata to take.</div>'};
+        if (!$cron) {echo '<div class="f">There are too many faculty connections for the metadata to take.</div>';}
       }
       for ($i = 0;$i <= $max; $i++) {
         // echo 'Type: '.gettype($field->structuredDataNodes->structuredDataNode[$i]).'<br>';
