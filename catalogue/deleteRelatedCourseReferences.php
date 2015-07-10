@@ -82,7 +82,7 @@ function indexFolder($client, $auth, $asset) {
         if ($delete->deleteReturn->success == 'true') {
           $delcount++;
         } else {
-          if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
+          if ($_POST['action'] == 'edit' || $cron) {$result = $client->__getLastResponse();} else {$result = '';}
           if ($cron) {
             $o[1] .= "<div style='padding:3px;color:#fff;background:#c00;'>".$child->path->path. " failed to delete</div>";
           }
