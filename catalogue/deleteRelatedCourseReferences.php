@@ -76,13 +76,13 @@ function indexFolder($client, $auth, $asset) {
   foreach($asset["children"]->child as $child) {
     if ($child->type == strtolower($asset_children_type)) {
       if (pagetest($child)) {
-        if ($_POST['action'] == 'edit') {
+        if ($_POST['action'] == 'edit' || $cron) {
           $delete = $client->delete(array ('authentication' => $auth, 'identifier' => array('id' => $child->id, 'type' => 'reference') ) );
         }
         if ($delete->deleteReturn->success == 'true') {
           $delcount++;
         } else {
-          if ($_POST['action'] == 'edit' || $cron) {$result = $client->__getLastResponse();} else {$result = '';}
+          if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
           if ($cron) {
             $o[1] .= "<div style='padding:3px;color:#fff;background:#c00;'>".$child->path->path. " failed to delete</div>";
           }
