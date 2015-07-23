@@ -121,7 +121,8 @@ function changes(&$asset) {
 
                   if (!$matchNew) {
                     $matchNew = false;
-                    if (explode('/',$asset['path'])[0] == $discFolder) {
+                    $pathFolders = explode('/',$asset['path']);
+                    if ($pathFolders[0] == $discFolder) {
                       if (!$cron) {echo "<div class='f'>Ooopsie, this course is trying to be related to its own discipline.</div>";}
                     } else {
                       if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
