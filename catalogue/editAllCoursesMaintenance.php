@@ -128,7 +128,7 @@ function changes(&$asset) {
                       if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
 
                       // Create the new reference
-                      if ($_POST['action'] == 'edit') {
+                      if ($_POST['action'] == 'edit' || $cron) {
                         $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
                       }
                       if ($create->createReturn->success === 'true') {
