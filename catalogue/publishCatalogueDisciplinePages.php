@@ -8,18 +8,12 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 // $asset_type = 'assetFactoryContainer';
 // $asset_children_type = 'assetFactory';
 
-
-// $year = '[-0-9]+'; // Matches all years
-$year = '2013-2014';
-
 function pagetest($child) {
-  global $year;
   // if (preg_match('/^[a-z][-a-z]+\/[-a-z]+\/2012-2013/',$child->path->path) || preg_match('/^humanities\/languages-and-literatures\/[-a-z]+\/2012-2013$/',$child->path->path))
   if (preg_match('/^[a-z][-a-z]+\/index/',$child->path->path))
     return true;
 }
 function foldertest($child) {
-  global $year;
   if (preg_match('/^[a-z][-a-z]+$/',$child->path->path))
     return true;
 }
