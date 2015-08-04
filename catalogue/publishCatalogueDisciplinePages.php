@@ -8,6 +8,8 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 // $asset_type = 'assetFactoryContainer';
 // $asset_children_type = 'assetFactory';
 
+$dest = 'prince';
+
 function pagetest($child) {
   // if (preg_match('/^[a-z][-a-z]+\/[-a-z]+\/2012-2013/',$child->path->path) || preg_match('/^humanities\/languages-and-literatures\/[-a-z]+\/2012-2013$/',$child->path->path))
   if (preg_match('/^[a-z][-a-z]+\/index/',$child->path->path))
@@ -81,7 +83,7 @@ function readPage($client, $auth, $id) {
 
 
 function editPage($client, $auth, $asset) {
-  global $total;
+  global $total, $dest;
   echo '<div class="page">';
   if ($_POST['before'] == 'on') {
     echo '<button class="btn" href="#bModal'.$asset['id'].'" data-toggle="modal">View Before</button><div id="bModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
@@ -103,7 +105,7 @@ function editPage($client, $auth, $asset) {
   }
   
   if ($_POST['action'] == 'edit') {
-    $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $asset["id"], 'destination' => 'prince'), 'unpublish' => false ) ) );
+    $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $asset["id"]), 'destinations' => array( array('type' => 'destination', 'path' => array( 'path' => $dest, 'siteId' => $asset["siteId"] ) ) ), 'unpublish' => false ) ) );
   }
   
   
