@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 
 // To update for each year, change this and change the $from and $to (below)
-$yearpath = 'events/2014-2015/';
+$yearpath = 'events/2015-2016/';
 
 // Function from http://php.net/manual/en/function.simplexml-load-string.php#48814
 function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
@@ -25,12 +25,12 @@ function simplexml_merge (SimpleXMLElement &$xml1, SimpleXMLElement $xml2) {
 if (isset($_GET['from'])) {
   $from = $_GET['from'];
 } else {
-  $from = '2014-09-01';
+  $from = '2015-09-01';
 }
 if (isset($_GET['to'])) {
   $to = $_GET['to'];
 } else {
-  $to = '2015-08-31';
+  $to = '2016-08-31';
 }
 
 $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
@@ -64,7 +64,7 @@ foreach ($events->event as $i=>$event) {
 $title = 'Delete event pages that have been removed from the events xml feeds';
 
 $type_override = 'folder';
-$start_asset = 'e7fad51b7f000002781205b8981ed26d';
+$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
 
 $message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 

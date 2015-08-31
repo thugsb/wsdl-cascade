@@ -65,7 +65,7 @@ foreach ($events->event as $i=>$event) {
 $title = 'Create event pages for events in the xml feeds';
 
 $type_override = 'folder';
-$start_asset = 'e7fad51b7f000002781205b8981ed26d';
+$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
@@ -241,7 +241,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
   
   $all_event_assets = array();
   // _archived
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e7fad90e7f000002781205b858f6b96e') ) );
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '85a8aa9fc0a8022b3d7ce269aa47d242') ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
@@ -252,7 +252,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
     }
   }
   // _inactive
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => 'e7fad9437f000002781205b8ac89680f') ) );
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '85a91e39c0a8022b3d7ce269adaec728') ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
