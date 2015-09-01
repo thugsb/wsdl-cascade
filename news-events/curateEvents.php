@@ -3,7 +3,7 @@ date_default_timezone_set('America/New_York');
 $title = 'Curate Events';
 
 // $type_override = 'page';
-$start_asset = 'e7fad51b7f000002781205b8981ed26d';
+$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
 
 $message = 'NOTE: This page requires JavaScript. Optionally, use the GET argument "?date=yyyy-mm-dd" to filter by date, where dd and mm are not required.';
 $user = $_POST['login'];
@@ -38,7 +38,7 @@ EOS;
 // $asset_children_type = 'assetFactory';
 
 function pagetest($child) {
-  $pattern = '/^events\/2014-2015\/'.$_GET['date'].'/';
+  $pattern = '/^events\/2015-2016\/'.$_GET['date'].'/';
   if (isset($_GET['date']) && preg_match($pattern, $child->path->path))
     return true;
 }
