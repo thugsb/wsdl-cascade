@@ -3,7 +3,7 @@ date_default_timezone_set('America/New_York');
 $title = 'Move past events into _archived';
 
 // $type_override = 'page';
-$start_asset = 'e7fad51b7f000002781205b8981ed26d';
+$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
 
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
@@ -145,7 +145,7 @@ function editPage($client, $auth, $asset) {
 
   if ($changed == true) {
     if ($_POST['action'] == 'edit' || $cron) {
-      $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'e7fad90e7f000002781205b858f6b96e'), 'doWorkflow'=>false) ) );
+      $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'85a8aa9fc0a8022b3d7ce269aa47d242'), 'doWorkflow'=>false) ) );
     }
     if ($move->moveReturn->success == 'true') {
       if ($cron) {
