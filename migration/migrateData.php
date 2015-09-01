@@ -43,25 +43,41 @@ function changes(&$asset) {
 										$newnode = new StdClass();
 										$newnode->identifier = 'primary';
 										$newnode->structuredDataNodes = new StdClass();
-										$newnode->structuredDataNodes->structuredDataNode = new Array();
+										$newnode->structuredDataNodes->structuredDataNode = array();
 										$newnode->structuredDataNodes->structuredDataNode[0]->identifier = 'type';
 										$newnode->structuredDataNodes->structuredDataNode[0]->type = 'text';
 										$newnode->structuredDataNodes->structuredDataNode[0]->text = 'External Block';
 										$newnode->structuredDataNodes->structuredDataNode[1]->identifier = 'external';
 										$newnode->structuredDataNodes->structuredDataNode[1]->type = 'group';
 										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes = new StdClass();
-										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode = new Array();
+										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode = array();
 										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0]->identifier = '';
 										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0]->type = 'asset';
 										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0]->assetType = 'block';
 										$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0]->blockId = $ssubnode->blockId;
  										array_push($sdnode, $newnode);
- 										echo "<div class='f'>External Block needs a type</div>";
+ 										echo "<div class='f'>External Block needs a type, and check its placement.</div>";
   								}
   							}
   						}
   					}
   					
+  				}
+  			}
+  			if ($subnode->identifier == 'content') {
+  				if ($subnode->text != '') {
+  			
+  					foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $ssdnode) {
+  						if ($ssdnode->identifier == "intro") {
+  							foreach ($ssdnode->structuredDataNodes->structuredDataNode as $ssubnode) {
+  								if ($ssubnode->identifier == 'text') {
+  									$ssubnode->text = $subnode->text;
+  									echo "<div class='s'>WYSIWYG content copied into Intro.</div>";
+  								}
+  							}
+  						}
+  					}
+  				
   				}
   			}
   			
