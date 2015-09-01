@@ -39,7 +39,7 @@ EOS;
 
 function pagetest($child) {
   $pattern = '/^events\/2015-2016\/'.$_GET['date'].'/';
-  if (isset($_GET['date']) && preg_match($pattern, $child->path->path))
+  if (preg_match($pattern, $child->path->path))
     return true;
 }
 function foldertest($child) {
