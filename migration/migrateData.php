@@ -21,15 +21,15 @@ function createNode($type, $id, $nodes = false, $text = '', $at=false, $bi=false
 	}
 	$newnode->text = $text;
 	if ($at) {$newnode->assetType = $at;}
-	if ($at) {$newnode->blockId = $bi;}
-	if ($at) {$newnode->blockPath = $bp;}
-	if ($at) {$newnode->fileId = $fi;}
-	if ($at) {$newnode->filePath = $fp;}
-	if ($at) {$newnode->pageId = $pi;}
-	if ($at) {$newnode->pagePath = $pp;}
-	if ($at) {$newnode->symlinkId = $si;}
-	if ($at) {$newnode->symlinkPath = $sp;}
-	if ($at) {$newnode->recycled = $re;}
+	if ($bi) {$newnode->blockId = $bi;}
+	if ($bp) {$newnode->blockPath = $bp;}
+	if ($fi) {$newnode->fileId = $fi;}
+	if ($fp) {$newnode->filePath = $fp;}
+	if ($pi) {$newnode->pageId = $pi;}
+	if ($pp) {$newnode->pagePath = $pp;}
+	if ($si) {$newnode->symlinkId = $si;}
+	if ($sp) {$newnode->symlinkPath = $sp;}
+	if ($re) {$newnode->recycled = $re;}
 	return $newnode;
 }
 
@@ -87,24 +87,15 @@ function changes(&$asset) {
 				
 					if ($subnode->identifier == 'data-definition-block') {
 						if ($subnode->blockId != '') {
-					
-							foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $ssdnode) {
-								if ($ssdnode->identifier == "group-primary") {
-									foreach ($ssdnode->structuredDataNodes->structuredDataNode as $ssubnode) {
-										if ($ssubnode->identifier == 'type') {
-											$newnode = createNode('group', 'group-primary', true);
-											$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, 'On');
-											$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, 'External Block');
-											$newnode->structuredDataNodes->structuredDataNode[1] = createNode('group', 'group-block', true);
-											$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0] = createNode('asset', 'block', false, '', 'block', $ssubnode->blockId);
-											array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $newnode);
-											echo "<div class='k'>External Block needs a type, and check its placement.</div>";
-											$primaryOn = true;
-										}
-									}
-								}
-							}
-						
+							$newnode = createNode('group', 'group-primary', true);
+							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, 'On');
+							$newnode->structuredDataNodes->structuredDataNode[1] = createNode('text', 'type', false, 'External Block');
+							$newnode->structuredDataNodes->structuredDataNode[2] = createNode('group', 'group-block', true);
+							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false);
+							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[1] = createNode('asset', 'block', false, '', 'block', $subnode->blockId);
+							array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $newnode);
+							echo "<div class='k'>External Block needs a type, and check its placement.</div>";
+							$primaryOn = true;
 						}
 					}
 				
@@ -112,9 +103,9 @@ function changes(&$asset) {
 						if ($subnode->text != '') {
 							$newnode = createNode('group', 'group-primary', true);
 							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, ($righton ? 'On': 'Off'));
-							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, 'Text');
-							$newnode->structuredDataNodes->structuredDataNode[1] = createNode('group', 'group-text', true);
-							$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'wysiwyg', false, $subnode->text);
+							$newnode->structuredDataNodes->structuredDataNode[1] = createNode('text', 'type', false, 'Text');
+							$newnode->structuredDataNodes->structuredDataNode[2] = createNode('group', 'group-text', true);
+							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'wysiwyg', false, $subnode->text);
 							array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $newnode);
 							echo "<div class='s'>Main Column WYSIWYG content will be copied into Primary.</div>";
 							$primaryOn = true;
