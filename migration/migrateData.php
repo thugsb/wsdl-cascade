@@ -39,7 +39,7 @@ function pagetest($child) {
     return true;
 }
 function foldertest($child) {
-  if (preg_match('/^[a-z]/', $child->path->path))
+  if (preg_match('/^[a-z]/', $child->path->path) && !preg_match('/media/', $child->path->path))
     return true;
 }
 function edittest($asset) {
@@ -102,7 +102,7 @@ function changes(&$asset) {
 					if ($subnode->identifier == 'content') {
 						if ($subnode->text != '') {
 							$newnode = createNode('group', 'group-primary', true);
-							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, ($righton ? 'On': 'Off'));
+							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, 'On');
 							$newnode->structuredDataNodes->structuredDataNode[1] = createNode('text', 'type', false, 'Text');
 							$newnode->structuredDataNodes->structuredDataNode[2] = createNode('group', 'group-text', true);
 							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'wysiwyg', false, $subnode->text);
@@ -168,9 +168,9 @@ function changes(&$asset) {
 						if ($subnode->identifier == 'content') {
 							$newnode = createNode('group', 'group-secondary', true);
 							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, ($righton ? 'On': 'Off'));
-							$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, 'Text');
-							$newnode->structuredDataNodes->structuredDataNode[1] = createNode('group', 'group-text', true);
-							$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'wysiwyg', false, $subnode->text);
+							$newnode->structuredDataNodes->structuredDataNode[1] = createNode('text', 'type', false, 'Text');
+							$newnode->structuredDataNodes->structuredDataNode[2] = createNode('group', 'group-text', true);
+							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'wysiwyg', false, $subnode->text);
 							array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $newnode);
 							echo "<div class='s'>Right Sidebar content will be copied into Secondary.</div>";
 							$secondaryOn = true;
@@ -207,11 +207,11 @@ function changes(&$asset) {
 					if ($formID != '') {
 						$newnode = createNode('group', 'group-primary', true);
 						$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, ($formOn ? 'On' : 'Off') );
-						$newnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, 'Form');
-						$newnode->structuredDataNodes->structuredDataNode[1] = createNode('group', 'group-form', true);
-						$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, $formType);
-						$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'id', false, $formID);
-						$newnode->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'redirect', false, $formRe);
+						$newnode->structuredDataNodes->structuredDataNode[1] = createNode('text', 'type', false, 'Form');
+						$newnode->structuredDataNodes->structuredDataNode[2] = createNode('group', 'group-form', true);
+						$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, $formType);
+						$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[1] = createNode('text', 'id', false, $formID);
+						$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[2] = createNode('text', 'redirect', false, $formRe);
 						array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $newnode);
 						echo "<div class='k'>Form will be copied into Primary. It was previously in $formPos, so check its placement.</div>";
 						$primaryOn = true;
