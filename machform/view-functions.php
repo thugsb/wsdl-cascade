@@ -5804,18 +5804,19 @@ EOT;
 				$view_css_markup = "<link rel=\"stylesheet\" type=\"text/css\" href=\"{$machform_path}{$css_dir}view.css\" media=\"all\" />";
 			}
 
+			if($form->id == '14634'){
+				$SLCaction = '/errors/__404.html';
+			} else {
+				$SLCaction = "#mform-{$form->id}";
+			}
+
+			$session_id = session_id();
 			$form_markup = <<<EOT
 {$view_css_markup}
 <link rel="stylesheet" type="text/css" href="{$machform_path}view.mobile.css" media="all" />
 {$theme_css_link}
 {$font_css_markup}
-<style>
-html{
-	background: none repeat scroll 0 0 transparent;
-	background-color: transparent;
-}
-</style>
-<script type="text/javascript" src="{$jquery_url}"></script>
+<script>window.jQuery || document.write('&lt;script type="text/javascript" src="{$jquery_url}"&gt;&lt;/script&gt;')</script>
 <script type="text/javascript" src="{$machform_path}js/jquery-ui/ui/jquery.effects.core.js"></script>
 <script type="text/javascript" src="{$machform_path}view.js"></script>
 {$recaptcha2_header}
@@ -5824,12 +5825,14 @@ html{
 {$signature_pad_init}
 {$logic_js}
 {$custom_script_js}
-<div id="main_body" class="{$container_class}">
+<script>Cookies.set("PHPSESSID","{$session_id}",{ expires: 1, path: "/" });</script>
+<noscript><div class="alert">WARNING: This form only functions fully when JavaScript and cookies are enabled. Please enable these to ensure you have the best experience.</div></noscript>
+<div id="mform-{$form->id}" class="{$container_class} mform">
 
-	<div id="form_container">
+	<div id="form_container-{$form->id}" class="form_container">
 	
 		<h1><a>{$form->name}</a></h1>
-		<form id="form_{$form->id}" class="appnitro {$form->label_alignment}" {$form_enc_type} method="post" data-highlightcolor="{$field_highlight_color}" action="#main_body">
+		<form id="form_{$form->id}" class="appnitro {$form->label_alignment}" {$form_enc_type} method="post" data-highlightcolor="{$field_highlight_color}" action="{$SLCaction}">
 			{$form_desc_div}						
 			<ul {$ul_class}>
 			{$pagination_header}
@@ -5842,9 +5845,6 @@ html{
 			{$button_markup}
 			</ul>
 		</form>	
-		<div id="footer">
-			{$powered_by_markup}
-		</div>
 	</div>	
 </div>
 
