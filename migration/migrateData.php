@@ -39,7 +39,7 @@ function pagetest($child) {
     return true;
 }
 function foldertest($child) {
-  if (preg_match('/^[a-z]/', $child->path->path) && !preg_match('/media/', $child->path->path))
+  if (preg_match('/^[a-zA-Z]/', $child->path->path) && !preg_match('/media/', $child->path->path))
     return true;
 }
 function edittest($asset) {
@@ -227,13 +227,64 @@ function changes(&$asset) {
 					}
 				}
 			}
+			
+			
 			if ($sdnode->identifier == "ssp") {
 				foreach ($sdnode->structuredDataNodes->structuredDataNode as $subnode) {
 					if ($subnode->identifier == 'embed') {
-						if ($subnode->text == 'Yes') {echo "<div class='f'>WARNING: SSP is included. Fix this manually.</div>";}
+					  if ($subnode->text == 'Yes') {$galOn = true;} else {$galOn = false;}
+					}
+					if ($subnode->identifier == 'director') {
+					  $galType = $subnode->text;
+					}
+					if ($subnode->identifier == 'type') {
+					  $galSet = $subnode->text;
+					}
+					if ($subnode->identifier == 'id') {
+					  $galID = $subnode->text;
+						if ($galID != '') {
+						  $gal = true;
+						}
+					}
+					if ($subnode->identifier == 'attributes') {
+    				foreach ($subnode->structuredDataNodes->structuredDataNode as $galnode) {
+    					if ($subnode->identifier == 'ratio') {
+    					  $galRatio = $subnode->text;
+    					}
+    				}
+					}
+					if ($subnode->identifier == 'flashvars') {
+    				foreach ($subnode->structuredDataNodes->structuredDataNode as $galnode) {
+    					if ($subnode->identifier == 'navAppearance') {
+    					  $galApp = $subnode->text;
+    					}
+    					if ($subnode->identifier == 'nav-location') {
+    					  $galLoc = $subnode->text;
+    					}
+    				}
 					}
 				}
+				
+				if ($gal) {
+					$galnode = createNode('group', 'group-primary', true);
+					$galnode->structuredDataNodes->structuredDataNode[0] = createNode('text', 'status', false, ($galOn ? 'On' : 'Off') );
+					$galnode->structuredDataNodes->structuredDataNode[1] = createNode('text', 'type', false, 'Image Gallery');
+					$galnode->structuredDataNodes->structuredDataNode[2] = createNode('group', 'group-gallery', true);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false, $galType);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[1] = createNode('text', 'id', false, $galID);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[2] = createNode('text', 'set', false, $galSet);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[3] = createNode('text', 'style', false, 'Carousel');
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[4] = createNode('group', 'group-config', true);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'ratio', false, $galRatio);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[1] = createNode('text', 'nav-appearance', false, $galApp);
+					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[2] = createNode('text', 'nav-location', false, $galLoc);
+					array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $galnode);
+					echo "<div class='k'>SSP will be copied into Primary.</div>";
+					$primaryOn = true;
+				}
 			}
+			
+			
 			if ($sdnode->identifier == "gallery") {
 				foreach ($sdnode->structuredDataNodes->structuredDataNode as $subnode) {
 					if ($subnode->identifier == 'size') {
