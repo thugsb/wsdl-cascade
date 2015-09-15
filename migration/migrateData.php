@@ -248,18 +248,18 @@ function changes(&$asset) {
 					}
 					if ($subnode->identifier == 'attributes') {
     				foreach ($subnode->structuredDataNodes->structuredDataNode as $galnode) {
-    					if ($subnode->identifier == 'ratio') {
-    					  $galRatio = $subnode->text;
+    					if ($galnode->identifier == 'ratio') {
+    					  $galRatio = $galnode->text;
     					}
     				}
 					}
 					if ($subnode->identifier == 'flashvars') {
     				foreach ($subnode->structuredDataNodes->structuredDataNode as $galnode) {
-    					if ($subnode->identifier == 'navAppearance') {
-    					  $galApp = $subnode->text;
+    					if ($galnode->identifier == 'navAppearance') {
+    					  $galApp = $galnode->text;
     					}
-    					if ($subnode->identifier == 'nav-location') {
-    					  $galLoc = $subnode->text;
+    					if ($galnode->identifier == 'nav-location') {
+    					  $galLoc = $galnode->text;
     					}
     				}
 					}
