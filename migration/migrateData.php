@@ -94,7 +94,7 @@ function changes(&$asset) {
 							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[0] = createNode('text', 'type', false);
 							$newnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[1] = createNode('asset', 'block', false, '', 'block', $subnode->blockId);
 							array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $newnode);
-							echo "<div class='s'>External Block needs a type, and check its placement.</div>";
+							echo "<div class='k'>External Block needs a type, and check its placement.</div>";
 							$primaryOn = true;
 						}
 					}
@@ -279,7 +279,7 @@ function changes(&$asset) {
 					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[1] = createNode('text', 'nav-appearance', false, $galApp);
 					$galnode->structuredDataNodes->structuredDataNode[2]->structuredDataNodes->structuredDataNode[4]->structuredDataNodes->structuredDataNode[2] = createNode('text', 'nav-location', false, $galLoc);
 					array_push($asset["structuredData"]->structuredDataNodes->structuredDataNode, $galnode);
-					echo "<div class='k'>SSP will be copied into Primary.</div>";
+					echo "<div class='s'>SSP will be copied into Primary.</div>";
 					$primaryOn = true;
 				}
 			}
