@@ -39,7 +39,7 @@ function pagetest($child) {
     return true;
 }
 function foldertest($child) {
-  if (preg_match('/^[a-zA-Z]/', $child->path->path) && !preg_match('/media/', $child->path->path))
+  if (!preg_match('/media/', $child->path->path))
     return true;
 }
 function edittest($asset) {
