@@ -61,7 +61,7 @@ foreach ($events->event as $i=>$event) {
 ?>
 
 <?php
-$title = 'Delete event pages that have been removed from the events xml feeds';
+$title = 'Unpublish event pages that have been removed from the events xml feeds';
 
 $type_override = 'folder';
 $start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
@@ -133,27 +133,38 @@ function indexFolder($client, $auth, $asset) {
     }
   }
   
+  
   foreach ($children as $child) {
     $name = str_replace($yearpath,'',$child->path->path);
-    if (!in_array($name, $event_names) ) {
+    if (in_array($name, $event_names) ) {
+      if ($cron) {
+        $o[3] .= $name.'<br>';
+      } else {
+        echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
+      }
+      $total['k']++;
+    } else {
       if ($_POST['action'] == 'edit' || $cron) {
-        $delete = $client->delete ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ) ) );
-        if ($delete->deleteReturn->success == 'true') {
+        $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
+        if ($publish->publishReturn->success == 'true') {
           if ($cron) {
-            $o[2] .= $name.' was deleted<br>';
+            $o[2] .= $name.' was unpublished<br>';
           } else {
-            echo '<div class="s">'.$name.' was deleted</div>';
+            echo '<div class="s">'.$name.' was unpublished</div>';
           }
           $total['s']++;
         } else {
           if ($cron) {
-            $o[1] .= $name.' FAILED to delete<br>';
+            $o[1] .= $name.' FAILED to unpublish<br>';
           } else {
-            echo '<div class="f">'.$name.' could not be deleted</div>';
+            echo '<div class="f">'.$name.' could not be unpublished</div>';
+            print_r($publish);
           }
-          print_r($delete);
           $total['f']++;
         }
+      } else {
+        echo '<div class="d">'.$name.' will be deleted</div>';
+        $total['k']++;
       }
     }
   }
