@@ -140,7 +140,26 @@ function indexFolder($client, $auth, $asset) {
         }
         
         if ($_POST['action'] == 'edit' || $cron) {
+          $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
           $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$delete_folder), 'doWorkflow'=>false) ) );
+        }
+        if ($publish->publishReturn->success == 'true') {
+          if ($cron) {
+            $o[2] .= $name.' was unpublished<br>';
+          } else {
+            echo '<div class="s">'.$name.' was unpublished</div>';
+          }
+          $message .= '<p>The event has been <span style="color:#090">successfully</span> unpublished.</p>';
+          $total['s']++;
+        } else {
+          if ($cron) {
+            $o[1] .= $name.' FAILED to unpublish<br>';
+          } else {
+            echo '<div class="f">'.$name.' could not be unpublished</div>';
+            print_r($publish);
+          }
+          $message .= '<p>The event <span style="color:#900">failed to unpublish</span>.</p>';
+          $total['f']++;
         }
         if ($move->moveReturn->success == 'true') {
           if ($cron) {
@@ -155,12 +174,13 @@ function indexFolder($client, $auth, $asset) {
             $o[1] .= $name.' FAILED to move<br>';
           } else {
             echo '<div class="f">'.$name.' could not be moved. '.($_POST['action'] == 'edit' ? '(Edit enabled)':'(Edit disabled)').'</div>';
+            print_r($move);
           }
           $message .= '<p>The event <span style="color:#900">failed to move</span> into the _deleted folder.</p>';
-          print_r($delete);
           $total['f']++;
         }
-        $message .= '<p>Please review this event.</p><p>Here are other events that match the same date:</p><ul>';
+        $message .= '<p>Please review this event.</p>';
+        $message .= '<p>Here are other events that match the same date:</p><ul>';
         foreach ($date_matches as $ev) {
           $message .= '<li>'.$ev.'</li>';
         }
