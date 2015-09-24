@@ -1,6 +1,10 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
+
+
+
+
 if (isset($_GET['from'])) {
   $from = $_GET['from'];
 } else {
@@ -15,7 +19,6 @@ $all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.
 
 
 $event_names = array();
-$event_dupes = array();
 foreach ($all_events->event as $i=>$event) {
   $e_date = new DateTime();
   $unix_date = (integer)$event->date->unixbegin;
@@ -27,11 +30,7 @@ foreach ($all_events->event as $i=>$event) {
   $event_title = strtolower(substr($event_title, 0, 20));
   $event_n = $event_date . '-' . $event_title . '-eid'.$event->detailid;
   // $event_n = str_replace(':','-',$event->date->begin[0]).'Z-'.$event->detailid;
-  if (in_array($event_n, $event_names)) {
-    array_push($event_dupes, $event_n);
-  } else {
-    array_push($event_names, $event_n);
-  }
+  array_push($event_names, $event_n);
 }
 
 ?>
@@ -57,7 +56,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset, $event_n) {
-  global $changed, $all_events, $event_dupes, $o, $cron;
+  global $changed, $all_events, $o, $cron;
   $changed = false;
   $detailid = explode('-eid',$event_n);
   $detailid = $detailid[1];
@@ -269,47 +268,6 @@ if (!$cron) {
   echo '<button class="btn" href="#eModal'.$asset['id'].'" data-toggle="modal">View Events</button><div id="eModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
     print_r($all_events); // Shows all the events in the XML feeds
   echo '</div></div>';
-  // echo '<h1>Duplicate Events:<br/><pre>';print_r($event_dupes);echo '</pre></h1>';
-}
-
-foreach ($event_dupes as $event_n) {
-  $detailid = explode('-eid',$event_n);
-  $detailid = $detailid[1];
-  $items = array();
-  foreach($all_events->event as $event) {
-    if ($all_events->detailid == $detailid) {
-      array_push($items, clone $event);
-    }
-  }
-  if (count($items) != 2) {
-    if ($cron) {
-      $o[0] .= '<div style="color:#600;">'.$detailid.' is duplicated '.count($items)." times.</div>";
-    } else {
-      echo '<div class="f">'.$detailid.' is duplicated '.count($items).' times.</div>';
-    }
-  } else {
-    foreach ($items as $event) {
-      $event->calendar = '';
-    }
-    $obj0 = (string) print_r($items[0], true);
-    $obj1 = (string) print_r($items[1], true);
-    if ($obj0 != $obj1) {
-      if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Events are different with detailid: '.$detailid."</div>";
-      } else {
-        echo '<div class="f">Events are different</div>';
-        echo '<button class="btn" href="#dModal'.$detailid.'" data-toggle="modal">View Events</button><div id="dModal'.$detailid.'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
-          print_r($items);
-        echo '</div></div>';
-      }
-    } else {
-      if ($cron) {
-        $o[3] .= '<div style="color:#009">Duplicate events with detailid '.$detailid." are the same</div>";
-      } else {
-        echo '<div class="k">Duplicate events with detailid "'.$detailid.'" are the same</div>';
-      }
-    }
-  }
 }
 
 ?>
