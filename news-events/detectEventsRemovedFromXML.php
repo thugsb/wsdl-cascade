@@ -124,7 +124,6 @@ function indexFolder($client, $auth, $asset) {
         }
       }
       if (!in_array($name, $event_names) ) {
-        print_r($name_matches);
         if (!$cron) {echo '<div><strong><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
         $to      = 'stu@t.apio.ca';
         $subject = 'Event deleted from XML: '.$name;
@@ -134,25 +133,24 @@ function indexFolder($client, $auth, $asset) {
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         if ($_POST['action'] == 'edit' || $cron) {
           $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$delete_folder), 'doWorkflow'=>false) ) );
-
-          if ($move->moveReturn->success == 'true') {
-            if ($cron) {
-              $o[2] .= $name.' was moved to _deleted<br>';
-            } else {
-              echo '<div class="s">'.$name.' was moved to _deleted</div>';
-            }
-            $message .= '<p>The event has been <span style="color:#090">successfully</span> moved into the _deleted folder.</p>';
-            $total['s']++;
+        }
+        if ($move->moveReturn->success == 'true') {
+          if ($cron) {
+            $o[2] .= $name.' was moved to _deleted<br>';
           } else {
-            if ($cron) {
-              $o[1] .= $name.' FAILED to move<br>';
-            } else {
-              echo '<div class="f">'.$name.' could not be moved</div>';
-            }
-            $message .= '<p>The event <span style="color:#900">failed to move</span> into the _deleted folder.</p>';
-            print_r($delete);
-            $total['f']++;
+            echo '<div class="s">'.$name.' was moved to _deleted</div>';
           }
+          $message .= '<p>The event has been <span style="color:#090">successfully</span> moved into the _deleted folder.</p>';
+          $total['s']++;
+        } else {
+          if ($cron) {
+            $o[1] .= $name.' FAILED to move<br>';
+          } else {
+            echo '<div class="f">'.$name.' could not be moved. '.($_POST['action'] == 'edit' ? '(Edit enabled)':'(Edit disabled)').'</div>';
+          }
+          $message .= '<p>The event <span style="color:#900">failed to move</span> into the _deleted folder.</p>';
+          print_r($delete);
+          $total['f']++;
         }
         $message .= '<p>Please review this event.</p><p>Here are other events that match the same date:</p><ul>';
         foreach ($date_matches as $ev) {
