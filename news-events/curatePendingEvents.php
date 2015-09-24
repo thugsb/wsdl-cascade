@@ -39,7 +39,8 @@ EOS;
 // $asset_children_type = 'assetFactory';
 
 function pagetest($child) {
-  $pattern = '/^events\/2015\/'.$_GET['date'].'/';
+  global $acad_year;
+  $pattern = '/^events\/'.$acad_year.'\/_pending\/'.$_GET['date'].'/';
   if (preg_match($pattern, $child->path->path))
     return true;
 }
