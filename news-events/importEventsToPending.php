@@ -1,7 +1,7 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
-include_once('eventFolderIDs');
+include_once('eventFolderIDs.php');
 
 
 
@@ -211,6 +211,17 @@ if (array_key_exists('submit',$_POST) || $cron) {
   }
   
   $all_event_assets = array();
+  // _archived
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => '85a8aa9fc0a8022b3d7ce269aa47d242') ) );
+  if ($folder->readReturn->success == 'true') {
+    $asset = ( array ) $folder->readReturn->asset->folder;
+    if (!is_array($asset["children"]->child)) {
+      $asset["children"]->child=array($asset["children"]->child);
+    }
+    foreach($asset["children"]->child as $child) {
+      array_push($all_event_assets, $child->path->path);
+    }
+  }
   // _pending
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => $pending_folder) ) );
   if ($folder->readReturn->success == 'true') {
