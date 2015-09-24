@@ -125,12 +125,13 @@ function indexFolder($client, $auth, $asset) {
       }
       if (!in_array($name, $event_names) ) {
         if (!$cron) {echo '<div><strong><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
-        $to      = 'stu@t.apio.ca';
+        $to      = 'tguiliano@sarahlawrence.edu';
         $subject = 'Event deleted from XML: '.$name;
         $message = '<p><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a> has been deleted from the XML event feed.</p>';
         $headers = 'From: stu@t.apio.ca' . "\r\n";
         $headers .= 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'Cc: stu@t.apio.ca' . "\r\n";
         if ($_POST['action'] == 'edit' || $cron) {
           $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$delete_folder), 'doWorkflow'=>false) ) );
         }
