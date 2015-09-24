@@ -1,20 +1,20 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
-// To update for each year, change this and change the $from and $to (below)
-$yearpath = 'events/2015/';
+include_once('eventFolderIDs');
 
-$delete_folder = 'f65414a5c0a8022b36e21ad719081b4f';
+
+$yearpath = "events/$acad_year/";
 
 if (isset($_GET['from'])) {
   $from = $_GET['from'];
 } else {
-  $from = '2015-09-01';
+  $from = $yearstart;
 }
 if (isset($_GET['to'])) {
   $to = $_GET['to'];
 } else {
-  $to = '2016-08-31';
+  $to = $yearend;
 }
 $all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 
@@ -40,7 +40,7 @@ foreach ($all_events->event as $i=>$event) {
 $title = 'Detect event pages that have been removed from the events xml feeds';
 
 $type_override = 'folder';
-$start_asset = 'f591deccc0a8022b36e21ad709360573'; // year folder
+$start_asset = $year_folder;
 
 $message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
@@ -98,7 +98,7 @@ function readFolder($client, $auth, $id) {
 }
 
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $o, $cron, $children, $yearpath, $event_names, $total, $delete_folder;
+  global $asset_type, $asset_children_type, $data, $o, $cron, $children, $yearpath, $event_names, $total, $deleted_folder;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
@@ -141,7 +141,7 @@ function indexFolder($client, $auth, $asset) {
         
         if ($_POST['action'] == 'edit' || $cron) {
           $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
-          $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$delete_folder), 'doWorkflow'=>false) ) );
+          $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$deleted_folder), 'doWorkflow'=>false) ) );
         }
         if ($publish->publishReturn->success == 'true') {
           if ($cron) {

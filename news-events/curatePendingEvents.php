@@ -2,8 +2,10 @@
 date_default_timezone_set('America/New_York');
 $title = 'Curate Events';
 
+include_once('eventFolderIDs');
+
 // $type_override = 'page';
-$start_asset = 'f5924734c0a8022b36e21ad715311709'; // _pending folder
+$start_asset = $pending_folder;
 
 $message = 'NOTE: This page requires JavaScript. Optionally, use the GET argument "?date=yyyy-mm-dd" to filter by date, where dd and mm are not required.';
 $user = $_POST['login'];

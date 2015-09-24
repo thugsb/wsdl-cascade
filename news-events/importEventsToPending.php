@@ -1,6 +1,7 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
+include_once('eventFolderIDs');
 
 
 
@@ -39,9 +40,7 @@ foreach ($all_events->event as $i=>$event) {
 $title = 'Import events from the XML feed into Cascade as pending pages';
 
 $type_override = 'folder';
-$start_asset = 'f591deccc0a8022b36e21ad709360573';
-$pendingID = 'f5924734c0a8022b36e21ad715311709';
-$inactiveID = 'f5927d1ac0a8022b36e21ad7532b85a2';
+$start_asset = $year_folder;
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
@@ -197,24 +196,6 @@ function changes(&$asset, $event_n) {
       }
     }
   }
-  
-  
-  
-  
-  // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode->structuredDataNodes->structuredDataNode as $field) {
-  //   if ($field->identifier == 'begin') {
-  //     if ($field->text != $object->date->unixbegin * 1000) {
-  //       $field->text = $object->date->unixbegin * 1000;
-  //       $changed = true;
-  //     }
-  //   } elseif ($field->identifier == 'end') {
-  //     if ($field->text != $object->date->unixend * 1000) {
-  //       $field->text = $object->date->unixend * 1000;
-  //       $changed = true;
-  //     }
-  //   }
-  // }
-
 }
 
 if (array_key_exists('submit',$_POST) || $cron) {
@@ -231,7 +212,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
   
   $all_event_assets = array();
   // _pending
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => $pendingID) ) );
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => $pending_folder) ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
@@ -242,7 +223,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
     }
   }
   // _inactive
-  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => $inactiveID) ) );
+  $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => $rejected_folder) ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
@@ -303,7 +284,7 @@ function readFolder($client, $auth, $id) {
   }
 }
 function indexFolder($client, $auth, $asset) {
-  global $asset_type, $asset_children_type, $data, $event_names, $total, $o, $cron, $all_event_assets, $pendingID, $inactiveID;
+  global $asset_type, $asset_children_type, $data, $event_names, $total, $o, $cron, $all_event_assets, $pending_folder, $rejected_folder;
   if (!is_array($asset["children"]->child)) {
     $asset["children"]->child=array($asset["children"]->child);
   }
@@ -337,7 +318,7 @@ function indexFolder($client, $auth, $asset) {
 
     } else {
       // echo "<div class='k'>".$event_n." will be created.</div>";
-      $destFolder = array ('type' => 'folder', 'id' => $pendingID);
+      $destFolder = array ('type' => 'folder', 'id' => $pending_folder);
       $copyParams = array ("newName" => $event_n, 'destinationContainerIdentifier' => $destFolder, "doWorkflow" => false);
       // The asset you're $copying
       $copying = array ('type' => 'page', 'id' => '432f506e7f0000021b1b5de78cbd125c' );	
