@@ -132,6 +132,13 @@ function indexFolder($client, $auth, $asset) {
         $headers .= 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
         $headers .= 'Cc: stu@t.apio.ca' . "\r\n";
+        
+        $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array('id' => $child->id, 'type' => 'page') ) );
+        if ($reply->readReturn->success == 'true') {
+          $page_asset = ( array ) $reply->readReturn->asset->page;
+          $message .= '<h4>'. $page_asset['metadata']->title .'</h4>';
+        }
+        
         if ($_POST['action'] == 'edit' || $cron) {
           $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$delete_folder), 'doWorkflow'=>false) ) );
         }
@@ -162,7 +169,11 @@ function indexFolder($client, $auth, $asset) {
           $message .= '<li>'.$ev.'</li>';
         }
         $message .= '</ul>';
-        mail($to, $subject, $message, $headers);
+        if ($cron) {
+          mail($to, $subject, $message, $headers);
+        } else {
+          echo $message.'<hr/>';
+        }
       }
     }
   }
