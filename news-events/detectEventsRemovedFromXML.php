@@ -16,8 +16,10 @@ if (isset($_GET['to'])) {
 } else {
   $to = $yearend;
 }
-$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 
+simplexml_merge($all_events, $private_events);
 
 $event_names = array();
 foreach ($all_events->event as $i=>$event) {
@@ -123,7 +125,14 @@ function indexFolder($client, $auth, $asset) {
           array_push($date_matches, $ev);
         }
       }
-      if (!in_array($name, $event_names) ) {
+      if (in_array($name, $event_names) ) {
+        if ($cron) {
+          $o[3] .= $name.'<br>';
+        } else {
+          echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
+        }
+        $total['k']++;
+      } else {
         if (!$cron) {echo '<div><strong><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
         $to      = 'tguiliano@sarahlawrence.edu';
         $subject = 'Event deleted from XML: '.$name;
