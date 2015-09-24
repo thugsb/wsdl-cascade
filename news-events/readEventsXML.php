@@ -65,9 +65,12 @@ foreach ($events->event as $i=>$event) {
 $title = 'Create event pages for events in the xml feeds';
 
 $type_override = 'folder';
-$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
+//$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
+$start_asset = '';
+$message = '<div class="f">WARNING: Legacy script. <a href="./importEventsToPending.php">Go to the new script</a>.</div>';
+//$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
-$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
+if (array_key_exists('submit',$_POST)) {mail('stu@t.apio.ca','WARNING: Legacy script submitted',"readEventsXML was submitted by $user.");}
 
 $publish = array();
 

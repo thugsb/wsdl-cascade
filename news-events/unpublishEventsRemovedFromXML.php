@@ -64,9 +64,12 @@ foreach ($events->event as $i=>$event) {
 $title = 'Unpublish event pages that have been removed from the events xml feeds';
 
 $type_override = 'folder';
-$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
+//$start_asset = '85a826eec0a8022b3d7ce269ce9477fa';
+$start_asset = '';
+$message = '<div class="f">WARNING: Legacy script. <a href="./detectEventsRemovedFromXML.php">Go to the new script</a>.</div>';
+//$message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
-$message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
+if (array_key_exists('submit',$_POST)) {mail('stu@t.apio.ca','WARNING: Legacy script submitted',"unpublishEventsRemovedFromXML was submitted by $user.");}
 
 $children = array();
 
