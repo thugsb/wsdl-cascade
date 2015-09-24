@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 $title = 'Activate Event';
 
-include_once('eventFolderIDs');
+include_once('eventFolderIDs.php');
 include("../web_services_util.php");
 
 if (!array_key_exists('submit', $_POST)) {echo 'no'; exit;}

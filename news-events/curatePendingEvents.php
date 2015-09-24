@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 $title = 'Curate Events';
 
-include_once('eventFolderIDs');
+include_once('eventFolderIDs.php');
 
 // $type_override = 'page';
 $start_asset = $pending_folder;
