@@ -134,25 +134,27 @@ function indexFolder($client, $auth, $asset) {
   }
   
   foreach ($children as $child) {
-    $name = str_replace($yearpath,'',$child->path->path);
-    if (!in_array($name, $event_names) ) {
-      if ($_POST['action'] == 'edit' || $cron) {
-        $delete = $client->delete ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ) ) );
-        if ($delete->deleteReturn->success == 'true') {
-          if ($cron) {
-            $o[2] .= $name.' was deleted<br>';
+    if ($child->type == 'page') {
+      $name = str_replace($yearpath,'',$child->path->path);
+      if (!in_array($name, $event_names) ) {
+        if ($_POST['action'] == 'edit' || $cron) {
+          $delete = $client->delete ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ) ) );
+          if ($delete->deleteReturn->success == 'true') {
+            if ($cron) {
+              $o[2] .= $name.' was deleted<br>';
+            } else {
+              echo '<div class="s">'.$name.' was deleted</div>';
+            }
+            $total['s']++;
           } else {
-            echo '<div class="s">'.$name.' was deleted</div>';
+            if ($cron) {
+              $o[1] .= $name.' FAILED to delete<br>';
+            } else {
+              echo '<div class="f">'.$name.' could not be deleted</div>';
+            }
+            print_r($delete);
+            $total['f']++;
           }
-          $total['s']++;
-        } else {
-          if ($cron) {
-            $o[1] .= $name.' FAILED to delete<br>';
-          } else {
-            echo '<div class="f">'.$name.' could not be deleted</div>';
-          }
-          print_r($delete);
-          $total['f']++;
         }
       }
     }

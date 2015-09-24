@@ -135,36 +135,38 @@ function indexFolder($client, $auth, $asset) {
   
   
   foreach ($children as $child) {
-    $name = str_replace($yearpath,'',$child->path->path);
-    if (in_array($name, $event_names) ) {
-      if ($cron) {
-        $o[3] .= $name.'<br>';
-      } else {
-        echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
-      }
-      $total['k']++;
-    } else {
-      if ($_POST['action'] == 'edit' || $cron) {
-        $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
-        if ($publish->publishReturn->success == 'true') {
-          if ($cron) {
-            $o[2] .= $name.' was unpublished<br>';
-          } else {
-            echo '<div class="s">'.$name.' was unpublished</div>';
-          }
-          $total['s']++;
+    if ($child->type == 'page') {
+      $name = str_replace($yearpath,'',$child->path->path);
+      if (in_array($name, $event_names) ) {
+        if ($cron) {
+          $o[3] .= $name.'<br>';
         } else {
-          if ($cron) {
-            $o[1] .= $name.' FAILED to unpublish<br>';
-          } else {
-            echo '<div class="f">'.$name.' could not be unpublished</div>';
-            print_r($publish);
-          }
-          $total['f']++;
+          echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
         }
-      } else {
-        echo '<div class="d">'.$name.' will be deleted</div>';
         $total['k']++;
+      } else {
+        if ($_POST['action'] == 'edit' || $cron) {
+          $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
+          if ($publish->publishReturn->success == 'true') {
+            if ($cron) {
+              $o[2] .= $name.' was unpublished<br>';
+            } else {
+              echo '<div class="s">'.$name.' was unpublished</div>';
+            }
+            $total['s']++;
+          } else {
+            if ($cron) {
+              $o[1] .= $name.' FAILED to unpublish<br>';
+            } else {
+              echo '<div class="f">'.$name.' could not be unpublished</div>';
+              print_r($publish);
+            }
+            $total['f']++;
+          }
+        } else {
+          echo '<div class="d">'.$name.' will be unpublished</div>';
+          $total['k']++;
+        }
       }
     }
   }
