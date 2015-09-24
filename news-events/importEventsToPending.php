@@ -44,7 +44,7 @@ $start_asset = $year_folder;
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
 
-if (mail('stu@t.apio.ca','Events Import Script Started',date('D, d M Y H:i'))) {echo 'mail sent';} else {echo 'mail error';}
+if ($cron) {mail('stu@t.apio.ca','Events Import Script Started',date('D, d M Y H:i') );}
 
 function pagetest($child) {
   // if (preg_match('/[a-z]/', $child->path->path))
