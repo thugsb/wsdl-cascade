@@ -139,6 +139,9 @@ function readPage($client, $auth, $id, $type) {
         if ($dyn->name == 'location') {
           $location = $dyn->fieldValues->fieldValue->value;
         }
+        if ($dyn->name == 'calendar') {
+          if ($dyn->fieldValues->fieldValue->value == 'Events Open to Public') {$public = true;}
+        }
         if ($dyn->name == 'type') {
           $type = $dyn->fieldValues->fieldValue->value;
         }
@@ -163,6 +166,11 @@ function readPage($client, $auth, $id, $type) {
         echo '<h4><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page&">'.$asset['metadata']->title.'</a></h4>';
         echo '<div>'.$asset['path'].$name.'</div>';
         echo '<div class="k">'.gmdate("D M dS, H:i", $begin).'</div> - <div class="k">'.gmdate('D M dS, H:i', $end).'</div>'.($recurring == 'False' ? '' : '<div class="label label-info">Recurring</div>').' <a class="label label-success" target="_blank" href="'.$eventsource.'">Source</a>';
+        if ($public) {
+          echo '<div class="label label-success pull-left">Public</div>';
+        } else {
+          echo '<div class="label label-info pull-left">Private</div>';
+        }
         echo '<div><strong>Location:</strong> '.$location.'</div>';
         echo '<div><strong>Sponsor:</strong> '.$sponsor.'</div>';
         echo '<div><strong>Type:</strong> '.$type.'</div>';
