@@ -14,7 +14,7 @@ $client = $_POST['client'];
 $script = <<<EOS
 
 $(function() {
-  $('body').append('<iframe name="result" id="result" style="position:fixed; bottom:0; right:0; width:50%; height:50px; background:#fff;"></iframe>');
+  $('body').append('<iframe name="result" id="result" style="position:fixed; bottom:0; right:0; width:50%; height:70px; background:#fff;"></iframe>');
   $('.event-form').append('<input name="login" type="hidden" value="$user"/><input name="password" type="hidden" value="$password"/><input name="client" type="hidden" value="$client"/><input name="type" type="hidden" value="page"/><input name="action" type="hidden" value="edit"/>');
   $('.event-form').prepend('<div class="btn-group pull-right"><input type="submit" name="submit" class="btn btn-success" value="Enable"/><input type="submit" name="submit" class="btn btn-warning" value="Reject"/></div>');
   

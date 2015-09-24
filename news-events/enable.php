@@ -20,6 +20,13 @@ if ($reply->readReturn->success == 'true') {
 
   if ($move->moveReturn->success == 'true') {
     echo '<div style="color:#090;">Move success: '.$asset['name'].' is now enabled</div>';
+    $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => $id, 'unpublish' => false ) ) );
+    if ($publish->publishReturn->success == 'true') {
+      echo '<div style="color:#090;">Publish success: '.$asset['name'].'</div>';
+    } else {
+      echo '<div style="color:#900;">Publish failed: '.$asset['name'].'</div>';
+      $total['f']++;
+    }
   } else {
     echo '<div style="color:#900;">Move failed: '.$asset['name'].'</div>';
   }
