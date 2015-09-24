@@ -19,13 +19,13 @@ $(function() {
   $('.event-form .btn-success').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','enable.php');
-    $(this).closest('form').prepend('<div class="label label-success pull-right">Enabled</div>');
+    $(this).closest('form').prepend('<div class="label label-success pull-right">Enable request sent</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
   $('.event-form .btn-warning').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','reject.php');
-    $(this).closest('form').prepend('<div class="label label-important pull-right">Rejected</div>');
+    $(this).closest('form').prepend('<div class="label label-important pull-right">Reject request sent</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
 });
