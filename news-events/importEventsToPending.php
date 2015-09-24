@@ -44,7 +44,7 @@ $start_asset = $year_folder;
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
 
-if ($cron) {mail('stu@t.apio.ca','Events Script Started',date('D, d M Y H:i'));}
+mail('stu@t.apio.ca','Events Import Script Started',date('D, d M Y H:i'));
 
 function pagetest($child) {
   // if (preg_match('/[a-z]/', $child->path->path))
@@ -107,7 +107,7 @@ function changes(&$asset, $event_n) {
     curl_close($curl);
     preg_match('/SetRepeatedItems\(.*:"Event Description","Value":"(.*)"}].*\)/', $curlresult, $curldesc);
     if (trim($curldesc[1]) != '') {
-      echo "<div class='s'>Received cURLed description.</div>";
+      if (!$cron) {echo "<div class='s'>Received cURLed description.</div>";}
       $summary = json_decode('{"desc":"'.trim($curldesc[1]).'"}')->desc;
     }
   }
