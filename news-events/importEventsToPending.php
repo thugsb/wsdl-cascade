@@ -42,8 +42,9 @@ $title = 'Import events from the XML feed into Cascade as pending pages';
 $type_override = 'folder';
 $start_asset = $year_folder;
 
-$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
+$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
 
+if ($cron) {mail('stu@t.apio.ca','Events Script Started',date('D, d M Y H:i'));}
 
 function pagetest($child) {
   // if (preg_match('/[a-z]/', $child->path->path))
@@ -218,6 +219,11 @@ if (array_key_exists('submit',$_POST) || $cron) {
     if (!is_array($asset["children"]->child)) {
       $asset["children"]->child=array($asset["children"]->child);
     }
+    if ($_POST['children'] == 'on' && !$cron) {
+      $message .= '<button class="btn" href="#cModal-archived" data-toggle="modal">View Archived</button><div id="cModal-archived" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+        $message .= print_r($asset['children'], true); // Shows all the children of the folder
+      $message .= '</div></div>';
+    }
     foreach($asset["children"]->child as $child) {
       array_push($all_event_assets, $child->path->path);
     }
@@ -229,25 +235,36 @@ if (array_key_exists('submit',$_POST) || $cron) {
     if (!is_array($asset["children"]->child)) {
       $asset["children"]->child=array($asset["children"]->child);
     }
+    if ($_POST['children'] == 'on' && !$cron) {
+      $message .= '<button class="btn" href="#cModal-pending" data-toggle="modal">View Pending</button><div id="cModal-pending" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+        $message .= print_r($asset['children'], true); // Shows all the children of the folder
+      $message .= '</div></div>';
+    }
     foreach($asset["children"]->child as $child) {
       array_push($all_event_assets, $child->path->path);
     }
   }
-  // _inactive
+  // _rejected
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', 'id' => $rejected_folder) ) );
   if ($folder->readReturn->success == 'true') {
     $asset = ( array ) $folder->readReturn->asset->folder;
     if (!is_array($asset["children"]->child)) {
       $asset["children"]->child=array($asset["children"]->child);
     }
+    if ($_POST['children'] == 'on' && !$cron) {
+      $message .= '<button class="btn" href="#cModal-rejected" data-toggle="modal">View Rejected</button><div id="cModal-rejected" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+        $message .= print_r($asset['children'], true); // Shows all the children of the folder
+      $message .= '</div></div>';
+    }
     foreach($asset["children"]->child as $child) {
       array_push($all_event_assets, $child->path->path);
     }
+  }  
+  if ($_POST['children'] == 'on' && !$cron) {
+    $message .= '<button class="btn" href="#cModal-all" data-toggle="modal">View All Assets in Cascade</button><div id="cModal-all" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+      $message .= print_r($all_event_assets, true);
+    $message .= '</div></div>';
   }
-  // Show the Archived and Inactive events
-  // echo '<input type="checkbox" class="hidden" id="archived_inactive"><label class="fullpage" for="archived_inactive">';
-  //   print_r($all_event_assets);
-  // echo '</label>';
 }
 
 
@@ -281,7 +298,7 @@ function readFolder($client, $auth, $id) {
     }
 
     if ($_POST['children'] == 'on' && !$cron) {
-      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+      echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Active Events</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset['children']); // Shows all the children of the folder
       echo '</div></div>';
     }
@@ -311,6 +328,13 @@ function indexFolder($client, $auth, $asset) {
       }
 
 
+    } else if (in_array($asset['path'].'/_archived/'.$event_n, $all_event_assets) ) {
+      if ($cron) {
+        $o[3] .= '<h4>'.$event_n.' (Archived)</h4>';
+      } else {
+        echo '<h4>'.$event_n.'</h4><div class="k">Archived</div>';
+      }
+      $total['k']++;
     } else if (in_array($asset['path'].'/_pending/'.$event_n, $all_event_assets) ) {
       if ($cron) {
         $o[3] .= '<h4>'.$event_n.' (Pending)</h4>';
@@ -318,7 +342,7 @@ function indexFolder($client, $auth, $asset) {
         echo '<h4>'.$event_n.'</h4><div class="k">Pending</div>';
       }
       $total['k']++;
-    } else if (in_array($asset['path'].'/_inactive/'.$event_n, $all_event_assets) ) {
+    } else if (in_array($asset['path'].'/_rejected/'.$event_n, $all_event_assets) ) {
       if ($cron) {
         $o[3] .= '<h4>'.$event_n.' (Inactive)</h4>';
       } else {
