@@ -140,7 +140,7 @@ function indexFolder($client, $auth, $asset) {
         $headers = 'From: stu@t.apio.ca' . "\r\n";
         $headers .= 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= 'Cc: stu@t.apio.ca' . "\r\n";
+        $headers .= 'Cc: stu@t.apio.ca, wjoell@sarahlawrence.edu' . "\r\n";
         
         $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array('id' => $child->id, 'type' => 'page') ) );
         if ($reply->readReturn->success == 'true') {
@@ -189,12 +189,12 @@ function indexFolder($client, $auth, $asset) {
           $total['f']++;
         }
         $message .= '<p>Please review this event.</p>';
-        $message .= '<p>Here are other events that match the same date:</p><ul>';
-        foreach ($date_matches as $ev) {
-          $message .= '<li>'.$ev.'</li>';
-        }
         $message .= "</ul><p>Here are other events that match the same name:</p><ul>";
         foreach ($name_matches as $ev) {
+          $message .= '<li>'.$ev.'</li>';
+        }
+        $message .= '<p>Here are other events that match the same date:</p><ul>';
+        foreach ($date_matches as $ev) {
           $message .= '<li>'.$ev.'</li>';
         }
         $message .= '</ul>';
