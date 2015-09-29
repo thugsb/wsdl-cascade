@@ -16,7 +16,10 @@ if (isset($_GET['to'])) {
 } else {
   $to = '';
 }
-$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+
+simplexml_merge($all_events, $private_events);
 
 $event_names = array();
 foreach ($all_events->event as $i=>$event) {
