@@ -189,11 +189,11 @@ function indexFolder($client, $auth, $asset) {
           $total['f']++;
         }
         $message .= '<p>Please review this event.</p>';
-        $message .= "</ul><p>Here are other events that match the same name:</p><ul>";
+        $message .= "<p>Here are other events that match the same name:</p><ul>";
         foreach ($name_matches as $ev) {
           $message .= '<li>'.$ev.'</li>';
         }
-        $message .= '<p>Here are other events that match the same date:</p><ul>';
+        $message .= '</ul><p>Here are other events that match the same date:</p><ul>';
         foreach ($date_matches as $ev) {
           $message .= '<li>'.$ev.'</li>';
         }
