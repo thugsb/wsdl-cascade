@@ -73,6 +73,7 @@ function changes(&$asset, $event_n) {
     $data = str_replace('&nbsp;','&#160;',$data);
     $data = str_replace('& ','and ',$data);
     $data = str_replace('&',' and ',$data);
+    $data = str_replace('and #160;','&#160;',$data);
     $data = strip_tags($data);
     // echo $data;
     if ($asset["metadata"]->$afield != $data) {
