@@ -1,6 +1,6 @@
 <?php
 $year_folder = '85a826eec0a8022b3d7ce269ce9477fa';
-$pending_folder = '0027dfb8c0a8022b219b8086db648616';
+$pending_folder = '39e9a9bcc0a8022b3e74b75175234a8f';
 $rejected_folder = '85a91e39c0a8022b3d7ce269adaec728';
 $deleted_folder = 'f65414a5c0a8022b36e21ad719081b4f';
 $acad_year = '2015-2016';
