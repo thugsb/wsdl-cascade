@@ -51,6 +51,12 @@ if (!isset($data)) {$data = '';}
   
   .modal {width:100%;left:0;margin-left:0;}
   .modal-body {max-height:500px;white-space:pre;}
+  
+  #result {height:70px;}
+  #result.bigger {height:300px;}
+  .tag-section {margin: .5em; background-color: #ccc;}
+  .tag-section label {display: inline-block; vertical-align:top; width: 250px;}
+  .tag-section label input {margin:0 5px 0 0;}
   </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
