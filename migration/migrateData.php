@@ -62,17 +62,22 @@ function changes(&$asset) {
 		$settings = createNode('group', 'group-settings', true);
 		$foundPageHeading = false;
 		foreach ($asset["metadata"]->dynamicFields->dynamicField as $meta) {
-			if ($meta->name = 'page-heading') {
-				$foundPageHeading = true;
-				if ($meta->fieldValues->fieldValue->value == '') {
-					$settings->structuredDataNodes->structuredDataNode[0] = createNode('text', 'page-heading', false, 'Display Name');
-				} else {
+			if ($meta->name == 'page-heading') {
+				echo "Page Heading: ".$meta->fieldValues->fieldValue->value;
+				if (strpos($meta->fieldValues->fieldValue->value, '<') !== FALSE || strpos($meta->fieldValues->fieldValue->value, '&amp;') !== FALSE) {
+					echo "<div class='k'>Includes HTML</div>";
+					$foundPageHeading = true;
 					$settings->structuredDataNodes->structuredDataNode[0] = createNode('text', 'page-heading', false, 'Custom');
+					$settings->structuredDataNodes->structuredDataNode[1] = createNode('text', 'custom-page-heading', false, $meta->fieldValues->fieldValue->value);
+					$meta->fieldValues->fieldValue->value = '';
 				}
-				$settings->structuredDataNodes->structuredDataNode[1] = createNode('text', 'custom-page-heading', false, $meta->fieldValues->fieldValue->value);
 			}
 		}
-		if (!$foundPageHeading) {echo "<div class='f'>Didn't find a page heading.</div>";}
+		if (!$foundPageHeading) {
+			echo "<div class='k'>Didn't find an HTML page heading.</div>";
+			$settings->structuredDataNodes->structuredDataNode[0] = createNode('text', 'page-heading', false, 'Use Metadata');
+			$settings->structuredDataNodes->structuredDataNode[1] = createNode('text', 'custom-page-heading', false, '');
+		}
 		$settings->structuredDataNodes->structuredDataNode[2] = createNode('asset', 'image', false, '', 'file');
 
 	
