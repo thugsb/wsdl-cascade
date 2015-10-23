@@ -146,12 +146,6 @@ function changes(&$asset, $event_n) {
         $dyn->fieldValues->fieldValue->value = $location;
         $changed = true;
       }
-    } elseif ($dyn->name == 'calendar') {
-      $calendar = (string)$object->calendar->name;
-      if ($dyn->fieldValues->fieldValue->value != $calendar) {
-        $dyn->fieldValues->fieldValue->value = $calendar;
-        $changed = true;
-      }
     } elseif ($dyn->name == 'type') {
       $type = (string)$object->type->name;
       $type = preg_replace("/[^A-Za-z0-9- \/\(\)']+/", "", $type);

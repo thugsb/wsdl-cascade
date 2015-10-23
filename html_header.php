@@ -55,6 +55,7 @@ if (!isset($data)) {$data = '';}
   #result {height:70px;}
   #result.bigger {height:300px;}
   .tag-section {margin: .5em; background-color: #ccc;}
+  .tag-section.calendar {background: #fec;}
   .tag-section label {display: inline-block; vertical-align:top; width: 250px;}
   .tag-section label input {margin:0 5px 0 0;}
   </style>
