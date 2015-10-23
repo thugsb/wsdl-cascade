@@ -58,7 +58,7 @@ function addTags(&$asset) {
   if(in_array('Careers',$themes)){$careers = true;}
   
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-    if ($dyn->name == 'calendar') {echo $_POST['calendar'];
+    if ($dyn->name == 'calendar') {
     	$dyn->fieldValues->fieldValue->value = $_POST['calendar'];
     } elseif ($dyn->name == 'studyAreas') {
       if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
