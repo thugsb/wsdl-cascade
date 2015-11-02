@@ -190,8 +190,7 @@ function changes(&$asset, $event_n) {
         $changed = true;
       }
     } elseif ($dyn->name == 'visible') {
-      $detailid = (string)$object->detailid;
-      if ($dyn->fieldValues->fieldValue->value != $detailid) {
+      if ($dyn->fieldValues->fieldValue->value != 'Yes') {
         $dyn->fieldValues->fieldValue->value = 'Yes'; // Legacy field, setting all to true
         $changed = true;
       }
