@@ -129,6 +129,13 @@ function indexFolder($client, $auth, $asset) {
           echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
         }
         $total['k']++;
+      } elseif (strstr($name, '-eid') == false) {
+          if ($cron) {
+            $o[3] .= $name.'<br>';
+          } else {
+            echo '<div class="k"><small>'.$name.' does not have an EID.</small></div>';
+          }
+          $total['k']++;
       } else {
         if (!$cron) {echo '<div><strong><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
         $to      = 'tguiliano@sarahlawrence.edu';
