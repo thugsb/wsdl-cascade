@@ -54,12 +54,14 @@ function addTags(&$asset) {
   if(isset($_POST['studies'])){if (is_array($_POST['studies'])) {$studies = $_POST['studies'];} else {$studies = array($_POST['studies']);}} else {$studies = array();}
   if(isset($_POST['audiences'])){if (is_array($_POST['audiences'])) {$audiences = $_POST['audiences'];} else {$audiences = array($_POST['audiences']);}} else {$audiences = array();}
   if(isset($_POST['themes'])){if (is_array($_POST['themes'])) {$themes = $_POST['themes'];} else {$themes = array($_POST['themes']);}} else {$themes = array();}
-  
   if(in_array('Careers',$themes)){$careers = true;}
   
+  if(isset($_POST['sponsors'])){if (is_array($_POST['sponsors'])) {$sponsors = $_POST['sponsors'];} else {$sponsors = array($_POST['sponsors']);}} else {$sponsors = array();}
+  
+  
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-    if ($dyn->name == 'calendar') {
-    	$dyn->fieldValues->fieldValue->value = $_POST['calendar'];
+    if ($dyn->name == 'faculty-tag') {
+    	$dyn->fieldValues->fieldValue->value = $_POST['faculty-tag'];
     } elseif ($dyn->name == 'studyAreas') {
       if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
       foreach($areas as $val) {
@@ -133,6 +135,13 @@ function addTags(&$asset) {
     } elseif ($dyn->name == 'themes') {
       if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
       foreach($themes as $val) {
+        $node = new StdClass();
+        $node->value = $val;
+        array_push($dyn->fieldValues->fieldValue, $node);
+      }
+    } elseif ($dyn->name == 'sponsors') {
+      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
+      foreach($sponsors as $val) {
         $node = new StdClass();
         $node->value = $val;
         array_push($dyn->fieldValues->fieldValue, $node);
