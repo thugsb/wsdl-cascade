@@ -61,50 +61,13 @@ function addTags(&$asset) {
   
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == 'faculty-tag') {
-    	$dyn->fieldValues->fieldValue->value = $_POST['faculty-tag'];
-    } elseif ($dyn->name == 'studyAreas') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
-      foreach($areas as $val) {
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-    } elseif ($dyn->name == 'studyDisciplines') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
-      foreach($disciplines as $val) {
-        if($val == 'Latin American and Latino/a Studies') {$val = 'LALS';}
-        if($val == 'Science, Technology, and Society') {$val = 'STS';}
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-    } elseif ($dyn->name == 'studyGrad') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
-      foreach($programs as $val) {
-        if($val == 'MFA Dance') {$val = 'Dance';}
-        if($val == 'MFA Theatre') {$val = 'Theatre';}
-        if($val == 'MFA Writing') {$val = 'Writing';}
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-    } elseif ($dyn->name == 'studyOther') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
-      foreach($studies as $val) {
-        if($val == 'Continuing Education') {$val = 'CCE';}
-        if($val == 'Child Development Institute') {$val = 'CDI';}
-        if($val == 'Early Childhood Center') {$val = 'ECC';}
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-      if ($careers) {
-        $node = new StdClass();
-        $node->value = 'Career Services';
-        array_push($dyn->fieldValues->fieldValue, $node);
+      if (isset($_POST['faculty-tag'])) {
+        $dyn->fieldValues->fieldValue->value = $_POST['faculty-tag'];
+      } else {
+        $dyn->fieldValues->fieldValue->value = '';
       }
     } elseif ($dyn->name == 'academics') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
+      $dyn->fieldValues->fieldValue = array();
       foreach($areas as $val) {
         $node = new StdClass();
         $node->value = $val;
@@ -126,21 +89,21 @@ function addTags(&$asset) {
         array_push($dyn->fieldValues->fieldValue, $node);
       }
     } elseif ($dyn->name == 'audiences') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
+      $dyn->fieldValues->fieldValue = array();
       foreach($audiences as $val) {
         $node = new StdClass();
         $node->value = $val;
         array_push($dyn->fieldValues->fieldValue, $node);
       }
     } elseif ($dyn->name == 'themes') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
+      $dyn->fieldValues->fieldValue = array();
       foreach($themes as $val) {
         $node = new StdClass();
         $node->value = $val;
         array_push($dyn->fieldValues->fieldValue, $node);
       }
     } elseif ($dyn->name == 'sponsors') {
-      if ( !is_array($dyn->fieldValues->fieldValue) ) {$dyn->fieldValues->fieldValue = array();}
+      $dyn->fieldValues->fieldValue = array();
       foreach($sponsors as $val) {
         $node = new StdClass();
         $node->value = $val;
