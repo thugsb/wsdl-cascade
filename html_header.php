@@ -21,7 +21,7 @@ if (!isset($data)) {$data = '';}
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <style type="text/css">
-  body {padding:1em;}
+  body {padding:1em 1em 100px;}
   a {text-decoration:none;color:#334}
   input[type=text], input[type=password], select {width:120px;}
   #id {width:255px;}
