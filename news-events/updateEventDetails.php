@@ -22,7 +22,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed, $all_events;
+  global $changed, $all_events, $cron;
   $changed = false;
   
   $date_string = substr($asset['name'], 0, 10);
@@ -105,7 +105,7 @@ function changes(&$asset) {
 		$headers = 'From: stu@t.apio.ca' . "\r\n";
 		$headers .= 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-		$headers .= 'Cc: stu@t.apio.ca, wjoell@sarahlawrence.edu' . "\r\n";
+		//$headers .= 'Cc: stu@t.apio.ca, wjoell@sarahlawrence.edu' . "\r\n";
 		
 		if ($cron) {
 			mail($to, $subject, $message, $headers);
