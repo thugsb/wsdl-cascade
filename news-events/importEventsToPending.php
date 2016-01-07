@@ -323,7 +323,8 @@ function indexFolder($client, $auth, $asset) {
     if (in_array($asset['path'].'/'.$event_n, $children)) {
       // echo "<div class='k'>".$event_n." exists</div>";
       if (pagetest($event_n)) {
-        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
+      	// If you want events to auto-update from the XML feed, uncomment this line:
+        // readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
       }
 
 
