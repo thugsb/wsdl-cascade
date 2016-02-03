@@ -80,101 +80,95 @@ function changes(&$asset) {
           }
         }
       }
-    } elseif (preg_match('/^related-to-/', $field->identifier) ) {
-      if (strstr($field->text, '::CONTENT-XML-CHECKBOX::') ) {
-        $related = explode('::CONTENT-XML-CHECKBOX::', $field->text);
-        array_shift($related);
-        if ($related[0] != '') {
-          foreach($related as $disc) {
-            $discFolder = $discNames[$disc];
-            if ($discFolder) {
-              if ($relatedIDs[$discFolder]) {
-              
-                $reference = array(
-                  'reference' => array(
-                    'name' => $asset['name'],
-                    'parentFolderId' => $relatedIDs[$discFolder],
-                    'referencedAssetId' => $asset['id'],
-                    'siteName' => 'www.sarahlawrence.edu+catalogue',
-                    'referencedAssetType' => 'page'
-                  )
-                );
+    } elseif ( $field->identifier == 'related' ) {
+      echo $field->text;
+      $disc = $field->text;
+      $discFolder = $discNames[$disc];
+      if ($discFolder) {
+        if ($relatedIDs[$discFolder]) {
+        
+          $reference = array(
+            'reference' => array(
+              'name' => $asset['name'],
+              'parentFolderId' => $relatedIDs[$discFolder],
+              'referencedAssetId' => $asset['id'],
+              'siteName' => 'www.sarahlawrence.edu+catalogue',
+              'referencedAssetType' => 'page'
+            )
+          );
 
-                $read = $client->read(array ('authentication' => $auth, 'identifier' => array('id'=>$relatedIDs[$discFolder], 'type' => 'folder') ) );
-                if ($read->readReturn->success === 'true') {
-                  $dest = ( array ) $read->readReturn->asset->folder;
-                  if ($_POST['children'] == 'on' && !$cron) {
-                    echo '<button class="btn" href="#cModal'.$dest['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$dest['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
-                      print_r($dest["children"]); // Shows all the children of the folder
-                    echo '</div></div>';
-                  }
-                  $matchNew = false;
-                  
-                  $children_array = is_object($dest["children"]->child) ? array($dest["children"]->child) : $dest["children"]->child;
-                  
-                  foreach ($children_array as $key=>$existingRef) {
-                    if (strcmp(basename($existingRef->path->path), $asset['name']) === 0) {
-                      $matchNew = true;
-                      if (!$cron) {echo '<div class="k">A reference for '.$asset['name'].' already exists in <strong>'.$dest['path'].'</strong>.</div>';}
-                    }
-                  }
-
-                  if (!$matchNew) {
-                    $matchNew = false;
-                    $pathFolders = explode('/',$asset['path']);
-                    if ($pathFolders[0] == $discFolder) {
-                      if (!$cron) {echo "<div class='f'>Ooopsie, this course is trying to be related to its own discipline.</div>";}
-                    } else {
-                      if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
-
-                      // Create the new reference
-                      if ($_POST['action'] == 'edit' || $cron) {
-                        $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
-                      }
-                      if ($create->createReturn->success === 'true') {
-                        if ($cron) {
-                          $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
-                        } else {
-                          echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
-                        }
-                        $total['s']++;
-                      } else {
-                        if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
-                        if ($cron) {
-                          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
-                        } else {
-                          echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
-                        }
-                        $total['f']++;
-                      }
-                    }
-                  }
-                    
-                } else {
-                  if ($cron) {
-                    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
-                  } else {
-                    echo '<div class="f">Failed to read folder: '.$discFolder.'</div>';
-                  }
-                }
-              } else {  
-                if ($cron) {
-                  $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline related folder ID does not exist: '.$disc.'</div>';
-                } else {
-                  echo '<div class="f">Discipline related folder ID does not exist: '.$disc.'</div>';
-                }
-              }
-            } else {
-              if ($disc !== 'Global Studies' && $disc !== 'Science, Technology, and Society') {
-                $total['f']++;
-              }
-              if ($cron) {
-                $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
-              } else {
-                echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
+          $read = $client->read(array ('authentication' => $auth, 'identifier' => array('id'=>$relatedIDs[$discFolder], 'type' => 'folder') ) );
+          if ($read->readReturn->success === 'true') {
+            $dest = ( array ) $read->readReturn->asset->folder;
+            if ($_POST['children'] == 'on' && !$cron) {
+              echo '<button class="btn" href="#cModal'.$dest['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$dest['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
+                print_r($dest["children"]); // Shows all the children of the folder
+              echo '</div></div>';
+            }
+            $matchNew = false;
+            
+            $children_array = is_object($dest["children"]->child) ? array($dest["children"]->child) : $dest["children"]->child;
+            
+            foreach ($children_array as $key=>$existingRef) {
+              if (strcmp(basename($existingRef->path->path), $asset['name']) === 0) {
+                $matchNew = true;
+                if (!$cron) {echo '<div class="k">A reference for '.$asset['name'].' already exists in <strong>'.$dest['path'].'</strong>.</div>';}
               }
             }
+
+            if (!$matchNew) {
+              $matchNew = false;
+              $pathFolders = explode('/',$asset['path']);
+              if ($pathFolders[0] == $discFolder) {
+                if (!$cron) {echo "<div class='f'>Ooopsie, this course is trying to be related to its own discipline.</div>";}
+              } else {
+                if (!$cron) {echo "<div>A reference for ".$asset['name']." will be created in $discFolder/$year/related/ :</div>";}
+
+                // Create the new reference
+                if ($_POST['action'] == 'edit' || $cron) {
+                  $create = $client->create(array ('authentication' => $auth, 'asset' => $reference) );
+                }
+                if ($create->createReturn->success === 'true') {
+                  if ($cron) {
+                    $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
+                  } else {
+                    echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
+                  }
+                  $total['s']++;
+                } else {
+                  if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
+                  if ($cron) {
+                    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+                  } else {
+                    echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
+                  }
+                  $total['f']++;
+                }
+              }
+            }
+              
+          } else {
+            if ($cron) {
+              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+            } else {
+              echo '<div class="f">Failed to read folder: '.$discFolder.'</div>';
+            }
           }
+        } else {  
+          if ($cron) {
+            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline related folder ID does not exist: '.$disc.'</div>';
+          } else {
+            echo '<div class="f">Discipline related folder ID does not exist: '.$disc.'</div>';
+          }
+        }
+      } else {
+        if ($disc !== 'Global Studies' && $disc !== 'Science, Technology, and Society') {
+          $total['f']++;
+        }
+        if ($cron) {
+          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
+        } else {
+          echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
         }
       }
     }
