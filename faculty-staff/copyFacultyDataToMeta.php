@@ -52,7 +52,7 @@ function changes(&$asset) {
   // print_r($links);
   
   // This is what we have grabbed
-  echo '<div>First: '.$first_name.'<br/>Last: '.$last_name.'<br/>Bio: '.$fac_content->text.'</div>';
+  // echo '<div>First: '.$first_name.'<br/>Last: '.$last_name.'<br/>Bio: '.$fac_content->text.'</div>';
   
   // Set the data in the correct metadata fields
   if ($asset["metadata"]->teaser != $fac_content->text) {
