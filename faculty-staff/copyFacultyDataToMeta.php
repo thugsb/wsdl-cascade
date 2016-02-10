@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/New_York');
-$title = 'Copy Faculty Structured Data to Metadata';
+$title = 'Copy Faculty Structured Data (Page Title, Bio and Affiliations) to Metadata';
 
 // $type_override = 'page';
 $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
@@ -28,25 +28,17 @@ function changes(&$asset) {
   $changed = false;
   // Grab the correct fields
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode[0]->structuredDataNodes->structuredDataNode as $sdnode) {
-    if ($sdnode->identifier == "first") {
-      $fac_first = $sdnode;
-    } elseif ($sdnode->identifier == "last") {
-      $fac_last = $sdnode;
-    } elseif ($sdnode->identifier == "title") {
-      $fac_title = $sdnode;
-    } elseif ($sdnode->identifier == "email") {
-      $fac_email = $sdnode;
-    } elseif ($sdnode->identifier == "phone") {
-      $fac_phone = $sdnode;
-    } elseif ($sdnode->identifier == "status") {
-      $fac_status = $sdnode;
-    } elseif ($sdnode->identifier == "note") {
-      $fac_note = $sdnode;
-    } elseif ($sdnode->identifier == "content") {
+    if ($sdnode->identifier == "content") {
       $fac_content = $sdnode;
     }
   }
-  
+  foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
+    if ($dyn->name == "first") {
+      $first_name = $dyn->fieldValues->fieldValue->value;
+    } elseif ($dyn->name == "last") {
+      $last_name = $dyn->fieldValues->fieldValue->value;
+    }
+  }
   
   // Affiliations
   if (!is_array($asset["structuredData"]->structuredDataNodes->structuredDataNode[1]->structuredDataNodes->structuredDataNode)) {
@@ -60,7 +52,7 @@ function changes(&$asset) {
   // print_r($links);
   
   // This is what we have grabbed
-  // echo '<div>First: '.$fac_first->text.'<br>Last: '.$fac_last->text.'<br>Title: '.$fac_title->text.'<br>Email: '.$fac_email->text.'<br>Status: '.$fac_status->text.'<br>Note: '.$fac_note->text.'<br>Bio: '.$fac_content->text.'</div>';
+  echo '<div>First: '.$first_name.'<br/>Last: '.$last_name.'<br/>Bio: '.$fac_content->text.'</div>';
   
   // Set the data in the correct metadata fields
   if ($asset["metadata"]->teaser != $fac_content->text) {
@@ -68,30 +60,7 @@ function changes(&$asset) {
     $changed = true;
   }
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-    if ($dyn->name == "first") {
-      $first_name = $fac_first->text;
-      if ($dyn->fieldValues->fieldValue->value != $fac_first->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_first->text;
-    } elseif ($dyn->name == "last") {
-      $last_name = $fac_last->text;
-      if ($dyn->fieldValues->fieldValue->value != $fac_last->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_last->text;
-    } elseif ($dyn->name == "faculty-title") {
-      if ($dyn->fieldValues->fieldValue->value != $fac_title->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_title->text;
-    } elseif ($dyn->name == "email") {
-      if ($dyn->fieldValues->fieldValue->value != $fac_email->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_email->text;
-    } elseif ($dyn->name == "phone") {
-      if ($dyn->fieldValues->fieldValue->value != $fac_phone->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_phone->text;
-    } elseif ($dyn->name == "status") {
-      if ($dyn->fieldValues->fieldValue->value != $fac_status->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_status->text;
-    } elseif ($dyn->name == "note") {
-      if ($dyn->fieldValues->fieldValue->value != $fac_note->text) {$changed = true;}
-      $dyn->fieldValues->fieldValue->value = $fac_note->text;
-    } elseif ($dyn->name == "affiliation-link-1") {
+    if ($dyn->name == "affiliation-link-1") {
       if ($dyn->fieldValues->fieldValue->value != $links[0] && $links[0] != 'site://') {
         $changed = true;
         $dyn->fieldValues->fieldValue->value = $links[0];
