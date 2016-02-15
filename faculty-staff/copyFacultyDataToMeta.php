@@ -7,7 +7,7 @@ $start_asset = '2891e3f87f00000101b7715d1ba2a7fb';
 
 function pagetest($child) {
   if (isset($_GET['name'])) {
-    if (preg_match("/^".$_GET['name']."[a-z]/",$child->path->path)) {
+    if (preg_match("/^".$_GET['name']."/",$child->path->path)) {
       return true;
     }
   } else {
