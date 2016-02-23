@@ -32,6 +32,11 @@ function changes(&$asset) {
   		$detailid = $dyn->fieldValues->fieldValue->value;
 	  }
   }
+
+  if ($detailid == '') {
+  	if (!$cron) {echo "<div>This must be a manually created event.</div>";}
+  	return;
+  }
 	
 	foreach ($all_events->event as $i=>$event) {
 		if ($detailid == $event->detailid) {
