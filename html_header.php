@@ -80,6 +80,7 @@ if (!isset($data)) {$data = '';}
 </head>
 <body>
   <nav>
+    <h5 style="margin:0"><?php echo $title; ?></h5>
     <form id="options" method="POST" class="form-inline">
       <a href="./">./</a>
       <input name="login" type="text" placeholder="username" size="8" value="<?php echo $_POST['login']; ?>">
