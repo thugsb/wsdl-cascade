@@ -17,14 +17,42 @@ $del_params = array ('authentication' => $auth, 'identifier' => $deleted_event_i
 $read_del = $client->read ( $del_params );
 if ($read_del->readReturn->success == 'true') {
   $del_page = ( array ) $read_del->readReturn->asset->page;
-  $old_dynamic_fields = $del_page["metadata"]->dynamicFields;
+  $old_dynamic_fields = $del_page["metadata"];
   $old_structured_data = $del_page["structuredData"]->structuredDataNodes;
 
   $read = $client->read ( $params );
   if ($read->readReturn->success == 'true') {
     $asset = ( array ) $read->readReturn->asset->page;
-    $asset["metadata"]->dynamicFields = $old_dynamic_fields;
+    foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
+      if ($dyn->name == 'detailid') {
+        $detailid = $dyn->fieldValues->fieldValue->value;
+      }
+      if ($dyn->name == 'begin') {
+        $begin = $dyn->fieldValues->fieldValue->value;
+      }
+      if ($dyn->name == 'end') {
+        $end = $dyn->fieldValues->fieldValue->value;
+      }
+      if ($dyn->name == 'location') {
+        $location = $dyn->fieldValues->fieldValue->value;
+      }
+    }
+    $asset["metadata"] = $old_dynamic_fields;
     $asset["structuredData"]->structuredDataNodes = $old_structured_data;
+    foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
+      if ($dyn->name == 'detailid') {
+        $dyn->fieldValues->fieldValue->value = $detailid;
+      }
+      if ($dyn->name == 'begin') {
+        $dyn->fieldValues->fieldValue->value = $begin;
+      }
+      if ($dyn->name == 'end') {
+        $dyn->fieldValues->fieldValue->value = $end;
+      }
+      if ($dyn->name == 'location') {
+        $dyn->fieldValues->fieldValue->value = $location;
+      }
+    }
 
     $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array('page' => $asset) ) );
     if ($edit->editReturn->success == 'true') {
