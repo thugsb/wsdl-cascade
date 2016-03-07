@@ -83,6 +83,7 @@ if (!isset($data)) {$data = '';}
   .tag-section.calendar {background: #fec;}
   .tag-section label {display: inline-block; vertical-align:top; width: 250px;}
   .tag-section label input {margin:0 5px 0 0;}
+  .deleted_events {width: 300px; margin:0;}
   </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
