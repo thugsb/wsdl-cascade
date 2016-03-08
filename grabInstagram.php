@@ -39,7 +39,11 @@ $data = json_decode($curlresult);
 
 $output = '<div class="list-inner"><h2><a target="blank" href="https://instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
 foreach ($data->data as $i => $media) {
-	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'"><img src="'.$media->images->thumbnail->url.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
+	$filename = end( explode( '/', parse_url( $media->images->thumbnail->url)['path'] ) );
+	if( !file_exists("../_assets/instagram/".$filename) ) {
+		copy($media->images->thumbnail->url, "../_assets/instagram/".$filename );
+	}
+	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'"><img src="../_assets/instagram/'.$filename.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
 }
 $output .= '</div></div>';
 if (!$cron) {echo $output;}
