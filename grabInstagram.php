@@ -39,7 +39,8 @@ $data = json_decode($curlresult);
 
 $output = '<div class="list-inner"><h2><a target="blank" href="https://instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
 foreach ($data->data as $i => $media) {
-	$filename = end( explode( '/', parse_url( $media->images->thumbnail->url)['path'] ) );
+	$url = parse_url( $media->images->thumbnail->url);
+	$filename = end( explode( '/', $url['path'] ) );
 	if( !file_exists("../_assets/instagram/".$filename) ) {
 		copy($media->images->thumbnail->url, "../_assets/instagram/".$filename );
 	}
@@ -48,7 +49,7 @@ foreach ($data->data as $i => $media) {
 $output .= '</div></div>';
 if (!$cron) {echo $output;}
 
-if (file_put_contents("../_assets/includes/instagram-$account.html", $output) ) {
+if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
 	if (!$cron) {echo 'success';}
 }
 
