@@ -1,5 +1,7 @@
 <?php
 
+parse_str(implode('&', array_slice($argv, 1)), $_GET);
+
 if (PHP_SAPI == 'cli') {$cron = true;}
 
 ( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
@@ -10,7 +12,6 @@ if ( isset($_GET['user_id'])) {
 	curl_setopt_array($curl, array(
 		CURLOPT_RETURNTRANSFER => 1,
 		CURLOPT_URL => "https://api.instagram.com/v1/users/$user_id/?access_token=1284963432.467ede5.569288e0262145459ecfd7d70ac50374",
-		CURLOPT_USERAGENT => 'Chrome 41.0.2228.0'
 	));
 	$curlresult = curl_exec($curl);
 	curl_close($curl);
@@ -28,7 +29,6 @@ $curl = curl_init();
 curl_setopt_array($curl, array(
 	CURLOPT_RETURNTRANSFER => 1,
 	CURLOPT_URL => "https://api.instagram.com/v1/users/$user_id/media/recent/?count=4&access_token=1284963432.467ede5.569288e0262145459ecfd7d70ac50374",
-	CURLOPT_USERAGENT => 'Chrome 41.0.2228.0'
 ));
 $curlresult = curl_exec($curl);
 curl_close($curl);
