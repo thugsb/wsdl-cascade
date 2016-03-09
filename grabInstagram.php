@@ -64,7 +64,12 @@ if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) )
 
 
 if ($cron) {
-	mail('stu@t.apio.ca', 'Cron grabInstagram'.($success ? '' : ' FAILED'), $message);
+	$headers = 'From: stu@t.apio.ca' . "\r\n";
+	$headers .= 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	// $headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
+        
+	mail('stu@t.apio.ca', 'Cron grabInstagram'.($success ? '' : ' FAILED'), $message, $headers);
 } else {
 	echo $message;
 	echo $output;
