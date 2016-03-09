@@ -67,7 +67,7 @@ if ($imageChanged) {
 	}
 }
 
-if ($message == '') {$message = '<p style="color:#009">No changes needed.</p>';}
+if ($message == '') {$message = '<p style="color:#009">No changes needed for the <a href="https://www.instagram.com/'.$account.'/">'.$account.'</a> account.</p>';} else {$message .= '<p>The script ran for the <a href="https://www.instagram.com/'.$account.'/">'.$account.'</a> account.</p>';}
 
 if ($cron) {
 	$headers = 'MIME-Version: 1.0' . "\r\n";
