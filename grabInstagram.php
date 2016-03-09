@@ -39,7 +39,7 @@ $data = json_decode($curlresult);
 
 $success = true;
 $message = '';
-$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
+$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Heading\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
 foreach ($data->data as $i => $media) {
 	$url = parse_url( $media->images->thumbnail->url);
 	$filename = end( explode( '/', $url['path'] ) );
@@ -51,7 +51,7 @@ foreach ($data->data as $i => $media) {
 			$success = false;
 		}
 	}
-	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'"><img src="../_assets/instagram/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
+	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')"><img src="/_assets/instagram/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
 }
 $output .= '</div></div></div>';
 
