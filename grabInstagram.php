@@ -43,7 +43,7 @@ $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a t
 foreach ($data->data as $i => $media) {
 	$url = parse_url( $media->images->thumbnail->url);
 	$filename = end( explode( '/', $url['path'] ) );
-	if( !file_exists("../_assets/instagram/".$filename) ) {
+	if( !file_exists("../_assets/instagram/".$account.'-'.$filename) ) {
 		if ( copy($media->images->thumbnail->url, "../_assets/instagram/".$account.'-'.$filename ) ) {
 			$message .= "<p style='color:#090'>Image $i copied successfully.</p>";
 		} else {
