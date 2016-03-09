@@ -39,7 +39,7 @@ $data = json_decode($curlresult);
 
 $success = true;
 $message = '';
-$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
+$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
 foreach ($data->data as $i => $media) {
 	$url = parse_url( $media->images->thumbnail->url);
 	$filename = end( explode( '/', $url['path'] ) );
