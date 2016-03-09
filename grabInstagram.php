@@ -1,8 +1,9 @@
 <?php
 
-parse_str(implode('&', array_slice($argv, 1)), $_GET);
-
-if (PHP_SAPI == 'cli') {$cron = true;}
+if (PHP_SAPI == 'cli') {
+	parse_str(implode('&', array_slice($argv, 1)), $_GET);
+	$cron = true;
+}
 if (!$cron) {echo '<p>This script can only be run from the command line.</p>';}
 
 ( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
