@@ -36,7 +36,8 @@ $curlresult = curl_exec($curl);
 curl_close($curl);
 
 $data = json_decode($curlresult);
-/*echo '<pre>';print_r($data);echo '</pre>';*/
+// echo '<pre>';print_r($data);echo '</pre>';
+// echo '<script>var data = '.$curlresult.'</script>';
 
 $imageChanged = false;
 $copyFail = false;
