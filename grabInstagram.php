@@ -37,7 +37,9 @@ curl_close($curl);
 $data = json_decode($curlresult);
 /*echo '<pre>';print_r($data);echo '</pre>';*/
 
-$success = true;
+$imageChanged = false;
+$copyFail = false;
+$writeFail = false;
 $message = '';
 $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Heading\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
 foreach ($data->data as $i => $media) {
@@ -46,20 +48,23 @@ foreach ($data->data as $i => $media) {
 	if( !file_exists("../_assets/instagram/".$account.'-'.$filename) ) {
 		if ( copy($media->images->thumbnail->url, "../_assets/instagram/".$account.'-'.$filename ) ) {
 			$message .= "<p style='color:#090'>Image $i copied successfully.</p>";
+			$imageChanged = true;
 		} else {
-			$message .= "<p style='color:#900'>Image $i copy failed.</p>";
-			$success = false;
+			$message .= "<p style='color:#900'>Image $i copy failed. The .html output file will NOT be modified.</p>";
+			$copyFail = true;
 		}
 	}
 	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')"><img src="/_assets/instagram/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
 }
 $output .= '</div></div></div>';
 
-if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
-	$message .= '<p style="color:#090">File HTML written successfully.</p>';
-} else {
-	$message .=  '<p style="color:#900">File HTML writing failed.</p>';
-	$success = false;
+if ($imageChanged) {
+	if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
+		$message .= '<p style="color:#090">File HTML written successfully.</p>';
+	} else {
+		$message .=  '<p style="color:#900">File HTML writing failed.</p>';
+		$writeFail = true;
+	}
 }
 
 
@@ -68,8 +73,8 @@ if ($cron) {
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
     // $headers .= 'From: stu@t.apio.ca' . "\r\n";
-	    
-	mail('stu@t.apio.ca', 'Cron grabInstagram'.($success ? '' : ' FAILED'), $message, $headers);
+	if ($copyFail || $writeFail) {$subject = 'FAILED: Instagram Image Grabber Cron';} else {$subject = 'Instagram Image Grabber Cron';}
+	mail('stu@t.apio.ca', $subject, $message, $headers);
 } else {
 	echo $message;
 	echo $output;
