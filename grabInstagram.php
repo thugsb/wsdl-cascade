@@ -3,6 +3,7 @@
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
 
 if (PHP_SAPI == 'cli') {$cron = true;}
+if (!$cron) {echo '<p>This script can only be run from the command line.</p>';}
 
 ( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
 if ( isset($_GET['user_id'])) {
@@ -36,21 +37,37 @@ curl_close($curl);
 $data = json_decode($curlresult);
 /*echo '<pre>';print_r($data);echo '</pre>';*/
 
-
-$output = '<div class="list-inner"><h2><a target="blank" href="https://instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
+$success = true;
+$message = '';
+$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">';
 foreach ($data->data as $i => $media) {
 	$url = parse_url( $media->images->thumbnail->url);
 	$filename = end( explode( '/', $url['path'] ) );
 	if( !file_exists("../_assets/instagram/".$filename) ) {
-		copy($media->images->thumbnail->url, "../_assets/instagram/".$filename );
+		if ( copy($media->images->thumbnail->url, "../_assets/instagram/".$account.'-'.$filename ) ) {
+			$message .= "<p style='color:#090'>Image $i copied successfully.</p>";
+		} else {
+			$message .= "<p style='color:#900'>Image $i copy failed.</p>";
+			$success = false;
+		}
 	}
-	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'"><img src="../_assets/instagram/'.$filename.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
+	$output .= '<div class="list-instagram"><a target="instagram" href="'.$media->link.'"><img src="../_assets/instagram/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$media->caption->text).'"/></a></div>';
 }
-$output .= '</div></div>';
-if (!$cron) {echo $output;}
+$output .= '</div></div></div>';
 
 if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
-	if (!$cron) {echo 'success';}
+	$message .= '<p style="color:#090">File HTML written successfully.</p>';
+} else {
+	$message .=  '<p style="color:#900">File HTML writing failed.</p>';
+	$success = false;
+}
+
+
+if ($cron) {
+	mail('stu@t.apio.ca', 'Cron grabInstagram'.($success ? '' : ' FAILED'), $message);
+} else {
+	echo $message;
+	echo $output;
 }
 
 ?>
