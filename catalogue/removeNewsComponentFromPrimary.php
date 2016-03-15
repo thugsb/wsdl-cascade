@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/New_York');
-$title = 'Test';
+$title = 'Remove the News component from Primary';
 
 // $type_override = 'page';
 $start_asset = 'c99c8e7fc0a8022b20b4e6099ff0c3e1';
