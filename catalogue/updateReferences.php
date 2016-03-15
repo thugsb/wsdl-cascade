@@ -9,8 +9,8 @@ $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 $siteName = 'www.sarahlawrence.edu+catalogue';
 // $siteName = 'www.sarahlawrence.edu+grad-catalogue';
 
-$oldyear = '2011-2012';
-$nextyear = '2015-2016';
+$oldyear = '2012-2013';
+$nextyear = '2016-2017';
 
 function foldertest($child) {
   if (preg_match('/^[a-z]/', $child->path->path) && !preg_match('/\/*\//', $child->path->path))
