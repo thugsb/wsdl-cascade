@@ -36,8 +36,6 @@ $curlresult = curl_exec($curl);
 curl_close($curl);
 
 $data = json_decode($curlresult);
-// echo '<pre>';print_r($data);echo '</pre>';
-// echo '<script>var data = '.$curlresult.'</script>';
 
 $imageChanged = false;
 $copyFail = false;
@@ -81,6 +79,8 @@ if ($cron) {
 } else {
 	echo $message;
 	echo $output;
+	echo '<pre>';print_r($data);echo '</pre>';
+	echo '<script>var data = '.$curlresult.'; console.log(data);</script>';
 }
 
 ?>
