@@ -2,16 +2,14 @@
 $title = 'Move the previous years course folders to _archived';
 
 // $type_override = 'page';
-$start_asset = '817373157f00000101f92de5bea1554a';
+$start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
+// $start_asset = '4e9e12a97f000001015d84e03ea3fb26'; // Grad
 
-// Optionally override the container/child types
-// $asset_type = 'assetFactoryContainer';
-// $asset_children_type = 'assetFactory';
 
 // Note: Change the year in the regex below. $move_to is meant to be blank
+$lastYear = '2015-2016';
 
 $move_to = '';
-$lastYear = '2014-2015';
 
 function pagetest($child) {
   return false;
