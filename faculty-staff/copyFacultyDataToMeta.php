@@ -61,6 +61,10 @@ function changes(&$asset) {
   }
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == "affiliation-link-1") {
+      if ($dyn->fieldValues->fieldValue->value != '' && $links[0] == 'site://') {
+        $dyn->fieldValues->fieldValue->value = '';
+        $changed = true; // Wipe out empty values
+      }
       if ($dyn->fieldValues->fieldValue->value != $links[0] && $links[0] != 'site://') {
         $changed = true;
         $dyn->fieldValues->fieldValue->value = $links[0];
@@ -70,6 +74,10 @@ function changes(&$asset) {
       if ($dyn->fieldValues->fieldValue->value != $data[$links[0]]) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $data[$links[0]];
     } elseif ($dyn->name == "affiliation-link-2") {
+      if ($dyn->fieldValues->fieldValue->value != '' && $links[1] == 'site://') {
+        $dyn->fieldValues->fieldValue->value = '';
+        $changed = true; // Wipe out empty values
+      }
       if ($dyn->fieldValues->fieldValue->value != $links[1] && $links[1] != 'site://') {
         $changed = true;
         $dyn->fieldValues->fieldValue->value = $links[1];
@@ -79,6 +87,10 @@ function changes(&$asset) {
       if ($dyn->fieldValues->fieldValue->value != $data[$links[1]]) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $data[$links[1]];
     } elseif ($dyn->name == "affiliation-link-3") {
+      if ($dyn->fieldValues->fieldValue->value != '' && $links[2] == 'site://') {
+        $dyn->fieldValues->fieldValue->value = '';
+        $changed = true; // Wipe out empty values
+      }
       if ($dyn->fieldValues->fieldValue->value != $links[2] && $links[2] != 'site://') {
         $changed = true;
         $dyn->fieldValues->fieldValue->value = $links[2];
@@ -88,6 +100,10 @@ function changes(&$asset) {
       if ($dyn->fieldValues->fieldValue->value != $data[$links[2]]) {$changed = true;}
       $dyn->fieldValues->fieldValue->value = $data[$links[2]];
     } elseif ($dyn->name == "affiliation-link-4") {
+      if ($dyn->fieldValues->fieldValue->value != '' && $links[3] == 'site://') {
+        $dyn->fieldValues->fieldValue->value = '';
+        $changed = true; // Wipe out empty values
+      }
       if ($dyn->fieldValues->fieldValue->value != $links[3] && $links[3] != 'site://') {
         $changed = true;
         $dyn->fieldValues->fieldValue->value = $links[3];
