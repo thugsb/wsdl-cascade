@@ -236,13 +236,18 @@ $searchQuery = '{
                             }
                         },
                         {
-                            "term" : {
+                            "match" : {
                                 "audiences" : "Graduate" 
                             }
                         }
                     ]
                 }
             }
+        }
+    },
+    "highlight": {
+        "fields" : {
+            "content" : {}, "title" : {}, "location" : {}, "audiences" : {}, "academics" : {}, "faculty" : {}, "sponsors" : {}, "themes" : {}
         }
     }
 }';
