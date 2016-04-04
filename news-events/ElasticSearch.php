@@ -52,6 +52,24 @@ echo exec($command);
 echo '; console.log(results); console.log(results.hits.total+ " results from Filter:Future.");</script>';
 
 
+$searchQuery = '{
+    "query" : {
+        "bool" : {
+            "filter" : {
+                "range" : {
+                    "start" : { "gt" : '.$now.' },
+                    "end" : { "lt" : '.($now+604800000).' }
+                }
+            }
+        }
+    }
+}';
+$command = "curl -XGET 'http://localhost:9200/slc/event/_search' -d '$searchQuery'";
+echo '<script>results = ';
+echo exec($command);
+echo '; console.log(results); console.log(results.hits.total+ " results from Filter:The next 7 days.");</script>';
+
+
 
 $searchQuery = '{
     "query" : {
