@@ -58,7 +58,7 @@ $searchQuery = '{
             "filter" : {
                 "range" : {
                     "start" : { "gt" : '.$now.' },
-                    "end" : { "lt" : '.($now+604800000).' }
+                    "start" : { "lte" : '.($now+604800000).' }
                 }
             }
         }
