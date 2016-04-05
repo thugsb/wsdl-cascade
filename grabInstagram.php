@@ -19,7 +19,7 @@ if ( isset($_GET['user_id'])) {
 	curl_close($curl);
 	$user_info = json_decode($curlresult);
 	$account = $user_info->data->username;
-} elseif ($account == 'slcwritinginst') {
+} elseif ($account == 'writinginstsarahlawrencecoll') {
 	$user_id = '1543232000';
 } elseif ($account == 'sarahlawrencecollegeeccart') {
 	$user_id = '2275179817';
