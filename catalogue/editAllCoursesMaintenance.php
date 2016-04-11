@@ -162,13 +162,15 @@ function changes(&$asset) {
           }
         }
       } else {
-        if ($disc !== 'Global Studies' && $disc !== 'Science, Technology, and Society') {
+        if ($disc !== '' && $disc !== 'Global Studies' && $disc !== 'Science, Technology, and Society') {
           $total['f']++;
         }
-        if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
-        } else {
-          echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
+        if ($disc !== '') {
+          if ($cron) {
+            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
+          } else {
+            echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
+          }
         }
       }
     }
