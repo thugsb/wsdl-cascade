@@ -9,7 +9,7 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 $asset_type = 'folder';
 $asset_children_type = 'reference';
 
-$year = '2015-2016';
+$year = '2016-2017';
 
 function pagetest($child) {
   global $year;
