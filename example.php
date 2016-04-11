@@ -31,6 +31,16 @@ function changes(&$asset) {
   //    $changed = true;
   //    $asset["metadata"]->teaser = 'test';
   // }
+  // foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
+  //   if ($dyn->name == "xxx") {
+  //     // Do stuff
+  //   }
+  // }
+  // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
+  //   if ($sdnode->identifier == "xxx") {
+  //     // Do stuff
+  //   }
+  // }
 }
 
 if (!$cron) {include('header.php');}
