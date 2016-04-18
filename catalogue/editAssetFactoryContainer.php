@@ -33,15 +33,73 @@ function edittest($asset) {
 
 
 function changes(&$asset) {
-  global $changed;
+  global $changed, $nextyearregex, $nextyear, $lastyear, $folderNames;
   $changed = false;
-  if (!preg_match($nextyearregex, $asset['placementFolderPath'])) {
-    $asset['placementFolderId'] = '';
-    $asset['placementFolderPath'] = preg_replace($lastyear,$nextyear,$asset['placementFolderPath']);
-    $changed = true;
+  $name = $asset['name'];
+  if (isset($folderNames[$name]) ) {
+    if (!preg_match($nextyearregex, $asset['placementFolderPath'])) {
+      $asset['placementFolderId'] = '';
+      $asset['placementFolderPath'] = preg_replace($lastyear,$nextyear,$asset['placementFolderPath']);
+      if ($asset['placementFolderPath'] == '/' || $asset['placementFolderPath'] == '') {
+        echo 'ye';
+        echo $name;
+        echo $folderNames[$name];
+        $asset['placementFolderPath'] = $folderNames[$name] . '/' . $nextyear;
+      }
+      $changed = true;
+    }
   }
 }
 
+$folderNames = array(
+'Anthropology' => 'anthropology',
+'Art History' => 'art-history',
+'Asian Studies' => 'asian-studies',
+'Biology' => 'biology',
+'Chemistry' => 'chemistry',
+'Chinese' => 'chinese',
+'Classics' => 'classics',
+'Computer Science' => 'computer-science',
+'Dance' => 'dance',
+'Economics' => 'economics',
+'Environmental Studies' => 'environmental-studies',
+'Film History' => 'film-history',
+'Filmmaking' => 'filmmaking-screenwriting-and-media-arts',
+'French' => 'french',
+'Geography' => 'geography',
+'German' => 'german',
+'Greek' => 'greek',
+'History' => 'history',
+'Italian' => 'italian',
+'Japanese' => 'japanese',
+'Latin' => 'latin',
+'LGBT Studies' => 'lesbian-gay-bisexual-and-transgender-studies',
+'Literature' => 'literature',
+'Mathematics' => 'mathematics',
+'Music' => 'music',
+'Philosophy' => 'philosophy',
+'Physics' => 'physics',
+'Politics' => 'politics',
+'Psychology' => 'psychology',
+'Public Policy' => 'public-policy',
+'Religion' => 'religion',
+'Russian' => 'russian',
+'Science, Tech and Society' => 'science-technology-and-society',
+'Sociology' => 'sociology',
+'Spanish' => 'spanish',
+'Theatre' => 'theatre',
+'Visual Arts' => 'visual-arts',
+'Writing' => 'writing',
+'Art of Teaching' => 'art-of-teaching',
+'Child Development' => 'child-development',
+'Dance' => 'dance-mfa',
+'Dance Movement Therapy' => 'dance-movement-therapy',
+'Health Advocacy' => 'health-advocacy',
+'Human Genetics' => 'human-genetics',
+'Theatre' => 'theatre-mfa',
+'Womens History' => 'womens-history',
+'Writing' => 'writing-mfa'
+); 
 
 if (!$cron)
   include('../header.php');
