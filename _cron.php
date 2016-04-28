@@ -151,8 +151,9 @@ $output = "<h1>Script: ".$_GET['s']."</h1>\n<h2>Summary</h2>".$o[0].'<h2>Errors<
 $subject = 'Re: WSDL Cron ';
 if ($total['f'] > 0) {$subject .= 'FAILED ';}
 $subject .= $_GET['s'];
+$headers = 'From: webmaster@example.com' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
 
-mail($email, $subject, $output, 'Content-type: text/html; charset=UTF-8');
+mail($email, $subject, $output, $headers);
 
 
 
