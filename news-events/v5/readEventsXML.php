@@ -70,7 +70,10 @@ $start_asset = '';
 $message = '<div class="f">WARNING: Legacy script. <a href="./importEventsToPending.php">Go to the new script</a>.</div>';
 //$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
-if (array_key_exists('submit',$_POST)) {mail('stu@t.apio.ca','WARNING: Legacy script submitted',"readEventsXML was submitted by $user.");}
+if (array_key_exists('submit',$_POST)) {
+  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+  mail('stu@t.apio.ca','WARNING: Legacy script submitted',"readEventsXML was submitted by $user.", $headers);
+}
 
 $publish = array();
 

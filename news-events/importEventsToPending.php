@@ -43,7 +43,10 @@ $start_asset = $year_folder;
 
 $message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
 
-if ($cron) {mail('stu@t.apio.ca','Events Import Script Started',date('D, d M Y H:i') );}
+if ($cron) {
+  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+  mail('stu@t.apio.ca','Events Import Script Started',date('D, d M Y H:i'), $headers );
+}
 
 function pagetest($child) {
   // if (preg_match('/[a-z]/', $child->path->path))

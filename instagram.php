@@ -97,6 +97,7 @@ if ($message == '') {$message = '<p style="color:#009">No changes needed for the
 
 if ($cli) {
 	$headers = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'From: com@vm-www.slc.edu' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	if ($copyFail || $writeFail) {$subject = 'FAILED: Instagram Image Grabber';} else {$subject = 'Instagram Image Grabber';}
 	mail($email, $subject, $message, $headers);

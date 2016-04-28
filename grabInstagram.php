@@ -73,7 +73,7 @@ if ($cron) {
 	$headers = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
-    // $headers .= 'From: stu@t.apio.ca' . "\r\n";
+    $headers .= 'From: com@vm-www.slc.edu';
 	if ($copyFail || $writeFail) {$subject = 'FAILED: Instagram Image Grabber Cron';} else {$subject = 'Instagram Image Grabber Cron';}
 	mail('stu@t.apio.ca', $subject, $message, $headers);
 } else {

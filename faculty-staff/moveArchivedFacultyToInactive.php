@@ -165,7 +165,8 @@ function editPage($client, $auth, $asset) {
       if ($move->moveReturn->success == 'true') {
         if ($cron) {
           $o[2] .= '<div style="color:#090;">Move success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
-          mail("45bd091b@opayq.com", "SLC Faculty Member Archived", "https://cms.slc.edu:8443/entity/open.act?id=".$asset['id']."&type=page");
+          $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+          mail("45bd091b@opayq.com", "SLC Faculty Member Archived", "https://cms.slc.edu:8443/entity/open.act?id=".$asset['id']."&type=page", $headers);
         } else {
           echo '<div class="s">Move success</div>';
         }

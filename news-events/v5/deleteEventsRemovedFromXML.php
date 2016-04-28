@@ -69,7 +69,10 @@ $start_asset = '';
 $message = '<div class="f">WARNING: Legacy script. <a href="./detectEventsRemovedFromXML.php">Go to the new script</a>.</div>';
 //$message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
-if (array_key_exists('submit',$_POST)) {mail('stu@t.apio.ca','WARNING: Legacy script submitted',"deleteEventsRemovedFromXML was submitted by $user.");}
+if (array_key_exists('submit',$_POST)) {
+  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+  mail('stu@t.apio.ca','WARNING: Legacy script submitted',"deleteEventsRemovedFromXML was submitted by $user.", $headers);
+}
 
 $children = array();
 

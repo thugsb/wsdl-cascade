@@ -107,7 +107,7 @@ function changes(&$asset) {
 		//$to      = 'thugsb@gmail.com';
 		$to      = 'tguiliano@sarahlawrence.edu';
 		$subject = 'Event changed in the XML: '.$asset['name'];
-		$headers = 'From: stu@t.apio.ca' . "\r\n";
+		$headers = 'From: com@vm-www.slc.edu' . "\r\n";
 		$headers .= 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 		$headers .= 'Cc: stu@t.apio.ca, wjoell@sarahlawrence.edu' . "\r\n";

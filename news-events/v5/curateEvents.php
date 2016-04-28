@@ -12,7 +12,10 @@ $user = $_POST['login'];
 $password = $_POST['password'];
 $client = $_POST['client'];
 
-if (array_key_exists('submit',$_POST)) {mail('stu@t.apio.ca','WARNING: Legacy script submitted',"curateEvents was submitted by $user.");}
+if (array_key_exists('submit',$_POST)) {
+  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+  mail('stu@t.apio.ca','WARNING: Legacy script submitted',"curateEvents was submitted by $user.", $headers);
+}
 
 $script = <<<EOS
 
