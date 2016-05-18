@@ -1,8 +1,8 @@
 <?php
-
+// This script requires the $cincopaID to be set, e.g.
 // $cincopaID = 'A0JA9WN5fdRp';
 
-if (!isset($cincopaID)) {exit;}
+if ( isset($cincopaID) ) {
 
 $curl = curl_init();
 curl_setopt ($curl, CURLOPT_URL, 'http://www.cincopa.com/media-platform/runtimeze/json.aspx?details=all&fid='.$cincopaID);
@@ -12,12 +12,15 @@ curl_close ($curl);
 
 $json = json_decode( $result );
 
-foreach ($json->items as $i => $item) {
-	$desc = '';
-	if ($item->description != '') {
-		$desc = "<figcaption><p>$item->description</p></figcaption>";
-	}
-	$output = <<<EOT
+if ( count($json->items) > 0 ) {
+	echo '<div class="gallery">';
+
+	foreach ($json->items as $i => $item) {
+		$desc = '';
+		if ($item->description != '') {
+			$desc = "<figcaption><p>$item->description</p></figcaption>";
+		}
+		$output = <<<EOT
 <div class='gallery-item'>
 	<a class='image link-exp link-exp-lbx'>
 		<img alt='$item->title' src='$item->thumbnail_url'/>
@@ -31,9 +34,15 @@ foreach ($json->items as $i => $item) {
 	</a>
 </div>
 EOT;
-echo $output;
+		echo $output;
+	}
+
+	echo '</div>'; // End .gallery
 }
+
 
 // echo '<pre>';
 // print_r( $json );
 // echo '</pre>';
+
+}
