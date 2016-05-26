@@ -81,6 +81,11 @@ function changes(&$asset) {
         }
       }
     } elseif ( $field->identifier == 'related' ) {
+      // This code can be used to update the courses relationships when a discipline is renamed:
+      // if ($field->text == 'Games, Interactivity, and Playable Media') {
+      //   $field->text = 'Games, Interactive Art, and New Genres';
+      //   $changed = true;
+      // }
       echo $field->text;
       $disc = $field->text;
       $discFolder = $discNames[$disc];
