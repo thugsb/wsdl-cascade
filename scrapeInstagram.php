@@ -23,6 +23,17 @@ $scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_serv
 
 // echo $matches[0];
 
+if ( count($matches) < 1 ) {
+	$headers = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
+    $headers .= 'From: com@vm-www.slc.edu';
+	$subject = 'MAJOR FAILED SCRIPT: Instagram Image Scraper Cron';
+	$match_fail_message = 'The instagram scrape did not find any regex matches. This probably means Instagram has changed its HTML output and the script needs re-writing. Ouch. :(';
+	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	exit;
+}
+
 $json = str_replace('window._sharedData = ','', $matches[0]);
 
 $data = json_decode($json);
@@ -70,7 +81,7 @@ if ($message == '') {$message = '<p style="color:#009">No changes needed for the
 if ($cron) {
 	$headers = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	// $headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
+	$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
     $headers .= 'From: com@vm-www.slc.edu';
 	if ($copyFail || $writeFail) {$subject = 'FAILED: Instagram Image Scraper Cron';} else {$subject = 'Instagram Image Scraper Cron';}
 	mail('stu@t.apio.ca', $subject, $message, $headers);
