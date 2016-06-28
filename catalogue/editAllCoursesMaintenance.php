@@ -51,13 +51,13 @@ function changes(&$asset) {
   if ( isset($disc_folder) ) {
     foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
       if ($dyn->name == "discipline-folder") {
-        if ($dyn->fieldValues->fieldValue->value != $disc_folder) {
+        if ($dyn->fieldValues->fieldValue->value !== $disc_folder) {
           $dyn->fieldValues->fieldValue->value = $disc_folder;
           $changed = true;
         }
       }
       if ($dyn->name == "discipline-name") {
-        if ($dyn->fieldValues->fieldValue->value != $disc_folder) {
+        if ($dyn->fieldValues->fieldValue->value !== $disc_name) {
           $dyn->fieldValues->fieldValue->value = $disc_name;
           $changed = true;
         }
