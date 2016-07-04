@@ -66,8 +66,10 @@ function changes(&$asset) {
   }
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
     if ($field->identifier == 'description') {
-      if ($asset["metadata"]->teaser != $field->text) {$changed = true;}
-      $asset["metadata"]->teaser = $field->text;
+      if ($asset["metadata"]->teaser != $field->text) {
+        $asset["metadata"]->teaser = $field->text;
+        $changed = true;
+      }
     } elseif ($field->identifier == 'faculty-set') {
       if(!is_array($field->structuredDataNodes->structuredDataNode)) {
         $field->structuredDataNodes->structuredDataNode = array($field->structuredDataNodes->structuredDataNode);
