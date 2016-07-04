@@ -17,19 +17,20 @@ $start_asset = '817373157f00000101f92de5bea1554a';
  *  pagetest e.g. ...primary\/[a-z]allet/'
  */
 
-// $year = '[-0-9]+'; // Matches all years
-$year = '2016-2017';
+$year = '201[5-9][-0-9]+'; // Matches all years
+// $year = '2015-2016';
+
 
 function pagetest($child) {
   global $year;
-  // if (preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'\/primary\/[a-zA-Z]/',$child->path->path))
-  if (preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/[a-zA-Z0-9]/',$child->path->path))
+  if (preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'\/[a-zA-Z]/',$child->path->path))
+  // if (preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/[a-zA-Z0-9]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
   global $year;
-  // if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses\/_archived$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'\/primary$/',$child->path->path))
-  if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/'.$year.'$/',$child->path->path) )
+  if (preg_match('/^phi[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'$/',$child->path->path) )
+  // if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/'.$year.'$/',$child->path->path) )
     return true;
 }
 function edittest($asset) {
@@ -68,8 +69,10 @@ function changes(&$asset) {
     if ($field->identifier == 'description') {
       $field->text = str_replace('&amp;nbsp;',' ',$field->text);
       $field->text = str_replace('&amp;#160;',' ',$field->text);
-      if ($asset["metadata"]->teaser != $field->text) {$changed = true;}
-      $asset["metadata"]->teaser = $field->text;
+      if ($asset["metadata"]->teaser != $field->text) {
+        $asset["metadata"]->teaser = $field->text;
+        $changed = true;
+      }
     } elseif ($field->identifier == 'faculty-set') {
       if(!is_array($field->structuredDataNodes->structuredDataNode)) {
         $field->structuredDataNodes->structuredDataNode = array($field->structuredDataNodes->structuredDataNode);
@@ -102,6 +105,7 @@ function changes(&$asset) {
       //   $field->text = 'Games, Interactive Art, and New Genres';
       //   $changed = true;
       // }
+      /*
       echo $field->text;
       $disc = $field->text;
       $discFolder = $discNames[$disc];
@@ -194,6 +198,7 @@ function changes(&$asset) {
           }
         }
       }
+    */
     }
   }
 }
