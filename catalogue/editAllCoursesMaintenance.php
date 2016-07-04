@@ -17,20 +17,20 @@ $start_asset = '817373157f00000101f92de5bea1554a';
  *  pagetest e.g. ...primary\/[a-z]allet/'
  */
 
-$year = '201[5-9][-0-9]+'; // Matches all years
-// $year = '2015-2016';
+// $year = '[-0-9]+'; // Matches all years
+$year = '2016-2017';
 
 
 function pagetest($child) {
   global $year;
-  if (preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'\/[a-zA-Z]/',$child->path->path))
-  // if (preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/[a-zA-Z0-9]/',$child->path->path))
+  // if (preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'\/[a-zA-Z]/',$child->path->path))
+  if (preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/[a-zA-Z0-9]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
   global $year;
-  if (preg_match('/^phi[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'$/',$child->path->path) )
-  // if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/'.$year.'$/',$child->path->path) )
+  // if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'$/',$child->path->path) )
+  if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/'.$year.'$/',$child->path->path) )
     return true;
 }
 function edittest($asset) {
@@ -99,14 +99,13 @@ function changes(&$asset) {
           }
         }
       }
-    } elseif ( $field->identifier == 'related' ) {
+    } elseif ( $field->identifier == 'related' && !strpos( $asset['path'], '/_archived/' ) ) {
       // This code can be used to update the courses relationships when a discipline is renamed:
       // if ($field->text == 'Games, Interactivity, and Playable Media') {
       //   $field->text = 'Games, Interactive Art, and New Genres';
       //   $changed = true;
       // }
-      /*
-      echo $field->text;
+      // echo $field->text;
       $disc = $field->text;
       $discFolder = $discNames[$disc];
       if ($discFolder) {
@@ -198,7 +197,6 @@ function changes(&$asset) {
           }
         }
       }
-    */
     }
   }
 }
