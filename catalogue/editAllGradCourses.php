@@ -22,13 +22,13 @@ $year = '2016-2017';
 
 function pagetest($child) {
   global $year;
-  // if (preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'\/primary\/[a-zA-Z]/',$child->path->path))
+  // if (preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'\/[a-zA-Z]/',$child->path->path))
   if (preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/[a-zA-Z]/',$child->path->path))
     return true;
 }
 function foldertest($child) {
   global $year;
-  // if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses\/_archived$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/courses\/_archived\/'.$year.'\/primary$/',$child->path->path))
+  // if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'$/',$child->path->path) )
   if (preg_match('/^[a-z][-a-z\/]+$/',$child->path->path) || preg_match('/^[a-z][-a-z\/]+\/'.$year.'$/',$child->path->path))
     return true;
 }
@@ -38,7 +38,7 @@ function edittest($asset) {
 }
 
 function changes(&$asset) {
-  global $changed, $total, $discNames, $relatedIDs, $year, $auth, $client, $cron, $o, $disc_folder, $disc_name;
+  global $changed, $total, $discNames, $year, $auth, $client, $cron, $o, $disc_folder, $disc_name;
   $changed = false;
   $newTitle = trim($asset['metadata']->title);
   $newTitle = preg_replace('/& /','and ',$newTitle);
@@ -182,6 +182,13 @@ function readPage($client, $auth, $id, $type) {
       
       editPage($client, $auth, $asset);
       if (!$cron) {echo '</div>';}
+    } elseif (preg_match('/Discipline/', $asset["contentTypePath"])) {
+      $total['f']++;
+      if ($cron) {
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Undergrad content type! '.$asset['path'].'</div>';
+      } else {
+        echo '<div class="f">Undergrad content type! '.$asset['path'].'</div>';
+      }
     }
     
   } else {
