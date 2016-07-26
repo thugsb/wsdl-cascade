@@ -37,19 +37,19 @@ $(function() {
 
   $('.event-form .btn-success').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
-    $(this).closest('form').attr('action','enable.php');
+    $(this).closest('form').attr('action','enable.php?year=$events_year');
     $(this).closest('form').append('<div class="label label-success pull-right">Enable request sent</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
   $('.event-form .btn-warning').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
-    $(this).closest('form').attr('action','reject.php');
+    $(this).closest('form').attr('action','reject.php?year=$events_year');
     $(this).closest('form').append('<div class="label label-important pull-right">Reject request sent</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
   $('.event-form .btn-info').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
-    $(this).closest('form').attr('action','copyData.php');
+    $(this).closest('form').attr('action','copyData.php?year=$events_year');
     $(this).closest('form').append('<div class="label label-important pull-right">Copy request sent</div>');
     $(this).closest('form').find('.btn').addClass('disabled');
   });
