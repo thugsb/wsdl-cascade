@@ -7,7 +7,7 @@ include_once('eventFolderIDs.php');
 // $type_override = 'page';
 $start_asset = $pending_folder;
 
-$message .= 'NOTE: This page requires JavaScript. Optionally, use the GET argument "?date=yyyy-mm-dd" to filter by date, where dd and mm are not required. ';
+$message .= 'NOTE: This page requires JavaScript. Optionally, use the GET argument "?date=yyyy-mm-dd" to filter by date, where dd and mm are not required. The "Read only" vs "Edit" radio options have no effect on this page.';
 $user = $_POST['login'];
 $password = $_POST['password'];
 $client = $_POST['client'];
