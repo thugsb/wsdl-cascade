@@ -41,7 +41,7 @@ $title = 'Import events from the XML feed into Cascade as pending pages';
 $type_override = 'folder';
 $start_asset = $year_folder;
 
-$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
+$message .= 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
 
 if ($cron) {
   $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';

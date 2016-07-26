@@ -41,7 +41,7 @@ $title = 'Detect event pages that have been removed from the events xml feeds';
 $type_override = 'folder';
 $start_asset = $year_folder;
 
-$message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
+$message .= 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
 $children = array();
 
