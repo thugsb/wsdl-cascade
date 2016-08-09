@@ -172,6 +172,9 @@ function editPage($client, $auth, $asset) {
         }
         $total['s']++;
       } else {
+        if ($_POST['debug'] == 'on' || $cron) {
+          $result = $client->__getLastResponse();
+        }
         if ($cron) {
           $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Move failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
         } else {

@@ -215,7 +215,7 @@ function editPage($client, $auth, $asset) {
   }
   
   if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
     }
     if ($edit->editReturn->success == 'true') {
@@ -226,11 +226,11 @@ function editPage($client, $auth, $asset) {
       }
       $total['s']++;
     } else {
-      if ($_POST['debug'] == 'on') {
+      if ($_POST['debug'] == 'on' || $cron) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type.'#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type.'#highlight">'.$asset['path']."</a><div>".htmlentities(extractMessage($result)).'</div></div>';
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
       }

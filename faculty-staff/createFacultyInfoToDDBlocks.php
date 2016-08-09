@@ -319,7 +319,7 @@ function createAssignAccess($client, $auth, $asset) {
       }
 
     } else {
-      if ($_POST['debug'] == 'on') {
+      if ($_POST['debug'] == 'on' || $cron) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {

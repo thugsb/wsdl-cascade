@@ -306,7 +306,7 @@ function editPage($client, $auth, $asset, $entry, $code) {
       }
       $total['s']++;
     } else {
-      if ($_POST['debug'] == 'on') {
+      if ($_POST['debug'] == 'on' || $cron) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {

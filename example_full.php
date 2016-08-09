@@ -148,7 +148,7 @@ function editPage($client, $auth, $asset) {
   }
   
   if ($changed == true) {
-    if ($_POST['action'] == 'edit') {
+    if ($_POST['action'] == 'edit' || $cron) {
       $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
     }
     if ($edit->editReturn->success == 'true') {
@@ -159,7 +159,7 @@ function editPage($client, $auth, $asset) {
       }
       $total['s']++;
     } else {
-      if ($_POST['debug'] == 'on') {
+      if ($_POST['debug'] == 'on' || $cron) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {

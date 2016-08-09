@@ -373,6 +373,9 @@ function indexFolder($client, $auth, $asset) {
         $total['s']++;
         readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/_pending/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
       } else {
+        if ($_POST['debug'] == 'on' || $cron) {
+          $result = $client->__getLastResponse();
+        }
         if ($cron) {
           $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation failed: '.$event_n.'<div>'.extractMessage($result)."</div></div>";
         } else {
@@ -416,8 +419,10 @@ function readPage($client, $auth, $id, $type, $event_n) {
       if (!$cron) {echo '</div>';}
     }
     
-  } else {  
-    $result = $client->__getLastResponse();
+  } else {
+    if ($_POST['debug'] == 'on' || $cron) {
+      $result = $client->__getLastResponse();
+    }
     if ($cron) {
       $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id['path']."<div>".extractMessage($result)."</div></div>";
     } else {
@@ -451,8 +456,11 @@ function editPage($client, $auth, $asset, $event_n) {
       $total['s']++;
       
     } else {
+      if ($_POST['debug'] == 'on' || $cron) {
+        $result = $client->__getLastResponse();
+      }
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a>".'<div>'.extractMessage($result).'</div></div>';
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       }
