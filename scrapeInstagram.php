@@ -4,7 +4,7 @@ if (PHP_SAPI == 'cli') {
 	parse_str(implode('&', array_slice($argv, 1)), $_GET);
 	$cron = true;
 }
-if (!$cron) {echo '<p>This script should only be run from the command line.</p>';}
+if (!$cron) {echo '<p>Due to file permissions, this script can only be run from the command line. A preview of the output is below.</p>';}
 
 ( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
 
@@ -53,7 +53,7 @@ foreach ($media as $key => $value) {
 	$url = parse_url( $value->thumbnail_src );
 	$filename = end( explode( '/', $url['path'] ) );
 	if( !file_exists("../_assets/instagram/".$account.'-'.$filename) ) {
-		if ( copy($value->thumbnail_src, "../_assets/instagram/".$account.'-'.$filename ) ) {
+		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/".$account.'-'.$filename ) ) {
 			$message .= "<p style='color:#090'>Image $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
@@ -68,7 +68,7 @@ foreach ($media as $key => $value) {
 $output .= '</div></div></div>';
 
 if ($imageChanged || !file_exists("../_assets/instagram/instagram-$account.html") ) {
-	if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
+	if ($cron && file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
 		$message .= '<p style="color:#090">File HTML written successfully.</p>';
 	} else {
 		$message .=  '<p style="color:#900">File HTML writing failed.</p>';
