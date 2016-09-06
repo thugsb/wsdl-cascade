@@ -67,7 +67,7 @@ foreach ($media as $key => $value) {
 }
 $output .= '</div></div></div>';
 
-if ($imageChanged) {
+if ($imageChanged || !file_exists("../_assets/instagram/instagram-$account.html") ) {
 	if (file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
 		$message .= '<p style="color:#090">File HTML written successfully.</p>';
 	} else {
