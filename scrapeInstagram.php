@@ -16,6 +16,20 @@ curl_setopt_array($curl, array(
 $curlresult = curl_exec($curl);
 curl_close($curl);
 
+
+$headers = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
+$headers .= 'From: com@vm-www.slc.edu';
+
+
+if ($curlresult === false) {
+	$subject = 'Warning: Instagram Image Scraper Cron';
+	$match_fail_message = 'The instagram cURL returned FALSE. This probably just means it timed out. If this happens repeatedly, it will need investigating.';
+	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	exit;
+}
+
 // echo $curlresult;
 
 
@@ -24,12 +38,8 @@ $scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_serv
 // echo $matches[0];
 
 if ( count($matches) < 1 ) {
-	$headers = 'MIME-Version: 1.0' . "\r\n";
-	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
-    $headers .= 'From: com@vm-www.slc.edu';
 	$subject = 'MAJOR FAILED SCRIPT: Instagram Image Scraper Cron';
-	$match_fail_message = 'The instagram scrape did not find any regex matches. This probably means Instagram has changed its HTML output and the script needs re-writing. Ouch. :(';
+	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means Instagram has changed its HTML output and the script needs re-writing. Ouch. :(';
 	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
 }
