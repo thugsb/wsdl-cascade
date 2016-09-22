@@ -34,30 +34,30 @@ function changes(&$asset) {
       if(!is_array($dyn->fieldValues->fieldValue)) {
         $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
       }
-      removeCheckboxItem('Filmmaking', $dyn->fieldValues->fieldValue);
-      //addCheckboxItem('Filmmaking, Screenwriting, and Media Arts', $dyn->fieldValues->fieldValue);
+      // removeCheckboxItem('Visual Arts', $dyn->fieldValues->fieldValue);
+      addCheckboxItem('Visual and Studio Arts', $dyn->fieldValues->fieldValue);
       // echo '<pre>';
       // print_r($dyn->fieldValues->fieldValue);
       // echo '</pre>';
 		}
     if ($dyn->name == "audiences") {
-      if(!is_array($dyn->fieldValues->fieldValue)) {
-        $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
-      }
+      // if(!is_array($dyn->fieldValues->fieldValue)) {
+      //   $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
+      // }
       //removeCheckboxItem('', $dyn->fieldValues->fieldValue);
       //addCheckboxItem('', $dyn->fieldValues->fieldValue);
     }
     if ($dyn->name == "sponsors") {
-      if(!is_array($dyn->fieldValues->fieldValue)) {
-        $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
-      }
+      // if(!is_array($dyn->fieldValues->fieldValue)) {
+      //   $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
+      // }
       //removeCheckboxItem('', $dyn->fieldValues->fieldValue);
       //addCheckboxItem('', $dyn->fieldValues->fieldValue);
     }
     if ($dyn->name == "themes") {
-      if(!is_array($dyn->fieldValues->fieldValue)) {
-        $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
-      }
+      // if(!is_array($dyn->fieldValues->fieldValue)) {
+      //   $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
+      // }
       //removeCheckboxItem('', $dyn->fieldValues->fieldValue);
       //addCheckboxItem('', $dyn->fieldValues->fieldValue);
     }
