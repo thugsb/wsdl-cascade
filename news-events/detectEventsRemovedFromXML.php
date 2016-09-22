@@ -42,6 +42,7 @@ $type_override = 'folder';
 $start_asset = $year_folder;
 
 $message .= 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
+$message .= '<p class="f">This script can either <a href="?operation=unpublish">unpublish</a> or <a href="?operation=move">move</a> the events, and does neither by default.</p>';
 
 $children = array();
 
@@ -152,45 +153,52 @@ function indexFolder($client, $auth, $asset) {
           $message .= '<h4>'. $page_asset['metadata']->title .'</h4>';
         }
         
-        if ($_POST['action'] == 'edit' || $cron) {
-          $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
-          $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$deleted_folder), 'doWorkflow'=>false) ) );
-        }
-        if ($publish->publishReturn->success == 'true') {
-          if ($cron) {
-            $o[2] .= $name.' was unpublished<br>';
-          } else {
-            echo '<div class="s">'.$name.' was unpublished</div>';
+        if ($_GET['operation'] == 'unpublish') {
+          if ($_POST['action'] == 'edit' || $cron) {
+            $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $child->id), 'unpublish' => true ) ) );
           }
-          $message .= '<p>The event has been <span style="color:#090">successfully</span> unpublished.</p>';
-          $total['s']++;
+          if ($publish->publishReturn->success == 'true') {
+            if ($cron) {
+              $o[2] .= $name.' was unpublished<br>';
+            } else {
+              echo '<div class="s">'.$name.' was unpublished</div>';
+            }
+            $message .= '<p>The event has been <span style="color:#090">successfully</span> unpublished.</p>';
+            $total['s']++;
+          } else {
+            if ($cron) {
+              $o[1] .= $name.' FAILED to unpublish<br>';
+            } else {
+              echo '<div class="f">'.$name.' could not be unpublished</div>';
+              print_r($publish);
+            }
+            $message .= '<p>The event <span style="color:#900">failed to unpublish</span>.</p>';
+            $total['f']++;
+          }
+        } else if ($_GET['operation'] == 'move') {
+          if ($_POST['action'] == 'edit' || $cron) {
+            $move = $client->move ( array ('authentication' => $auth, 'identifier' => array ('type' => $asset_children_type, 'id' => $child->id ), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>$deleted_folder), 'doWorkflow'=>false) ) );
+          }
+          if ($move->moveReturn->success == 'true') {
+            if ($cron) {
+              $o[2] .= $name.' was moved to _deleted<br>';
+            } else {
+              echo '<div class="s">'.$name.' was moved to _deleted</div>';
+            }
+            $message .= '<p>The event has been <span style="color:#090">successfully</span> moved into the _deleted folder.</p>';
+            $total['s']++;
+          } else {
+            if ($cron) {
+              $o[1] .= $name.' FAILED to move<br>';
+            } else {
+              echo '<div class="f">'.$name.' could not be moved. '.($_POST['action'] == 'edit' ? '(Edit enabled)':'(Edit disabled)').'</div>';
+              print_r($move);
+            }
+            $message .= '<p>The event <span style="color:#900">failed to move</span> into the _deleted folder.</p>';
+            $total['f']++;
+          }
         } else {
-          if ($cron) {
-            $o[1] .= $name.' FAILED to unpublish<br>';
-          } else {
-            echo '<div class="f">'.$name.' could not be unpublished</div>';
-            print_r($publish);
-          }
-          $message .= '<p>The event <span style="color:#900">failed to unpublish</span>.</p>';
-          $total['f']++;
-        }
-        if ($move->moveReturn->success == 'true') {
-          if ($cron) {
-            $o[2] .= $name.' was moved to _deleted<br>';
-          } else {
-            echo '<div class="s">'.$name.' was moved to _deleted</div>';
-          }
-          $message .= '<p>The event has been <span style="color:#090">successfully</span> moved into the _deleted folder.</p>';
-          $total['s']++;
-        } else {
-          if ($cron) {
-            $o[1] .= $name.' FAILED to move<br>';
-          } else {
-            echo '<div class="f">'.$name.' could not be moved. '.($_POST['action'] == 'edit' ? '(Edit enabled)':'(Edit disabled)').'</div>';
-            print_r($move);
-          }
-          $message .= '<p>The event <span style="color:#900">failed to move</span> into the _deleted folder.</p>';
-          $total['f']++;
+          $message .= '<div class="k">No operation specified</div>';
         }
         $message .= '<p>Please review this event.</p>';
         $message .= "<p>Here are other events that match the same name:</p><ul>";
