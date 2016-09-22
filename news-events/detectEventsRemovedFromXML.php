@@ -198,7 +198,7 @@ function indexFolder($client, $auth, $asset) {
             $total['f']++;
           }
         } else {
-          $message .= '<div class="k">No operation specified</div>';
+          $message .= '<div class="k" style="color:#900">No operation specified, so both unpublish and move failed.</div>';
         }
         $message .= '<p>Please review this event.</p>';
         $message .= "<p>Here are other events that match the same name:</p><ul>";
