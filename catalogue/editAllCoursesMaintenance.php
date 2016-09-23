@@ -1,18 +1,15 @@
 <?php
 $title = 'Copying DD data to metadata for all course pages in specified years';
 
-// $type_override = 'page';
 $start_asset = '817373157f00000101f92de5bea1554a';
-
-// Optionally override the container/child types
-// $asset_type = 'assetFactoryContainer';
-// $asset_children_type = 'assetFactory';
 
 /*
  *  The following pagetest and foldertest match either the current years, 
  *  or the archived years.
  *  To change from one to the other, comment and uncomment the appropriate
  *  lines in BOTH pagetest and foldertest. Also, adjust the $year folder param.
+ *  If you don't want to create references, uncomment the line ~110 that is continue;
+ *  Finally, adjust around line 100 which includes !strpos( $asset['path'], '/_archived/' )
  *  If you want to narrow down pages editing, add a course name of the end of 
  *  pagetest e.g. ...primary\/[a-z]allet/'
  */
@@ -23,7 +20,7 @@ $year = '2016-2017';
 
 function pagetest($child) {
   global $year;
-  // if (preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'\/[a-zA-Z]/',$child->path->path))
+  // if (preg_match('/^[a-z][-a-z\/]+\/_archived\/'.$year.'\/[a-zA-Z0-9]/',$child->path->path))
   if (preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/[a-zA-Z0-9]/',$child->path->path))
     return true;
 }
@@ -100,12 +97,16 @@ function changes(&$asset) {
         }
       }
     } elseif ( $field->identifier == 'related' && !strpos( $asset['path'], '/_archived/' ) ) {
+    // } elseif ( $field->identifier == 'related' ) {
       // This code can be used to update the courses relationships when a discipline is renamed:
-      // if ($field->text == 'Games, Interactivity, and Playable Media') {
-      //   $field->text = 'Games, Interactive Art, and New Genres';
+      // if ($field->text == 'Visual Arts') {
+      //   $field->text = 'Visual and Studio Arts';
       //   $changed = true;
       // }
       // echo $field->text;
+
+      // If editing archived years, you may wish to not create references. If so, uncomment this line:
+      // continue;
       $disc = $field->text;
       $discFolder = $discNames[$disc];
       if ($discFolder) {
