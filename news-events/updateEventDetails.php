@@ -119,7 +119,9 @@ function changes(&$asset) {
 		$message .= '<div class="f">This event was not found. As such, editing it failed. Is the $yearstart and $yearend set correctly?</div>';
 		$subject = 'WARNING: Event does not exist in the XML: '.$asset['name'];
 		if ($cron) {
-			mail($to, $subject, $message, $headers);
+      if ($_GET['email'] == true) {
+        mail($to, $subject, $message, $headers);
+      }
 		} else {
 			echo $message.'<hr/>';
 		}
