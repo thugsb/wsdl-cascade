@@ -253,22 +253,24 @@ function editPage($client, $auth, $asset) {
       }
       $total['s']++;
 
-      $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $asset['id']), 'unpublish' => false ) ) );
-      if ($publish->publishReturn->success == 'true') {
-        if ($cron) {
-          $o[2] .= $asset['path'].' was published<br>';
+      if ( !strpos($asset['path'], '_pending') ) {
+        $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $asset['id']), 'unpublish' => false ) ) );
+        if ($publish->publishReturn->success == 'true') {
+          if ($cron) {
+            $o[2] .= $asset['path'].' was published<br>';
+          } else {
+            echo '<div class="s">'.$asset['path'].' was published</div>';
+          }
+          $total['s']++;
         } else {
-          echo '<div class="s">'.$asset['path'].' was published</div>';
+          if ($cron) {
+            $o[1] .= $asset['path'].' FAILED to publish<br>';
+          } else {
+            echo '<div class="f">'.$asset['path'].' could not be published</div>';
+            print_r($publish);
+          }
+          $total['f']++;
         }
-        $total['s']++;
-      } else {
-        if ($cron) {
-          $o[1] .= $asset['path'].' FAILED to publish<br>';
-        } else {
-          echo '<div class="f">'.$asset['path'].' could not be published</div>';
-          print_r($publish);
-        }
-        $total['f']++;
       }
 
     } else {
