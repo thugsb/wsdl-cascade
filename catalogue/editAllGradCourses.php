@@ -64,36 +64,6 @@ function changes(&$asset) {
       }
     }
   }
-  foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
-    if ($field->identifier == 'description') {
-      if ($asset["metadata"]->teaser != $field->text) {
-        $asset["metadata"]->teaser = $field->text;
-        $changed = true;
-      }
-    } elseif ($field->identifier == 'faculty-set') {
-      if(!is_array($field->structuredDataNodes->structuredDataNode)) {
-        $field->structuredDataNodes->structuredDataNode = array($field->structuredDataNodes->structuredDataNode);
-      }
-      $max = count($field->structuredDataNodes->structuredDataNode)-1;
-      if ($max > 5) { /* If you want to allow more faculty, make sure to to add the fields to the metadata set and then up these numbers to match */
-        $max = 5;
-        echo '<div class="f">There are too many faculty connections for the metadata to take.</div>';
-      }
-      for ($i = 0;$i <= $max; $i++) {
-        // echo 'Type: '.gettype($field->structuredDataNodes->structuredDataNode[$i]).'<br>';
-        // print_r($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode);
-        foreach ($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode as $subfield) {
-          if ($subfield->identifier == 'faculty') {
-            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value != 'site://'.str_replace(':','/',$subfield->pagePath)) {$changed = true;}
-            $asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value = 'site://'.str_replace(':','/',$subfield->pagePath); //Faculty Path
-          } elseif ($subfield->identifier == 'note') {
-            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value != $subfield->text) {$changed = true;}
-            $asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value = $subfield->text; //Faculty Note
-          }
-        }
-      }
-    }
-  }
 }
 
 

@@ -63,40 +63,7 @@ function changes(&$asset) {
     }
   }
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
-    if ($field->identifier == 'description') {
-      $field->text = str_replace('&amp;nbsp;',' ',$field->text);
-      $field->text = str_replace('&amp;#160;',' ',$field->text);
-      if ($asset["metadata"]->teaser != $field->text) {
-        $asset["metadata"]->teaser = $field->text;
-        $changed = true;
-      }
-    } elseif ($field->identifier == 'faculty-set') {
-      if(!is_array($field->structuredDataNodes->structuredDataNode)) {
-        $field->structuredDataNodes->structuredDataNode = array($field->structuredDataNodes->structuredDataNode);
-      }
-      $max = count($field->structuredDataNodes->structuredDataNode)-1;
-      if ($max > 5) { /* If you want to allow more faculty, make sure to to add the fields to the metadata set and then up these numbers to match */
-        $max = 5;
-        $total['f']++;
-        if (!$cron) {echo '<div class="f">There are too many faculty connections for the metadata to take.</div>';}
-      }
-      for ($i = 0;$i <= $max; $i++) {
-        // echo 'Type: '.gettype($field->structuredDataNodes->structuredDataNode[$i]).'<br>';
-        // print_r($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode);
-        if(!is_array($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode)) {
-          $field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode = array($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode);
-        }
-        foreach ($field->structuredDataNodes->structuredDataNode[$i]->structuredDataNodes->structuredDataNode as $subfield) {
-          if ($subfield->identifier == 'faculty') {
-            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value != 'site://'.str_replace(':','/',$subfield->pagePath)) {$changed = true;}
-            $asset["metadata"]->dynamicFields->dynamicField[2*$i+18]->fieldValues->fieldValue->value = 'site://'.str_replace(':','/',$subfield->pagePath); //Faculty Path
-          } elseif ($subfield->identifier == 'note') {
-            if ($asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value != $subfield->text) {$changed = true;}
-            $asset["metadata"]->dynamicFields->dynamicField[2*$i+19]->fieldValues->fieldValue->value = $subfield->text; //Faculty Note
-          }
-        }
-      }
-    } elseif ( $field->identifier == 'related' && !strpos( $asset['path'], '/_archived/' ) ) {
+    if ( $field->identifier == 'related' && !strpos( $asset['path'], '/_archived/' ) ) {
     // } elseif ( $field->identifier == 'related' ) {
       // This code can be used to update the courses relationships when a discipline is renamed:
       // if ($field->text == 'Visual Arts') {
