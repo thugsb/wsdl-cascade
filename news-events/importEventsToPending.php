@@ -156,45 +156,16 @@ function changes(&$asset, $event_n) {
         $dyn->fieldValues->fieldValue->value = $type;
         $changed = true;
       }
-    } elseif ($dyn->name == 'alldayevent') {
-      $alldayevent = (string)$object->alldayevent;
-      if ($dyn->fieldValues->fieldValue->value != $alldayevent) {
-        $dyn->fieldValues->fieldValue->value = $alldayevent;
-        $changed = true;
-      }
     } elseif ($dyn->name == 'recurring') {
       $recurring = (string)$object->recurring;
       if ($dyn->fieldValues->fieldValue->value != $recurring) {
         $dyn->fieldValues->fieldValue->value = $recurring;
         $changed = true;
       }
-    } elseif ($dyn->name == 'eventurl') {
-      $eventurl = (string)$object->eventurl;
-      if ($dyn->fieldValues->fieldValue->value != $eventurl) {
-        $dyn->fieldValues->fieldValue->value = $eventurl;
-        $changed = true;
-      }
     } elseif ($dyn->name == 'eventsource') {
       $eventsource = (string)$object->detailslink;
       if ($dyn->fieldValues->fieldValue->value != $eventsource) {
         $dyn->fieldValues->fieldValue->value = $eventsource;
-        $changed = true;
-      }
-    } elseif ($dyn->name == 'eventid') {
-      $eventid = (string)$object->id;
-      if ($dyn->fieldValues->fieldValue->value != $eventid) {
-        $dyn->fieldValues->fieldValue->value = $eventid;
-        $changed = true;
-      }
-    } elseif ($dyn->name == 'detailid') {
-      $detailid = (string)$object->detailid;
-      if ($dyn->fieldValues->fieldValue->value != $detailid) {
-        $dyn->fieldValues->fieldValue->value = $detailid;
-        $changed = true;
-      }
-    } elseif ($dyn->name == 'visible') {
-      if ($dyn->fieldValues->fieldValue->value != 'Yes') {
-        $dyn->fieldValues->fieldValue->value = 'Yes'; // Legacy field, setting all to true
         $changed = true;
       }
     }
