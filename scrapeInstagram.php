@@ -38,8 +38,8 @@ $scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_serv
 // echo $matches[0];
 
 if ( count($matches) < 1 ) {
-	$subject = 'MAJOR FAILED SCRIPT: Instagram Image Scraper Cron';
-	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means Instagram has changed its HTML output and the script needs re-writing. Ouch. :(';
+	$subject = 'Failed script warning: Instagram Image Scraper Cron';
+	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means the cURL was incomplete and is nothing to worry about. If this happens repeatedly, it might mean that Instagram has changed its HTML output and the script needs re-writing.';
 	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
 }
