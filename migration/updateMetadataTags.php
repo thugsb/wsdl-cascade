@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 $title = 'Add or Remove metadata tags from Pages';
 
-$type_override = 'page';
+// $type_override = 'page';
 $start_asset = '';
 
 $message = "You probably want to put in specific page IDs, which can be generated <a href='https://www.sarahlawrence.edu/_reports/metadata-tags.html'>here</a> and <a href='https://www.sarahlawrence.edu/_reports/metadata-tagged.html'>here</a>.";
@@ -31,11 +31,11 @@ function changes(&$asset) {
   
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == "academics") {
-      if(!is_array($dyn->fieldValues->fieldValue)) {
-        $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
-      }
-      // removeCheckboxItem('Visual Arts', $dyn->fieldValues->fieldValue);
-      addCheckboxItem('Visual and Studio Arts', $dyn->fieldValues->fieldValue);
+      // if(!is_array($dyn->fieldValues->fieldValue)) {
+      //   $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
+      // }
+      // // removeCheckboxItem('Visual Arts', $dyn->fieldValues->fieldValue);
+      // addCheckboxItem('Visual and Studio Arts', $dyn->fieldValues->fieldValue);
       // echo '<pre>';
       // print_r($dyn->fieldValues->fieldValue);
       // echo '</pre>';
@@ -60,6 +60,12 @@ function changes(&$asset) {
       // }
       //removeCheckboxItem('', $dyn->fieldValues->fieldValue);
       //addCheckboxItem('', $dyn->fieldValues->fieldValue);
+    }
+    if ($dyn->name == "level") {
+      if ( $dyn->fieldValues->fieldValue->value !== 'None' ) {
+        $dyn->fieldValues->fieldValue->value = 'None';
+        $changed = true;
+      }
     }
 	}
 }
