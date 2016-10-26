@@ -27,11 +27,9 @@ function changes(&$asset) {
   
   $date_string = substr($asset['name'], 0, 10);
   
-  foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-  	if ($dyn->name == 'detailid') {
-  		$detailid = $dyn->fieldValues->fieldValue->value;
-	  }
-  }
+  preg_match('/eid[0-9]{6,6}$/', $asset['name'], $detailIDMatches);
+  $detailid = substr($detailIDMatches[0], 3,6);
+  // echo $detailid;
 
   if ($detailid == '') {
   	if (!$cron) {echo "<div>This must be a manually created event.</div>";}
