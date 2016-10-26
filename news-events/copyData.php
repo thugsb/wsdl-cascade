@@ -24,9 +24,6 @@ if ($read_del->readReturn->success == 'true') {
   if ($read->readReturn->success == 'true') {
     $asset = ( array ) $read->readReturn->asset->page;
     foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-      if ($dyn->name == 'detailid') {
-        $detailid = $dyn->fieldValues->fieldValue->value;
-      }
       if ($dyn->name == 'begin') {
         $begin = $dyn->fieldValues->fieldValue->value;
       }
@@ -40,9 +37,6 @@ if ($read_del->readReturn->success == 'true') {
     $asset["metadata"] = $old_dynamic_fields;
     $asset["structuredData"]->structuredDataNodes = $old_structured_data;
     foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-      if ($dyn->name == 'detailid') {
-        $dyn->fieldValues->fieldValue->value = $detailid;
-      }
       if ($dyn->name == 'begin') {
         $dyn->fieldValues->fieldValue->value = $begin;
       }
