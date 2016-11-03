@@ -680,33 +680,33 @@
 			<!-- Parameters when getting the audits from the system -->
 			<complexType name="auditParameters">
 				<sequence>
-				<!-- Filter the assets by a certain entity
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="identifier" type="impl:identifier"/>
-				<!-- Filter the audits by a given user name
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="username" type="xsd:string"/>
-				<!-- Filter the audits by a given group name. The audits
-				for all users in the group will be returned
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="groupname" type="xsd:string"/>
-				<!-- Filter the audits by a given role.
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="rolename" type="xsd:string"/>
-				<!-- Filter the audits by a start time. Only audits for
-				events that happened after this time will be included.
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="startDate" type="xsd:dateTime"/>
-				<!-- Filter the audits by an end time. Only audits for
-				events that happened before this time will be included.
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="endDate" type="xsd:dateTime"/>
-				<!-- Filter the audits by an audit type. Only audits of this
-				type will be returned in the response
-				NOT REQUIRED -->
-				<element maxOccurs="1" minOccurs="0" name="auditType" type="impl:auditTypes"/>
-			</sequence>
-		</complexType>
+					<!-- Filter the assets by a certain entity
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="identifier" type="impl:identifier"/>
+					<!-- Filter the audits by a given user name
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="username" type="xsd:string"/>
+					<!-- Filter the audits by a given group name. The audits
+					for all users in the group will be returned
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="groupname" type="xsd:string"/>
+					<!-- Filter the audits by a given role.
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="rolename" type="xsd:string"/>
+					<!-- Filter the audits by a start time. Only audits for
+					events that happened after this time will be included.
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="startDate" type="xsd:dateTime"/>
+					<!-- Filter the audits by an end time. Only audits for
+					events that happened before this time will be included.
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="endDate" type="xsd:dateTime"/>
+					<!-- Filter the audits by an audit type. Only audits of this
+					type will be returned in the response
+					NOT REQUIRED -->
+					<element maxOccurs="1" minOccurs="0" name="auditType" type="impl:auditTypes"/>
+				</sequence>
+			</complexType>
 
 			<!-- Represents the different kinds of audits in the system -->
 			<simpleType name="auditTypes">
