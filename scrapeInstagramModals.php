@@ -101,10 +101,10 @@ foreach ($media as $key => $value) {
 		}
 		$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
 				.'		<div class="inner-left"><div class="field-image ">'."\n"
-				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
+				.'			<div class="link-wrap"><a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
 				.'				<img src="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
 				.'				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
-				.'			</a>'."\n"
+				.'			</a></div>'."\n"
 				.'		</div></div>'."\n"
 				.'		<div class="inner-right"><section class="field-body">'."\n"
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
