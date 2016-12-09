@@ -94,22 +94,22 @@ foreach ($media as $key => $value) {
 	} else {
 		$output .= '<div class="list-instagram link-exp-lbx lbx-only">'."\n";
 	}
-			$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
+		if ($key < 4 ) {
+			$output .= '	<a target="instagram" href="#modal-instagram-'.$key.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
+					.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+					.'	</a>'."\n";
+		}
+		$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
+				.'		<div class="inner-right"><section class="field-body">'."\n"
+				.'			<p>'. $captionWithHashes .'</p>'."\n"
+				.'		</section></div>'."\n"
 				.'		<div class="inner-left"><div class="field-image ">'."\n"
 				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
 				.'				<img src="/_assets/instagram/large/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
 				.'			</a>'."\n"
 				.'		</div></div>'."\n"
-				.'		<div class="inner-right"><section class="field-body">'."\n"
-				.'			<p>'. $captionWithHashes .'</p>'."\n"
-				.'		</section></div>'."\n"
 				.'	</div>'."\n";
 
-	if ($key < 4 ) {
-			$output .= '	<a target="instagram" href="#modal-instagram-'.$key.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
-				.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
-				.'	</a>'."\n";
-	}
 	$output .= '</div>'."\n\n";
 }
 $output .= "\n\n".'</div></div></div>';
