@@ -62,9 +62,9 @@ $message = '';
 $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Heading\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">'."\n\n";
 foreach ($media as $key => $value) {
 	$thumb_url = parse_url( $value->thumbnail_src );
-	$filename = end( explode( '/', $thumb_url['path'] ) );
-	if( !file_exists("../_assets/instagram/thumb/".$account.'-'.$filename) ) {
-		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/thumb/".$account.'-'.$filename ) ) {
+	$thumb_filename = end( explode( '/', $thumb_url['path'] ) );
+	if( !file_exists("../_assets/instagram/thumb/".$account.'-'.$thumb_filename) ) {
+		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/thumb/".$account.'-'.$thumb_filename ) ) {
 			$message .= "<p style='color:#090'>Image thumb $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
@@ -75,7 +75,7 @@ foreach ($media as $key => $value) {
 	$large_url = parse_url( $value->display_src );
 	$filename = end( explode( '/', $large_url['path'] ) );
 	if( !file_exists("../_assets/instagram/large/".$account.'-'.$filename) ) {
-		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/large/".$account.'-'.$filename ) ) {
+		if ( $cron && copy($value->display_src, "../_assets/instagram/large/".$account.'-'.$filename ) ) {
 			$message .= "<p style='color:#090'>Large image $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
