@@ -90,10 +90,7 @@ foreach ($media as $key => $value) {
 	$captionWithHashes = preg_replace($matchHash, '<a href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
 
 	if ($key < 4 ) {
-		$output .= '<div class="list-instagram link-exp-lbx">'."\n"
-			.'	<a target="instagram" href="#modal-instagram-'.$key.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
-			.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
-			.'	</a>'."\n";
+		$output .= '<div class="list-instagram link-exp-lbx">'."\n";
 	} else {
 		$output .= '<div class="list-instagram link-exp-lbx lbx-only">'."\n";
 	}
@@ -106,8 +103,14 @@ foreach ($media as $key => $value) {
 				.'		<div class="inner-right"><section class="field-body">'."\n"
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
 				.'		</section></div>'."\n"
-			.'	</div>'."\n"
-		.'</div>'."\n\n";
+				.'	</div>'."\n";
+
+	if ($key < 4 ) {
+			$output .= '	<a target="instagram" href="#modal-instagram-'.$key.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
+				.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+				.'	</a>'."\n";
+	}
+	$output .= '</div>'."\n\n";
 }
 $output .= "\n\n".'</div></div></div>';
 
