@@ -114,11 +114,7 @@ foreach ($media as $key => $value) {
 }
 $output .= "\n\n".'</div></div></div>';
 
-if (file_exists("../_assets/instagram/instagram-$account.html") ) {
-	$existingFileContents = file_get_contents("../_assets/instagram/instagram-$account.html");
-} else {
-	$existingFileContents = false;
-}
+$existingFileContents = file_get_contents("../_assets/instagram/instagram-$account.html");
 
 if ($imageChanged || !file_exists("../_assets/instagram/instagram-$account.html") || $output !== $existingFileContents ) {
 	if ($cron && file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
