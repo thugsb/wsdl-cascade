@@ -63,8 +63,8 @@ $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a t
 foreach ($media as $key => $value) {
 	$thumb_url = parse_url( $value->thumbnail_src );
 	$thumb_filename = end( explode( '/', $thumb_url['path'] ) );
-	if( !file_exists("../_assets/instagram/thumb/".$account.'-'.$thumb_filename) ) {
-		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/thumb/".$account.'-'.$thumb_filename ) ) {
+	if( !file_exists("../_assets/instagram/thumb/".$account.'-'.$value->code.'.jpg') ) {
+		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/thumb/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "<p style='color:#090'>Image thumb $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
@@ -74,8 +74,8 @@ foreach ($media as $key => $value) {
 	}
 	$large_url = parse_url( $value->display_src );
 	$filename = end( explode( '/', $large_url['path'] ) );
-	if( !file_exists("../_assets/instagram/large/".$account.'-'.$filename) ) {
-		if ( $cron && copy($value->display_src, "../_assets/instagram/large/".$account.'-'.$filename ) ) {
+	if( !file_exists("../_assets/instagram/large/".$account.'-'.$value->code.'.jpg') ) {
+		if ( $cron && copy($value->display_src, "../_assets/instagram/large/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "<p style='color:#090'>Large image $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
@@ -95,19 +95,20 @@ foreach ($media as $key => $value) {
 		$output .= '<div class="list-instagram link-exp-lbx lbx-only">'."\n";
 	}
 		if ($key < 4 ) {
-			$output .= '	<a href="#modal-instagram-'.$key.'">'."\n"
-					.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+			$output .= '	<a href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
+					.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$value->code.'.jpg'.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
 					.'	</a>'."\n";
 		}
 		$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
+				.'		<div class="inner-left"><div class="field-image ">'."\n"
+				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
+				.'				<img src="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+				.'				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
+				.'			</a>'."\n"
+				.'		</div></div>'."\n"
 				.'		<div class="inner-right"><section class="field-body">'."\n"
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
 				.'		</section></div>'."\n"
-				.'		<div class="inner-left"><div class="field-image ">'."\n"
-				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/">'."\n"
-				.'				<img src="/_assets/instagram/large/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
-				.'			</a>'."\n"
-				.'		</div></div>'."\n"
 				.'	</div>'."\n";
 
 	$output .= '</div>'."\n\n";
