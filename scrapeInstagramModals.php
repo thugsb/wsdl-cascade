@@ -1,0 +1,145 @@
+<?php
+
+if (PHP_SAPI == 'cli') {
+	parse_str(implode('&', array_slice($argv, 1)), $_GET);
+	$cron = true;
+}
+if (!$cron) {echo '<p>Due to file permissions, this script can only be run from the command line. A preview of the output is below.</p>';}
+
+( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+	CURLOPT_RETURNTRANSFER => 1,
+	CURLOPT_URL => "https://www.instagram.com/".$account.'/'
+));
+$curlresult = curl_exec($curl);
+curl_close($curl);
+
+
+$headers = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
+$headers .= 'From: com@vm-www.slc.edu';
+
+
+if ($curlresult === false) {
+	$subject = 'Warning: Instagram Image Scraper Cron';
+	$match_fail_message = 'The instagram cURL returned FALSE. This probably just means it timed out. If this happens repeatedly, it will need investigating.';
+	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	exit;
+}
+
+// echo $curlresult;
+
+
+$scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_server_guess": true}/', $curlresult, $matches);
+
+// echo $matches[0];
+
+if ( count($matches) < 1 ) {
+	$subject = 'Failed script warning: Instagram Image Scraper Cron';
+	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means the cURL was incomplete and is nothing to worry about. If this happens repeatedly, it might mean that Instagram has changed its HTML output and the script needs re-writing.';
+	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	exit;
+}
+
+$json = str_replace('window._sharedData = ','', $matches[0]);
+
+$data = json_decode($json);
+
+//print_r($data);
+
+$media = $data->entry_data->ProfilePage[0]->user->media->nodes;
+
+
+$imageChanged = false;
+$copyFail = false;
+$writeFail = false;
+$matchUser = '/(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)/';
+$matchHash = '/(?:#)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)/';
+$message = '';
+$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Heading\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">'."\n\n";
+foreach ($media as $key => $value) {
+	$thumb_url = parse_url( $value->thumbnail_src );
+	$filename = end( explode( '/', $thumb_url['path'] ) );
+	if( !file_exists("../_assets/instagram/thumb/".$account.'-'.$filename) ) {
+		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/thumb/".$account.'-'.$filename ) ) {
+			$message .= "<p style='color:#090'>Image thumb $key copied successfully.</p>";
+			$imageChanged = true;
+		} else {
+			$message .= "<p style='color:#900'>Image thumb $key copy failed. The .html output file will NOT be modified.</p>";
+			$copyFail = true;
+		}
+	}
+	$large_url = parse_url( $value->display_src );
+	$filename = end( explode( '/', $large_url['path'] ) );
+	if( !file_exists("../_assets/instagram/large/".$account.'-'.$filename) ) {
+		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/large/".$account.'-'.$filename ) ) {
+			$message .= "<p style='color:#090'>Large image $key copied successfully.</p>";
+			$imageChanged = true;
+		} else {
+			$message .= "<p style='color:#900'>Large image $key copy failed. The .html output file will NOT be modified.</p>";
+			$copyFail = true;
+		}
+	}
+	// echo "<a href='https://www.instagram.com/p/$value->code/'><img src='$value->thumbnail_src'></a>";
+
+
+	$captionWithUsers = preg_replace($matchUser, '<a href="https://www.instagram.com/$1/">@$1</a>', $value->caption);
+	$captionWithHashes = preg_replace($matchHash, '<a href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
+
+	if ($key < 4 ) {
+		$output .= '<div class="list-instagram link-exp-lbx">'."\n"
+			.'	<a target="instagram" href="#modal-instagram-'.$key.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
+			.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+			.'	</a>'."\n";
+	} else {
+		$output .= '<div class="list-instagram link-exp-lbx lbx-only">'."\n";
+	}
+			$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
+				.'		<div class="inner-left"><div class="field-image ">'."\n"
+				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
+				.'				<img src="/_assets/instagram/large/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+				.'			</a>'."\n"
+				.'		</div></div>'."\n"
+				.'		<div class="inner-right"><section class="field-body">'."\n"
+				.'			<p>'. $captionWithHashes .'</p>'."\n"
+				.'		</section></div>'."\n"
+			.'	</div>'."\n"
+		.'</div>'."\n\n";
+}
+$output .= "\n\n".'</div></div></div>';
+
+if (file_exists("../_assets/instagram/instagram-$account.html") ) {
+	$existingFileContents = file_get_contents("../_assets/instagram/instagram-$account.html");
+} else {
+	$existingFileContents = false;
+}
+
+if ($imageChanged || !file_exists("../_assets/instagram/instagram-$account.html") || $output !== $existingFileContents ) {
+	if ($cron && file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
+		$message .= '<p style="color:#090">File HTML written successfully.</p>';
+	} else {
+		$message .=  '<p style="color:#900">File HTML writing failed.</p>';
+		$writeFail = true;
+	}
+}
+
+if ($message == '') {$message = '<p style="color:#009">No changes needed for the <a href="https://www.instagram.com/'.$account.'/">'.$account.'</a> account.</p>';} else {$message .= '<p>The script ran for the <a href="https://www.instagram.com/'.$account.'/">'.$account.'</a> account.</p>';}
+
+if ($cron) {
+	$headers = 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	// $headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
+    $headers .= 'From: com@vm-www.slc.edu';
+	if ($copyFail || $writeFail) {$subject = 'FAILED: Instagram Image Scraper Cron';} else {$subject = 'Instagram Image Scraper Cron';}
+	mail('stu@t.apio.ca', $subject, $message, $headers);
+} else {
+	echo $message;
+	echo $output;
+	echo '<pre>';print_r($data);echo '</pre>';
+	// echo '<script>var data = "'. htmlspecialchars($curlresult) .'"; console.log(data);</script>';
+}
+
+?>
