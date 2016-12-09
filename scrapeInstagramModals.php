@@ -90,9 +90,9 @@ foreach ($media as $key => $value) {
 	$captionWithHashes = preg_replace($matchHash, '<a class="instagram-hashtag" href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
 
 	if ($key < 4 ) {
-		$output .= '<div class="list-instagram link-exp-lbx">'."\n";
+		$output .= '<div class="list-instagram link-exp-lbx lbx-wide">'."\n";
 	} else {
-		$output .= '<div class="list-instagram link-exp-lbx lbx-only">'."\n";
+		$output .= '<div class="list-instagram link-exp-lbx lbx-wide lbx-only">'."\n";
 	}
 		if ($key < 4 ) {
 			$output .= '	<a href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
