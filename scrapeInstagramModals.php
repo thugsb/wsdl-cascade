@@ -59,7 +59,7 @@ $writeFail = false;
 $matchUser = '/(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)/';
 $matchHash = '/(?:#)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)/';
 $message = '';
-$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Heading\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">'."\n\n";
+$output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">'."\n\n";
 foreach ($media as $key => $value) {
 	$thumb_url = parse_url( $value->thumbnail_src );
 	$thumb_filename = end( explode( '/', $thumb_url['path'] ) );
@@ -86,8 +86,8 @@ foreach ($media as $key => $value) {
 	// echo "<a href='https://www.instagram.com/p/$value->code/'><img src='$value->thumbnail_src'></a>";
 
 
-	$captionWithUsers = preg_replace($matchUser, '<a href="https://www.instagram.com/$1/">@$1</a>', $value->caption);
-	$captionWithHashes = preg_replace($matchHash, '<a href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
+	$captionWithUsers  = preg_replace($matchUser, '<a class="instagram-user" href="https://www.instagram.com/$1/">@$1</a>', $value->caption);
+	$captionWithHashes = preg_replace($matchHash, '<a class="instagram-hashtag" href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
 
 	if ($key < 4 ) {
 		$output .= '<div class="list-instagram link-exp-lbx">'."\n";
@@ -95,7 +95,7 @@ foreach ($media as $key => $value) {
 		$output .= '<div class="list-instagram link-exp-lbx lbx-only">'."\n";
 	}
 		if ($key < 4 ) {
-			$output .= '	<a target="instagram" href="#modal-instagram-'.$key.'" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
+			$output .= '	<a href="#modal-instagram-'.$key.'">'."\n"
 					.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
 					.'	</a>'."\n";
 		}
@@ -104,7 +104,7 @@ foreach ($media as $key => $value) {
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
 				.'		</section></div>'."\n"
 				.'		<div class="inner-left"><div class="field-image ">'."\n"
-				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" onclick="ga(\'send\', \'event\', \'Component\', \'Instagram Image\', \'<?php echo $_SERVER[\'REQUEST_URI\']; ?>\')">'."\n"
+				.'			<a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/">'."\n"
 				.'				<img src="/_assets/instagram/large/'.$account.'-'.$filename.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
 				.'			</a>'."\n"
 				.'		</div></div>'."\n"
