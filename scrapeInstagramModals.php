@@ -33,7 +33,8 @@ if ($curlresult === false) {
 // echo $curlresult;
 
 
-$scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_server_guess": true}/', $curlresult, $matches);
+//$scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_server_guess": true}/', $curlresult, $matches);
+$scrape = preg_match('/window\._sharedData = .*\}/', $curlresult, $matches); // loosen regex; Jeff Fowler 2017-01-20
 
 // echo $matches[0];
 
