@@ -41,11 +41,11 @@ function changes(&$asset) {
       // echo '</pre>';
 		}
     if ($dyn->name == "audiences") {
-      // if(!is_array($dyn->fieldValues->fieldValue)) {
-      //   $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
-      // }
-      //removeCheckboxItem('', $dyn->fieldValues->fieldValue);
-      //addCheckboxItem('', $dyn->fieldValues->fieldValue);
+      if(!is_array($dyn->fieldValues->fieldValue)) {
+        $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
+      }
+      // removeCheckboxItem('', $dyn->fieldValues->fieldValue);
+      addCheckboxItem('Karen R. Lawrence', $dyn->fieldValues->fieldValue);
     }
     if ($dyn->name == "sponsors") {
       // if(!is_array($dyn->fieldValues->fieldValue)) {
@@ -62,10 +62,10 @@ function changes(&$asset) {
       //addCheckboxItem('', $dyn->fieldValues->fieldValue);
     }
     if ($dyn->name == "level") {
-      if ( $dyn->fieldValues->fieldValue->value !== 'None' ) {
-        $dyn->fieldValues->fieldValue->value = 'None';
-        $changed = true;
-      }
+      // if ( $dyn->fieldValues->fieldValue->value !== 'None' ) {
+      //   $dyn->fieldValues->fieldValue->value = 'None';
+      //   $changed = true;
+      // }
     }
 	}
 }
