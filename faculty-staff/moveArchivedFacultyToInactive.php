@@ -32,7 +32,7 @@ function changes(&$asset) {
   $changed = false;
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == 'status') {
-      if ($dyn->fieldValues->fieldValue->value != 'Active') {
+      if ($dyn->fieldValues->fieldValue->value != 'Active' && $dyn->fieldValues->fieldValue->value != 'Deceased') {
         $changed = true;
       }
     }
