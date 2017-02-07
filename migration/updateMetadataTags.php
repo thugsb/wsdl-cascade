@@ -30,6 +30,19 @@ function changes(&$asset) {
   $changed = false;
   
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
+    if ($dyn->name == 'level') {
+      if ($dyn->fieldValues->fieldValue->value != 'None') {
+        $dyn->fieldValues->fieldValue = new stdClass();
+        $dyn->fieldValues->fieldValue->value = 'None';
+        $changed = true;
+      }
+    }
+    if ($dyn->name == 'course-type') {
+      if ($dyn->fieldValues->fieldValue->value != 'Graduate Seminar') {
+        $dyn->fieldValues->fieldValue->value = 'Graduate Seminar';
+        $changed = true;
+      }
+    }
     if ($dyn->name == "academics") {
       // if(!is_array($dyn->fieldValues->fieldValue)) {
       //   $dyn->fieldValues->fieldValue = array($dyn->fieldValues->fieldValue);
