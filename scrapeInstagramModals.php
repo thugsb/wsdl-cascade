@@ -98,6 +98,7 @@ foreach ($media as $key => $value) {
 		if ($key < 4 ) {
 			$output .= '	<a href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
 					.'		<img src="/_assets/instagram/thumb/'.$account.'-'.$value->code.'.jpg'.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+					.'		<span class="icon i-exp-img" data-grunticon-embed=""></span>'."\n"
 					.'	</a>'."\n";
 		}
 		$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
