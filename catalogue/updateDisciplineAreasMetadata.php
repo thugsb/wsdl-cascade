@@ -95,7 +95,7 @@ if (!$cron) {include('../html_header.php');}
 
 
 function readFolder($client, $auth, $id) {
-  global $asset_type, $asset_children_type, $data, $o, $cron, $disciplineFolderID;
+  global $asset_type, $asset_children_type, $data, $o, $cron, $disciplineFolderID, $relatedDisciplines, $relatedAreas;
   $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($folder->readReturn->success == 'true') {
 
@@ -103,6 +103,8 @@ function readFolder($client, $auth, $id) {
 
     if (preg_match('/^[a-z][-a-z\/]+$/',$asset['path'] ) ) {
       $disciplineFolderID = $asset['id'];
+      $relatedDisciplines = [];
+      $relatedAreas = [];
     }
 
     if ($cron) {
