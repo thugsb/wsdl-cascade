@@ -171,7 +171,7 @@ function indexFolder($client, $auth, $asset) {
         } else {
           echo '<div class="f">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
         }
-        $t['f']++;
+        $total['f']++;
       }
     }
     sort($relatedAreas);
@@ -212,7 +212,7 @@ function indexFolder($client, $auth, $asset) {
           } else {
             if (!$cron) { echo '<div class="k">No changes needed (the areas match)</div>'; }
             $o[3] .= $asset['name']."\n";
-            $t['k']++;
+            $total['k']++;
           }
           break;
         }
@@ -223,7 +223,7 @@ function indexFolder($client, $auth, $asset) {
       } else {
         echo '<div class="f">Discipline folder read failed</div>';
       }
-      $t['f']++;
+      $total['f']++;
     }
 
   }
