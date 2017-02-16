@@ -141,7 +141,7 @@ function indexFolder($client, $auth, $asset) {
   }
   // This IF will single out the Clusters from the rest of the disciplines, and still allow the subfolders of clusters to be read
   if ( $asset['path'] == '/' || $isClusterFolder || preg_match('/^[a-z][-a-z\/]+\/'.$year.'/',$asset['path']) ) {
-    if (!$cron) { echo '<div class="s">Cluster</div>'; }
+    if (!$cron && $isClusterFolder) { echo '<div class="s">Cluster</div>'; }
     foreach($asset["children"]->child as $child) {
       if ($child->type == strtolower($asset_children_type)) {
         if (pagetest($child))
