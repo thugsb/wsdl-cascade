@@ -193,11 +193,13 @@ function indexFolder($client, $auth, $asset) {
 
 
           if ($existingAreas != $relatedAreas) {
-            echo '<div class="k">The areas have changed (existing and update respectively):</div>';
-            echo '<pre>';
-            print_r( $existingAreas );
-            print_r( $relatedAreas );
-            echo '</pre>';
+            if (!$cron) {
+              echo '<div class="k">The areas have changed (existing and update respectively):</div>';
+              echo '<pre>';
+              print_r( $existingAreas );
+              print_r( $relatedAreas );
+              echo '</pre>';
+            }
             $dyn->fieldValues->fieldValue = [];
             foreach ($relatedAreas as $areaName) {
               $val = new StdClass();
@@ -208,13 +210,20 @@ function indexFolder($client, $auth, $asset) {
             editFolder($client, $auth, $asset, $dyn);
             
           } else {
-            echo '<div class="k">No changes needed (the areas match)</div>';
+            if (!$cron) { echo '<div class="k">No changes needed (the areas match)</div>'; }
+            $o[3] .= $asset['name']."\n";
+            $t['k']++;
           }
           break;
         }
       }
     } else {
-      echo '<div class="f">Discipline folder read failed</div>';
+      if ($cron) {
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline folder with ID '. $disciplineFolderID .' read failed</div>';
+      } else {
+        echo '<div class="f">Discipline folder read failed</div>';
+      }
+      $t['f']++;
     }
 
   }
