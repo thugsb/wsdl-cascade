@@ -161,12 +161,18 @@ function indexFolder($client, $auth, $asset) {
   if ( preg_match('/^[a-z][-a-z\/]+\/'.$year.'\/related$/',$asset['path'] ) ) {
     // Get array of the Areas
     foreach ($relatedDisciplines as $disciplineFolderName) {
-      if ( !in_array($areaLookup[$disciplineFolderName], $relatedAreas) ) {
-        array_push($relatedAreas, $areaLookup[$disciplineFolderName]);
+      if ( array_key_exists($disciplineFolderName, $areaLookup) ) {
+        if ( !in_array($areaLookup[$disciplineFolderName], $relatedAreas) && $areaLookup[$disciplineFolderName] != 'Cross-Disciplinary Paths' ) {
+          array_push($relatedAreas, $areaLookup[$disciplineFolderName]);
+        }
+      } else {
+        if ($cron) {
+          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
+        } else {
+          echo '<div class="f">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
+        }
+        $t['f']++;
       }
-    }
-    if ( !in_array('Cross-Disciplinary Paths', $relatedAreas) ) {
-      array_push($relatedAreas, 'Cross-Disciplinary Paths');
     }
     sort($relatedAreas);
 
