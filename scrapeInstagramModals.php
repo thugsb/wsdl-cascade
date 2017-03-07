@@ -107,7 +107,11 @@ foreach ($media as $key => $value) {
 				.'		<div class="cpt-instagram"><h2><a href="https://www.instagram.com/'. $account .'/">Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></h2></div>'."\n"
 				.'		<div class="inner-left"><div class="field-image ">'."\n"
 				.'			<div class="link-wrap"><a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
+		if ($key < 4 ) {
 				.'				<img src="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+			} else {
+				.'				<img data-original="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+			}
 				.'				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
 				.'			</a></div>'."\n"
 				.'		</div></div>'."\n"
