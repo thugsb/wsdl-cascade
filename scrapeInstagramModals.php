@@ -110,7 +110,7 @@ foreach ($media as $key => $value) {
 		if ($key < 4 ) {
 			$output .= '				<img src="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
 		} else {
-			$output .= '				<img data-original="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
+			$output .= '				<img class="lazy" data-original="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
 		}
 		$output .= '				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
 				.'			</a></div>'."\n"
