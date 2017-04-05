@@ -3,7 +3,7 @@ $title = 'Update relatedIDs.php';
 
 $start_asset = '817373157f00000101f92de5bea1554a';
 
-$year = '2016-2017';
+$year = '2017-2018';
 
 function pagetest($child) {
   global $year;

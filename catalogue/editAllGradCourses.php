@@ -18,7 +18,7 @@ $start_asset = '4e9e12a97f000001015d84e03ea3fb26';
  */
 
 // $year = '[-0-9]+'; // Matches all years
-$year = '2016-2017';
+$year = '2017-2018';
 
 function pagetest($child) {
   global $year;

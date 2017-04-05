@@ -9,8 +9,8 @@ $title = 'Copy the base asset used for course folders';
 $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 // $start_asset = '4e9e12a97f000001015d84e03ea3fb26'; // Grad
 
-$lastyear = '/2015-2016$/';
-$nextyear = "2016-2017";
+$lastyear = '/2016-2017$/';
+$nextyear = "2017-2018";
 
 function foldertest($child) {
   if (preg_match('/^[a-z]/', $child->path->path) && !preg_match('/\/*\//', $child->path->path))
