@@ -7,22 +7,14 @@ if ( isset($_GET['year']) ) {
 }
 
 $message .= 'You are currently curating the events for '. $events_year. '. ';
-if ( $events_year != '2015-2016' ) {
-  $message .= '<a href="?year=2015-2016">Click here for 2015-2016</a>. ';
-}
 if ( $events_year != '2016-2017' ) {
   $message .= '<a href="?year=2016-2017">Click here for 2016-2017</a>. ';
 }
+if ( $events_year != '2017-2018' ) {
+  $message .= '<a href="?year=2017-2018">Click here for 2017-2018</a>. ';
+}
 
-if ( $events_year == '2015-2016' ) {
-  $year_folder = '85a826eec0a8022b3d7ce269ce9477fa';
-  $pending_folder = '39e9a9bcc0a8022b3e74b75175234a8f';
-  $rejected_folder = '85a91e39c0a8022b3d7ce269adaec728';
-  $deleted_folder = 'f65414a5c0a8022b36e21ad719081b4f';
-  $acad_year = '2015-2016';
-  $yearstart = '2015-09-01';
-  $yearend = '2017-08-31';
-} elseif ( $events_year == '2016-2017' ) {
+if ( $events_year == '2016-2017' ) {
   $year_folder = '21885c37c0a8022b048dce3cddbe9449';
   $pending_folder = '2188600ec0a8022b048dce3cbbf35c30';
   $rejected_folder = '21885e09c0a8022b048dce3c8fffcd32';
@@ -30,6 +22,14 @@ if ( $events_year == '2015-2016' ) {
   $acad_year = '2016-2017';
   $yearstart = '2016-09-01';
   $yearend = '2017-08-31';
+} elseif ( $events_year == '2017-2018' ) {
+  $year_folder = 'c9674124c0a8022b686c5474de639b04';
+  $pending_folder = 'c967458bc0a8022b686c5474c124a14e';
+  $rejected_folder = 'c9674494c0a8022b686c5474449cc282';
+  $deleted_folder = 'c9674514c0a8022b686c5474a12a169b';
+  $acad_year = '2017-2018';
+  $yearstart = '2017-09-01';
+  $yearend = '2018-08-31';
 }
 
 
