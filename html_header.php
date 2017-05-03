@@ -21,7 +21,7 @@ function addCheckboxItem($val, &$array) {
     $changed = true;
     if (!$cron) {echo "<div class='k'>$val added.</div>";}
   }
-  $array = array_filter($array);
+  $array = array_values(array_filter($array));
 }
 
 include("web_services_util.php");
