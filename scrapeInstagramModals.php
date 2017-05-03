@@ -7,6 +7,18 @@ if (PHP_SAPI == 'cli') {
 if (!$cron) {echo '<p>Due to file permissions, this script can only be run from the command line. A preview of the output is below.</p>';}
 
 ( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
+( isset($_GET['site']) ? $site = $_GET['site'] : $site = 'sarahlawrencecollege');
+
+if ( $site == 'sarahlawrencecollege' ) {
+	$serverPath = '/srv/www/htdocs/_assets/instagram/';
+	$sitePath = '/_assets/instagram/';
+} elseif ( $site == 'curb' ) {
+	$serverPath = '/srv/www/centerfortheurbanriver.org/core/instagram/';
+	$sitePath = '/core/instagram/';
+} elseif ($site == 'local' ) {
+	$serverPath = '/Users/Resist/Sites/instagram/';
+	$sitePath = '../instagram/';
+}
 
 $curl = curl_init();
 curl_setopt_array($curl, array(
@@ -64,8 +76,8 @@ $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a t
 foreach ($media as $key => $value) {
 	$thumb_url = parse_url( $value->thumbnail_src );
 	$thumb_filename = end( explode( '/', $thumb_url['path'] ) );
-	if( !file_exists("../_assets/instagram/thumb/".$account.'-'.$value->code.'.jpg') ) {
-		if ( $cron && copy($value->thumbnail_src, "../_assets/instagram/thumb/".$account.'-'.$value->code.'.jpg' ) ) {
+	if( !file_exists( $serverPath . "thumb/".$account.'-'.$value->code.'.jpg') ) {
+		if ( $cron && copy($value->thumbnail_src, $serverPath ."thumb/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "<p style='color:#090'>Image thumb $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
@@ -75,8 +87,8 @@ foreach ($media as $key => $value) {
 	}
 	$large_url = parse_url( $value->display_src );
 	$filename = end( explode( '/', $large_url['path'] ) );
-	if( !file_exists("../_assets/instagram/large/".$account.'-'.$value->code.'.jpg') ) {
-		if ( $cron && copy($value->display_src, "../_assets/instagram/large/".$account.'-'.$value->code.'.jpg' ) ) {
+	if( !file_exists( $serverPath ."large/".$account.'-'.$value->code.'.jpg') ) {
+		if ( $cron && copy($value->display_src, $serverPath ."large/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "<p style='color:#090'>Large image $key copied successfully.</p>";
 			$imageChanged = true;
 		} else {
@@ -98,7 +110,7 @@ foreach ($media as $key => $value) {
 		if ($key < 4 ) {
 			$output .= '	<a href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
 					.'		<span class="img-wrap">'."\n"
-					.'			<img src="/_assets/instagram/thumb/'.$account.'-'.$value->code.'.jpg'.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+					.'			<img src="'. $sitePath .'thumb/'.$account.'-'.$value->code.'.jpg'.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
 					.'			<span class="icon i-exp-img" data-grunticon-embed=""></span>'."\n"
 					.'		</span>'."\n"
 					.'	</a>'."\n";
@@ -108,9 +120,9 @@ foreach ($media as $key => $value) {
 				.'		<div class="inner-left"><div class="field-image ">'."\n"
 				.'			<div class="link-wrap"><a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n";
 		if ($key < 4 ) {
-			$output .= '				<img class="lazy" data-original="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" src="/_assets/instagram/thumb/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
+			$output .= '				<img class="lazy" data-original="'. $sitePath .'large/'.$account.'-'.$value->code.'.jpg'.'" src="'. $sitePath .'thumb/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
 		} else {
-			$output .= '				<img class="lazy" data-original="/_assets/instagram/large/'.$account.'-'.$value->code.'.jpg'.'" src="/_assets/images/loading.gif" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
+			$output .= '				<img class="lazy" data-original="'. $sitePath .'large/'.$account.'-'.$value->code.'.jpg'.'" src="'. $sitePath .'loading.gif" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
 		}
 		$output .= '				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
 				.'			</a></div>'."\n"
@@ -125,10 +137,10 @@ foreach ($media as $key => $value) {
 }
 $output .= "\n\n".'</div></div></div>';
 
-$existingFileContents = file_get_contents("../_assets/instagram/instagram-$account.html");
+$existingFileContents = file_get_contents($serverPath ."instagram-$account.html");
 
-if ($imageChanged || !file_exists("../_assets/instagram/instagram-$account.html") || $output !== $existingFileContents ) {
-	if ($cron && file_put_contents("../_assets/instagram/instagram-$account.html", $output) ) {
+if ($imageChanged || !file_exists($serverPath ."instagram-$account.html") || $output !== $existingFileContents ) {
+	if ($cron && file_put_contents($serverPath ."instagram-$account.html", $output) ) {
 		$message .= '<p style="color:#090">File HTML written successfully.</p>';
 	} else {
 		$message .=  '<p style="color:#900">File HTML writing failed.</p>';
