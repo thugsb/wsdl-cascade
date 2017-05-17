@@ -37,7 +37,7 @@ $headers .= 'From: com@vm-www.slc.edu';
 
 if ($curlresult === false) {
 	$subject = 'Warning: Instagram Image Scraper Cron';
-	$match_fail_message = 'The instagram cURL returned FALSE. This probably just means it timed out. If this happens repeatedly, it will need investigating.';
+	$match_fail_message = 'The instagram cURL returned FALSE. This probably just means it timed out. If this happens repeatedly, it will need investigating. This occurred while running for the '. $account .' account.';
 	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
 }
@@ -52,7 +52,7 @@ $scrape = preg_match('/window\._sharedData = .*\}/', $curlresult, $matches); // 
 
 if ( count($matches) < 1 ) {
 	$subject = 'Failed script warning: Instagram Image Scraper Cron';
-	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means the cURL was incomplete and is nothing to worry about. If this happens repeatedly, it might mean that Instagram has changed its HTML output and the script needs re-writing.';
+	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means the cURL was incomplete and is nothing to worry about. If this happens repeatedly, it might mean that Instagram has changed its HTML output and the script needs re-writing. This occurrred while running for the '. $account .' account.'';
 	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
 }
