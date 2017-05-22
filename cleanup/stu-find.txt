@@ -1,0 +1,27 @@
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o ! -iregex ".*\.\(html\|php\|htm\|jpg\|png\|jpeg\|gif\|tif\|pdf\|css\|js\|xml\|svg\|eot\|woff\|ttf\|txt\|ics\|mp3\|db\|swf\|flv\|rss\|zip\|pptx\|ppsx\|ppt\|doc\|docx\|sql\|htaccess\|cache\|mov\|mp4\|avi\|m4a\)" -type f > ../pending.slc.edu/stu-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(html\)" -type f > ../pending.slc.edu/stu-html-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(php\)" -type f > ../pending.slc.edu/stu-php-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(jpg\|png\|jpeg\|gif\|tif\)" -type f > ../pending.slc.edu/stu-images-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(pdf\)" -type f > ../pending.slc.edu/stu-pdf-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(css\|eot\|woff\|ttf\)" -type f > ../pending.slc.edu/stu-css-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(svg\|mp3\|swf\|flv\|mov\|mp4\|avi\|m4a\)" -type f > ../pending.slc.edu/stu-media-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(pptx\|ppsx\|ppt\|doc\|docx\)" -type f > ../pending.slc.edu/stu-docs-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(xml\|db\|rss\|sql\)" -type f > ../pending.slc.edu/stu-data-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(zip\|htaccess\|cache\)" -type f > ../pending.slc.edu/stu-other-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(ics\)" -type f > ../pending.slc.edu/stu-ics-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(htm\)" -type f > ../pending.slc.edu/stu-htm-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(js\)" -type f > ../pending.slc.edu/stu-js-list.txt
+
+find . -name '.git' -prune -o -name '__web-services' -prune -o -name 'ssp_director' -prune -o -name 'mform' -prune -o -iregex ".*\.\(txt\)" -type f > ../pending.slc.edu/stu-txt-list.txt
