@@ -2,3 +2,4 @@ _credentials.php
 .htaccess
 grabInstagram.php
 *.sublime-*
+indexes/
