@@ -40,7 +40,7 @@ function changes(&$asset) {
   // }
 }
 
-if (!$cron) {include('html_header.php');}
+if (!$cron) {include('../html_header.php');}
 
 
 

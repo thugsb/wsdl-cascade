@@ -95,7 +95,7 @@ function changes(&$asset, $type) {
   
 }
 
-if (!$cron) {include('html_header.php');}
+if (!$cron) {include('../html_header.php');}
 
 function outputData($file, $asset, $output = '') {
   $myFile = "indexes/".$file.".html";

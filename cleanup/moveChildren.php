@@ -22,7 +22,7 @@ function edittest($asset) {
 }
 
 
-if (!$cron) {include('html_header.php');}
+if (!$cron) {include('../html_header.php');}
 
 
 

@@ -48,7 +48,7 @@ function changes(&$asset, $code) {
   }
 }
 
-if (!$cron) {include('html_header.php');}
+if (!$cron) {include('../html_header.php');}
 
 function readScripts($link, $files, $folders, $subFolder) {
   global $asset_type, $asset_children_type, $client, $auth, $total, $cron, $o;

@@ -59,6 +59,6 @@ function changes(&$asset) {
   } else {echo 'nope';}
 }
 
-if (!$cron) {include('header.php');}
+if (!$cron) {include('../header.php');}
 
 ?>

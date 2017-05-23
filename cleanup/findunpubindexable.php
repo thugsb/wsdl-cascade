@@ -68,7 +68,7 @@ function changes(&$asset, $type) {
   
 }
 
-if (!$cron) {include('html_header.php');}
+if (!$cron) {include('../html_header.php');}
 
 
 

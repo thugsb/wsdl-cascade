@@ -724,7 +724,7 @@ $web_repeats = ["CD" => "<p>(no periods, acceptable on first reference to a comp
 "www." => "<p>In text or lists where the Web context is clearly understood, the prefix <em>www.</em> may be omitted. Otherwise, retain the prefix <em>www</em>. for clarity and immediate recognition, especially in single or stand-alone Web addresses (such as those appearing in advertisements).</p>"];
 
 
-if (!$cron) {include('html_header.php');}
+if (!$cron) {include('../html_header.php');}
 
 
 
