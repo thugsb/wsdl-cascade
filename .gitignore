@@ -3,3 +3,4 @@ _credentials.php
 grabInstagram.php
 *.sublime-*
 indexes/
+vendor/
