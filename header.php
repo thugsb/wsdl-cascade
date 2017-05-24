@@ -8,7 +8,7 @@
  *  For more control, just include html_header.php instead of this file.
 */
 
-include_once("html_header.php");
+include_once(__DIR__."/html_header.php");
 
 $changed = true;
 

@@ -43,6 +43,6 @@ function changes(&$asset) {
   // }
 }
 
-if (!$cron) {include('header.php');}
+if (!$cron) {include(__DIR__.'/header.php');}
 
 ?>
