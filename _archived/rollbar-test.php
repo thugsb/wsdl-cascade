@@ -1,9 +1,14 @@
 <?php
-require '../rollbar-init.php';
+require_once __DIR__ . '/../rollbar-init.php';
+
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
 
 try {
     throw new \Exception('test exception');
+    echo 'text exception thrown';
 } catch (\Exception $e) {
+    echo 'text exception failed';
     Rollbar::log(Level::error(), $e);
 }
 

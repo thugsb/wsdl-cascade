@@ -1,11 +1,13 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
+
+// The following two lines need to also be present in any file that is using Rollbar:
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
-require_once '_credentials.php';
 
+require_once __DIR__ . '/_credentials.php';
 // Installs global error and exception handlers
-$config = array(
+$rollbarConfig = array(
     // required
     'access_token' => $rollbarToken,
     // optional - environment name
@@ -13,5 +15,5 @@ $config = array(
     // optional - path to directory your code is in. Used for linking stack traces.
     // 'root' => '/Users/brian/www/myapp'
 );
-Rollbar::init($config);
+Rollbar::init($rollbarConfig);
 ?>
