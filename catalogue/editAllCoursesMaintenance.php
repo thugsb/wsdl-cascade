@@ -159,7 +159,7 @@ function changes(&$asset) {
         }
         if ($disc !== '') {
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.'</div>';
+            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.' for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name'].'</a></div>';
           } else {
             echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
           }
