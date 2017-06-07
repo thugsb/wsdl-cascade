@@ -35,7 +35,7 @@ function edittest($asset) {
     return true;
 }
 
-function changes(&$asset) {
+function changes(&$asset, $type) {
   global $changed, $total, $discNames, $relatedIDs, $year, $auth, $client, $cron, $o, $disc_folder, $disc_name;
   $changed = false;
   $newTitle = trim($asset['metadata']->title);
@@ -274,7 +274,7 @@ function readPage($client, $auth, $id, $type) {
 function editPage($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   
-  changes($asset);
+  changes($asset, $type);
   
   if ($_POST['after'] == 'on' && !$cron) {
     echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
