@@ -257,7 +257,7 @@ function readPage($client, $auth, $id, $type) {
         echo "</script>";
       }
       
-      editPage($client, $auth, $asset);
+      editPage($client, $auth, $asset, $type);
       if (!$cron) {echo '</div>';}
     }
     
@@ -271,7 +271,7 @@ function readPage($client, $auth, $id, $type) {
 }
 
 
-function editPage($client, $auth, $asset) {
+function editPage($client, $auth, $asset, $type) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   
   changes($asset, $type);
