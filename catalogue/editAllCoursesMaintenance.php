@@ -63,6 +63,14 @@ function changes(&$asset, $type) {
     }
   }
   foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $field) {
+    if ( $field->identifier == 'description' ) {
+      if ( preg_match('/\&amp;#160;/', $field->text) ) {
+        $field->text = preg_replace('/\&amp;#160;/', ' ', $field->text);
+        if (!$cron) {echo '#160 NBSPs removed.';}
+        $changed = true;
+      }
+    }
+
     if ( $field->identifier == 'related' && !strpos( $asset['path'], '/_archived/' ) ) {
     // } elseif ( $field->identifier == 'related' ) {
       // This code can be used to update the courses relationships when a discipline is renamed:
