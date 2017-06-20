@@ -95,7 +95,7 @@ function readPage($client, $auth, $id, $type) {
     if ($cron) {
       $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
     } else {
-      echo '<div class="f">Failed to read page: '.$id.'</div>';
+      echo '<div class="f">Failed to read page: '.$id['id'].'</div>';
     }
   }
 }
