@@ -2,7 +2,7 @@
 date_default_timezone_set('America/New_York');
 $title = 'Update Discipline Folder Areas-of-Study metadata';
 
-$year = '2016-2017';
+$year = '2017-2018';
 
 $start_asset = '817373157f00000101f92de5bea1554a';
 

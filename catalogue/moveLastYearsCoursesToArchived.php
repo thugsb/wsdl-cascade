@@ -7,7 +7,7 @@ $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 
 
 // Note: Change the year in the regex below. $move_to is meant to be blank
-$lastYear = '2015-2016';
+$lastYear = '2016-2017';
 
 $move_to = '';
 
