@@ -45,7 +45,7 @@ if (!$cron) {include(__DIR__.'/../html_header.php');}
 foreach ($csv as $key => $value) {
   // if ($key >= 2380 && $key < 3390) {
     // echo '<pre>'; print_r($value); echo '</pre>';
-    if ( !$value['isRecycled'] && $value['isCurrentVersion'] == 1 && $value['draftOriginalId'] == 'NULL' && ( $value['siteId'] == 'd9c23844c0a8022b3ff2b692a1ecfcf5' || $value['siteId'] == 'b1e7bedc7f00000100279c88a80da991' ) ) {
+    if ( !$value['isRecycled'] && $value['isCurrentVersion'] == 1 && $value['draftOriginalId'] == 'NULL' && ( $value['siteId'] == 'd9c23844c0a8022b3ff2b692a1ecfcf5' || $value['siteId'] == 'b1e7bedc7f00000100279c88a80da991' || $value['siteId'] == '2891e3df7f00000101b7715dd1bcfc57'  ) ) {
       readPage($client, $auth, array('id' => $value['id'], 'type' => 'file'), $value );
     }
   // }
