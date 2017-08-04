@@ -1,5 +1,9 @@
 <?php
 
+include_once(__DIR__.'/rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
 if (PHP_SAPI == 'cli') {
 	parse_str(implode('&', array_slice($argv, 1)), $_GET);
 	$cron = true;
@@ -28,17 +32,18 @@ curl_setopt_array($curl, array(
 $curlresult = curl_exec($curl);
 curl_close($curl);
 
+$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
 
-$headers = 'MIME-Version: 1.0' . "\r\n";
-$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-$headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
-$headers .= 'From: com@vm-www.slc.edu';
 
 
 if ($curlresult === false) {
-	$subject = 'Warning: Instagram Image Scraper Cron';
-	$match_fail_message = 'The instagram cURL returned FALSE. This probably just means it timed out. If this happens repeatedly, it will need investigating. This occurred while running for the '. $account .' account.';
-	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	$subject = 'Instagram Image Scraper cURL returned FALSE';
+	$match_fail_message = 'This probably just means it timed out. If this happens repeatedly, it will need investigating. '."\n".'This occurred while running for the '. $account .' account.';
+	$output = $subject . "\n" . $match_fail_message;
+	$response = Rollbar::log(Level::warning(), $output);
+  	if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+  	}
 	exit;
 }
 
@@ -51,8 +56,13 @@ $scrape = preg_match('/window\._sharedData = .*\}/', $curlresult, $matches); // 
 // echo $matches[0];
 
 if ( count($matches) < 1 ) {
-	$subject = 'Failed script warning: Instagram Image Scraper Cron';
-	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means the cURL was incomplete and is nothing to worry about. If this happens repeatedly, it might mean that Instagram has changed its HTML output and the script needs re-writing. This occurrred while running for the '. $account .' account.';
+	$subject = 'Instagram Image Scraper did not match regex';
+	$match_fail_message = 'The instagram cURL worked but the scrape did not match the regex. This probably means the cURL was incomplete and is nothing to worry about. If this happens repeatedly, it might mean that Instagram has changed its HTML output and the script needs re-writing. '."\n".'This occurrred while running for the '. $account .' account.';
+	$output = $subject . "\n" . $match_fail_message;
+	$response = Rollbar::log(Level::warning(), $output);
+  	if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+  	}
 	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
 }
@@ -78,10 +88,10 @@ foreach ($media as $key => $value) {
 	$thumb_filename = end( explode( '/', $thumb_url['path'] ) );
 	if( !file_exists( $serverPath . "thumb/".$account.'-'.$value->code.'.jpg') ) {
 		if ( $cron && copy($value->thumbnail_src, $serverPath ."thumb/".$account.'-'.$value->code.'.jpg' ) ) {
-			$message .= "<p style='color:#090'>Image thumb $key copied successfully.</p>";
+			$message .= "Image thumb $key copied successfully.\n";
 			$imageChanged = true;
 		} else {
-			$message .= "<p style='color:#900'>Image thumb $key copy failed. The .html output file will NOT be modified.</p>";
+			$message .= "Image thumb $key copy FAILED. The .html output file will NOT be modified.\n";
 			$copyFail = true;
 		}
 	}
@@ -89,10 +99,10 @@ foreach ($media as $key => $value) {
 	$filename = end( explode( '/', $large_url['path'] ) );
 	if( !file_exists( $serverPath ."large/".$account.'-'.$value->code.'.jpg') ) {
 		if ( $cron && copy($value->display_src, $serverPath ."large/".$account.'-'.$value->code.'.jpg' ) ) {
-			$message .= "<p style='color:#090'>Large image $key copied successfully.</p>";
+			$message .= "Large image $key copied successfully.\n";
 			$imageChanged = true;
 		} else {
-			$message .= "<p style='color:#900'>Large image $key copy failed. The .html output file will NOT be modified.</p>";
+			$message .= "Large image $key copy FAILED. The .html output file will NOT be modified.\n";
 			$copyFail = true;
 		}
 	}
@@ -141,24 +151,32 @@ $existingFileContents = file_get_contents($serverPath ."instagram-$account.html"
 
 if ($imageChanged || !file_exists($serverPath ."instagram-$account.html") || $output !== $existingFileContents ) {
 	if ($cron && file_put_contents($serverPath ."instagram-$account.html", $output) ) {
-		$message .= '<p style="color:#090">File HTML written successfully.</p>';
+		$message .= 'File HTML written successfully.'."\n";
 	} else {
-		$message .=  '<p style="color:#900">File HTML writing failed.</p>';
+		$message .=  'File HTML writing FAILED.'."\n";
 		$writeFail = true;
 	}
 }
 
-if ($message == '') {$message = '<p style="color:#009">No changes needed for the <a href="https://www.instagram.com/'.$account.'/">'.$account.'</a> account.</p>';} else {$message .= '<p>The script ran for the <a href="https://www.instagram.com/'.$account.'/">'.$account.'</a> account.</p>';}
+if ($message == '') {$message = 'No changes needed for the https://www.instagram.com/'.$account.' account.'."\n";} else {$message .= 'The script ran for the https://www.instagram.com/'.$account.' account.'."\n";}
 
 if ($cron) {
-	$headers = 'MIME-Version: 1.0' . "\r\n";
-	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	// $headers .= 'Cc: wjoell@sarahlawrence.edu' . "\r\n";
-    $headers .= 'From: com@vm-www.slc.edu';
-	if ($copyFail || $writeFail) {$subject = 'FAILED: Instagram Image Scraper Cron';} else {$subject = 'Instagram Image Scraper Cron';}
-	mail('stu@t.apio.ca', $subject, $message, $headers);
+	$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+	$subject = 'Instagram Image Scraper';
+	$rollbarOutput = $subject . "\n" . $message;
+	if ($copyFail || $writeFail) {
+		$response = Rollbar::log(Level::error(), $rollbarOutput);
+	  	if (!$response->wasSuccessful()) {
+	      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $rollbarOutput, $headers);
+	  	}
+	} else {
+		$response = Rollbar::log(Level::info(), $rollbarOutput);
+	  	if (!$response->wasSuccessful()) {
+	      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $rollbarOutput, $headers);
+	  	}
+	}
 } else {
-	echo $message;
+	echo '<pre>'.$message.'</pre>';
 	echo $output;
 	echo '<pre>';print_r($data);echo '</pre>';
 	// echo '<script>var data = "'. htmlspecialchars($curlresult) .'"; console.log(data);</script>';
