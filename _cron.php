@@ -1,6 +1,8 @@
 <?php
 
-error_reporting(0);
+include_once(__DIR__.'/rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
 
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
 
@@ -45,7 +47,7 @@ $ids = explode(',',$start_asset);
 if (!function_exists(readFolder)) {
 
   function readFolder($client, $auth, $id) {
-    global $asset_type, $asset_children_type, $data, $o;
+    global $asset_type, $asset_children_type, $data, $o, $total;
     $folder = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
     if ($folder->readReturn->success == 'true') {
     
@@ -80,7 +82,7 @@ if (!function_exists(readFolder)) {
   }
 
   function readPage($client, $auth, $id, $type) {
-    global $asset_type, $asset_children_type, $data, $o;
+    global $asset_type, $asset_children_type, $data, $o, $total;
     $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
     if ($reply->readReturn->success == 'true') {
       $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
@@ -144,17 +146,32 @@ if ($asset_type == 'folder' || preg_match('/container/', $asset_type) ) {
 
 $changed = true;
 
-$output = "<h1>Script: ".$_GET['s']."</h1>\n<h2>Summary</h2>".$o[0].'<h2>Errors</h2>'.$o[1].'<h2>Edited Assets</h2>'.$o[2].'<h2>All Assets Processed</h2>'.$o[3].'<h2>Folders Processed</h2>'.$o[4];
+$output = "Script: ".$_GET['s'] . "\n\nSummary:\n==========\n".$o[0];
+if (strlen($o[1]) > 0 ) {
+  $output .= "\n\n\nErrors:\n==========\n".$o[1];
+}
+if (strlen($o[2]) > 0 ) {
+  $output .= "\n\n\nEdited Assets:\n==========\n".$o[2];
+}
+if (strlen($o[3]) > 0 ) {
+  $output .= "\n\n\nAll Assets Processed:\n==========\n".$o[3];
+}
+if (strlen($o[4]) > 0 ) {
+  $output .= "\n\n\nFolders Processed:\n==========\n".$o[4];
+}
 
-// $full_details = '<h2>Children of the folders</h2>'.$o[5].'<h2>Edited Asset Content (before and after)</h2>'.$o[6];
+$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
 
-$subject = 'Re: WSDL Cron ';
-if ($total['f'] > 0) {$subject .= 'FAILED ';}
-$subject .= $_GET['s'];
-$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
-
-mail($email, $subject, $output, $headers);
-
-
+if ($total['f'] > 0) {
+  $response = Rollbar::log(Level::error(), $output);
+  if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+  }
+} else {
+  $response = Rollbar::log(Level::info(), $output);
+  if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+  }
+}
 
 ?>
