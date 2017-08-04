@@ -40,7 +40,6 @@ function changes(&$asset) {
   	return;
   }
 	
-	//$to      = 'thugsb@gmail.com';
 	$to      = 'tguiliano@sarahlawrence.edu';
   $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
 		
@@ -118,11 +117,9 @@ function changes(&$asset) {
     $subject = 'WARNING: Event does not exist in the XML'."\n";
 		$message .= 'The event "'.$asset['name'].'" was not found. As such, editing it failed. Is the $yearstart and $yearend set correctly?';
 		if ($cron) {
-      if ($_GET['email'] == true) {
-        $response = Rollbar::log(Level::warning(), $subject . $message);
-        if (!$response->wasSuccessful()) {
-          mail($to, 'Logging with Rollbar FAILED ' . $_GET['s'], $subject . $message, $headers);
-        }
+      $response = Rollbar::log(Level::warning(), $subject . $message);
+      if (!$response->wasSuccessful()) {
+        mail($to, 'Logging with Rollbar FAILED ' . $_GET['s'], $subject . $message, $headers);
       }
 		} else {
 			echo $message.'<hr/>';
