@@ -1,8 +1,11 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
-include_once('eventFolderIDs.php');
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
 
+include_once('eventFolderIDs.php');
 
 $yearpath = "events/$acad_year/";
 
@@ -79,7 +82,7 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     if ($cron) {
-      $o[4] .= '<div style="color:#009;">Folder: '.$asset["path"]."</div>";
+      $o[4] .= 'Folder: '.$asset["path"]."\n";
     }
     
     if ($_POST['children'] == 'on' && !$cron) {
@@ -90,7 +93,7 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"]."</div>";
+      $o[1] .= 'FAILED to read folder: '.$asset["path"]."\n";
     } else {
       echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
     }
@@ -125,14 +128,14 @@ function indexFolder($client, $auth, $asset) {
       }
       if (in_array($name, $event_names) ) {
         if ($cron) {
-          $o[3] .= $name.'<br>';
+          $o[3] .= $name."\n";
         } else {
           echo '<div class="k"><small>'.$name.' is in the XML feed.</small></div>';
         }
         $total['k']++;
       } elseif (strstr($name, '-eid') == false) {
           if ($cron) {
-            $o[3] .= $name.'<br>';
+            $o[3] .= $name."\n";
           } else {
             echo '<div class="k"><small>'.$name.' does not have an EID.</small></div>';
           }
@@ -140,17 +143,14 @@ function indexFolder($client, $auth, $asset) {
       } else {
         if (!$cron) {echo '<div><strong><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
         $to      = 'tguiliano@sarahlawrence.edu';
-        $subject = 'Event deleted from XML: '.$name;
-        $message = '<p><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a> has been deleted from the XML event feed.</p>';
-        $headers = 'From: com@vm-www.slc.edu' . "\r\n";
-        $headers .= 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= 'Cc: stu@t.apio.ca, wjoell@sarahlawrence.edu' . "\r\n";
+        $subject = 'Event deleted from XML: '."\n";
+        $message = $name."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page'."\n".'This event has been deleted from the XML event feed.'."\n";
+        $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
         
         $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array('id' => $child->id, 'type' => 'page') ) );
         if ($reply->readReturn->success == 'true') {
           $page_asset = ( array ) $reply->readReturn->asset->page;
-          $message .= '<h4>'. $page_asset['metadata']->title .'</h4>';
+          $message .= 'Title: '. $page_asset['metadata']->title ."\n";
         }
         
         if ($_GET['operation'] == 'unpublish') {
@@ -159,20 +159,20 @@ function indexFolder($client, $auth, $asset) {
           }
           if ($publish->publishReturn->success == 'true') {
             if ($cron) {
-              $o[2] .= $name.' was unpublished<br>';
+              $o[2] .= $name.' was unpublished'."\n";
             } else {
               echo '<div class="s">'.$name.' was unpublished</div>';
             }
-            $message .= '<p>The event has been <span style="color:#090">successfully</span> unpublished.</p>';
+            $message .= 'The event has been SUCCESSFULLY unpublished.'."\n";
             $total['s']++;
           } else {
             if ($cron) {
-              $o[1] .= $name.' FAILED to unpublish<br>';
+              $o[1] .= $name.' FAILED to unpublish'."\n";
             } else {
               echo '<div class="f">'.$name.' could not be unpublished</div>';
               print_r($publish);
             }
-            $message .= '<p>The event <span style="color:#900">failed to unpublish</span>.</p>';
+            $message .= 'The event FAILED to unpublish'."\n";
             $total['f']++;
           }
         } else if ($_GET['operation'] == 'move') {
@@ -181,37 +181,40 @@ function indexFolder($client, $auth, $asset) {
           }
           if ($move->moveReturn->success == 'true') {
             if ($cron) {
-              $o[2] .= $name.' was moved to _deleted<br>';
+              $o[2] .= $name.' was moved to _deleted'."\n";
             } else {
               echo '<div class="s">'.$name.' was moved to _deleted</div>';
             }
-            $message .= '<p>The event has been <span style="color:#090">successfully</span> moved into the _deleted folder.</p>';
+            $message .= 'The event has been SUCCESSFULLY moved into the _deleted folder.'."\n";
             $total['s']++;
           } else {
             if ($cron) {
-              $o[1] .= $name.' FAILED to move<br>';
+              $o[1] .= $name.' FAILED to move'."\n";
             } else {
               echo '<div class="f">'.$name.' could not be moved. '.($_POST['action'] == 'edit' ? '(Edit enabled)':'(Edit disabled)').'</div>';
               print_r($move);
             }
-            $message .= '<p>The event <span style="color:#900">failed to move</span> into the _deleted folder.</p>';
+            $message .= 'The event FAILED to move into the _deleted folder.'."\n";
             $total['f']++;
           }
         } else {
-          $message .= '<div class="k" style="color:#900">No operation specified, so both unpublish and move failed.</div>';
+          $message .= 'No operation specified, so both unpublish and move FAILED.'."\n";
         }
-        $message .= '<p>Please review this event.</p>';
-        $message .= "<p>Here are other events that match the same name:</p><ul>";
+        $message .= 'Please review this event.'."\n";
+        $message .= "Here are other events that match the same name:"."\n";
         foreach ($name_matches as $ev) {
-          $message .= '<li>'.$ev.'</li>';
+          $message .= '* '.$ev."\n";
         }
-        $message .= '</ul><p>Here are other events that match the same date:</p><ul>';
+        $message .= "\n\n".'Here are other events that match the same date:'."\n";
         foreach ($date_matches as $ev) {
-          $message .= '<li>'.$ev.'</li>';
+          $message .= '* '.$ev."\n";
         }
-        $message .= '</ul>';
+        $message .= "\n\n";
         if ($cron) {
-          mail($to, $subject, $message, $headers);
+          $response = Rollbar::log(Level::info(), $subject . $message);
+          if (!$response->wasSuccessful()) {
+            mail($to, 'Logging with Rollbar FAILED ' . $_GET['s'], $subject . $message, $headers);
+          }
         } else {
           echo $message.'<hr/>';
         }
