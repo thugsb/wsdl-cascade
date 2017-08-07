@@ -177,7 +177,7 @@ function changes(&$asset, $type) {
   }
 }
 
-include('relatedIDs.php');
+include_once(__DIR__.'/relatedIDs.php');
 
 
 if (!$cron) {
