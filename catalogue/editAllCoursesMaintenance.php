@@ -107,7 +107,7 @@ function changes(&$asset, $type) {
             }
             $matchNew = false;
             
-            $children_array = is_object($dest["children"]->child) ? array($dest["children"]->child) : $dest["children"]->child;
+            $children_array = is_array($dest["children"]->child) ? $dest["children"]->child : array($dest["children"]->child);
             
             foreach ($children_array as $key=>$existingRef) {
               if (strcmp(basename($existingRef->path->path), $asset['name']) === 0) {
