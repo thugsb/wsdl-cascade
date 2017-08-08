@@ -1,6 +1,10 @@
 <?php 
 date_default_timezone_set('America/New_York');
 
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
 include_once('eventFolderIDs.php');
 
 
@@ -44,8 +48,12 @@ $start_asset = $year_folder;
 $message .= 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd ';
 
 if ($cron) {
-  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
-  mail('stu@t.apio.ca','Events Import Script Started',date('D, d M Y H:i'), $headers );
+  $output = 'Events Import Script Started' ."\n". date('D, d M Y H:i');
+  $response = Rollbar::log(Level::info(), $output);
+  if (!$response->wasSuccessful()) {
+    $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+    mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+  }
 }
 
 function pagetest($child) {
@@ -95,7 +103,7 @@ function changes(&$asset, $event_n) {
     $summary = str_replace('&nbsp;','&#160;',$summary);
     $summary = str_replace('<p>&#160;</p>','',$summary);
     if ($cron) {
-      $o[1] .= '<div style="color:#900;">PHP Tidy: '.$tidy->errorBuffer."</div>";
+      $o[1] .= 'PHP Tidy: '.$tidy->errorBuffer."\n";
     } else {
       echo '<div class="f">PHP Tidy: '.$tidy->errorBuffer.'</div>';
     }
@@ -267,7 +275,7 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     if ($cron) {
-      $o[4] .= '<div style="color:#009;">Folder: '.$asset["path"]."</div>";
+      $o[4] .= 'Folder: '.$asset["path"]."\n";
     }
 
     if ($_POST['children'] == 'on' && !$cron) {
@@ -278,9 +286,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {  
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"]."</div>";
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
   }
 }
@@ -304,21 +312,21 @@ function indexFolder($client, $auth, $asset) {
 
     } else if (in_array($asset['path'].'/_archived/'.$event_n, $all_event_assets) ) {
       if ($cron) {
-        $o[3] .= '<h4>'.$event_n.' (Archived)</h4>';
+        $o[3] .= $event_n.' (Archived)'."\n";
       } else {
         echo '<h4>'.$event_n.'</h4><div class="k">Archived</div>';
       }
       $total['k']++;
     } else if (in_array($asset['path'].'/_pending/'.$event_n, $all_event_assets) ) {
       if ($cron) {
-        $o[3] .= '<h4>'.$event_n.' (Pending)</h4>';
+        $o[3] .= $event_n.' (Pending)'."\n";
       } else {
         echo '<h4>'.$event_n.'</h4><div class="k">Pending</div>';
       }
       $total['k']++;
     } else if (in_array($asset['path'].'/_rejected/'.$event_n, $all_event_assets) ) {
       if ($cron) {
-        $o[3] .= '<h4>'.$event_n.' (Inactive)</h4>';
+        $o[3] .= $event_n.' (Inactive)'."\n";
       } else {
         echo '<h4>'.$event_n.'</h4><div class="k">Inactive</div>';
       }
@@ -337,7 +345,7 @@ function indexFolder($client, $auth, $asset) {
       }
       if ($copy->copyReturn->success == 'true') {
         if ($cron) {
-          $o[2] .= '<div style="color:#090;">Created successfully: '.$event_n."</div>";
+          $o[2] .= 'Created successfully: '.$event_n."\n";
         } else {
           echo '<div class="s">Created successfully: '.$event_n.'</div>';
         }
@@ -348,7 +356,7 @@ function indexFolder($client, $auth, $asset) {
           $result = $client->__getLastResponse();
         }
         if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation failed: '.$event_n.'<div>'.extractMessage($result)."</div></div>";
+          $o[1] .= 'Creation FAILED: '.$event_n."\n".extractMessage($result)."\n\n";
         } else {
           echo '<div class="f">Creation failed: '.$event_n.'<div>'.extractMessage($result).'</div></div>';
         }
@@ -370,7 +378,7 @@ function readPage($client, $auth, $id, $type, $event_n) {
       echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     if ($cron) {
-      $o[3] .= '<div style="color:#090;"><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></div>";
+      $o[3] .= $asset['path'].$name."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
     }
     
     if (edittest($asset)) {
@@ -395,7 +403,7 @@ function readPage($client, $auth, $id, $type, $event_n) {
       $result = $client->__getLastResponse();
     }
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id['path']."<div>".extractMessage($result)."</div></div>";
+      $o[1] .= 'FAILED to read page: '.$id['path']."\n".extractMessage($result)."\n\n";
     } else {
       echo '<div class="f">Failed to read page: '.$id['path']."<div>".extractMessage($result)."</div></div>";
     }
@@ -420,7 +428,7 @@ function editPage($client, $auth, $asset, $event_n) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -431,7 +439,7 @@ function editPage($client, $auth, $asset, $event_n) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a>".'<div>'.extractMessage($result).'</div></div>';
+        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".extractMessage($result)."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       }

@@ -9,7 +9,7 @@ $start_asset = '817373157f00000101f92de5bea1554a';
 $asset_type = 'folder';
 $asset_children_type = 'reference';
 
-include_once('./relatedIDs.php');
+include_once(__DIR__.'/relatedIDs.php');
 
 
 $year = '2017-2018';
