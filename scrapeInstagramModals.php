@@ -169,11 +169,6 @@ if ($cron) {
 	  	if (!$response->wasSuccessful()) {
 	      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $rollbarOutput, $headers);
 	  	}
-	} else {
-		$response = Rollbar::log(Level::info(), $rollbarOutput);
-	  	if (!$response->wasSuccessful()) {
-	      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $rollbarOutput, $headers);
-	  	}
 	}
 } else {
 	echo '<pre>'.$message.'</pre>';
