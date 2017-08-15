@@ -75,6 +75,9 @@ $data = json_decode($json);
 
 $media = $data->entry_data->ProfilePage[0]->user->media->nodes;
 
+if (!is_array($media) {
+	$media = array($media);
+}
 
 $imageChanged = false;
 $copyFail = false;
