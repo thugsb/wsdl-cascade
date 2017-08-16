@@ -182,9 +182,6 @@ function changes(&$asset, $event_n) {
 
 if (array_key_exists('submit',$_POST) || $cron) {
   if ($cron) {
-    $o[1] .= '';
-  }
-  if ($cron) {
     $client = new SoapClient ( 'https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl', array ('trace' => 1 ) );	
     $auth = array ('username' => $username, 'password' => $password );  
   } else {
