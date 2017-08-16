@@ -108,7 +108,7 @@ function readFolder($client, $auth, $id) {
     }
 
     if ($cron) {
-      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
@@ -120,9 +120,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
   }
 }

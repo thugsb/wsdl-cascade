@@ -275,7 +275,7 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     if ($cron) {
-      $o[4] .= 'Folder: '.$asset["path"]."\n";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     }
 
     if ($_POST['children'] == 'on' && !$cron) {
