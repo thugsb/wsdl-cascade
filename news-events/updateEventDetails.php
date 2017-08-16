@@ -249,7 +249,7 @@ function editPage($client, $auth, $asset) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -280,7 +280,7 @@ function editPage($client, $auth, $asset) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".htmlspecialchars(extractMessage($result))."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".htmlspecialchars(extractMessage($result)).'</div></div>';
       }

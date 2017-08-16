@@ -284,7 +284,7 @@ function readFolder($client, $auth, $id) {
       echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
-  } else {  
+  } else {
     if ($cron) {
       $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
@@ -428,7 +428,7 @@ function editPage($client, $auth, $asset, $event_n) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -439,7 +439,7 @@ function editPage($client, $auth, $asset, $event_n) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".extractMessage($result)."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       }
