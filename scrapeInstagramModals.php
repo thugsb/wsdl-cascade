@@ -22,6 +22,12 @@ if ( $site == 'sarahlawrencecollege' ) {
 } elseif ($site == 'local' ) {
 	$serverPath = '/Users/Resist/Sites/instagram/';
 	$sitePath = '../instagram/';
+} elseif ($site == 'test' ) {
+	$serverPath = '/srv/www/test.slc.edu/_assets/instagram/';
+	$sitePath = '/_assets/instagram/';
+} elseif ($site == 'testcurb' ) {
+	$serverPath = '/srv/www/test.centerfortheurbanriver.org/core/instagram/';
+	$sitePath = '/core/instagram/';
 }
 
 $curl = curl_init();
