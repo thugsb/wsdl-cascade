@@ -1,6 +1,7 @@
 _credentials.php
 .htaccess
 grabInstagram.php
+rollbar-init.php
 *.sublime-*
 indexes/
 vendor/
