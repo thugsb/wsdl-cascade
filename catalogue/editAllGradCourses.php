@@ -157,7 +157,7 @@ function readPage($client, $auth, $id, $type) {
     } elseif (preg_match('/Discipline/', $asset["contentTypePath"])) {
       $total['f']++;
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Undergrad content type! '.$asset['path'].'</div>';
+        $o[1] .= 'Undergrad content type! '.$asset['path']."\n";
       } else {
         echo '<div class="f">Undergrad content type! '.$asset['path'].'</div>';
       }

@@ -259,14 +259,14 @@ function editPage($client, $auth, $asset) {
         $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $asset['id']), 'unpublish' => false ) ) );
         if ($publish->publishReturn->success == 'true') {
           if ($cron) {
-            $o[2] .= $asset['path'].' was published';
+            $o[2] .= $asset['path'].' was published'."\n";
           } else {
             echo '<div class="s">'.$asset['path'].' was published</div>';
           }
           $total['s']++;
         } else {
           if ($cron) {
-            $o[1] .= $asset['path'].' FAILED to publish';
+            $o[1] .= $asset['path'].' FAILED to publish'."\n";
           } else {
             echo '<div class="f">'.$asset['path'].' could not be published</div>';
             print_r($publish);

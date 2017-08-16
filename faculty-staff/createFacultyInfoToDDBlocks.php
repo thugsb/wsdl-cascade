@@ -194,7 +194,7 @@ function createAssignAccess($client, $auth, $asset) {
         if ($copy->copyReturn->success == 'true') {
 
           if ($cron) {
-            $o[3] .= '<div>Info Block Copy success for '.$asset['name'].'</div>';
+            $o[3] .= 'Info Block Copy success for '.$asset['name']."\n";
           } else {
             echo '<div class="s">Info Block Copy success</div>';
           }
@@ -211,14 +211,14 @@ function createAssignAccess($client, $auth, $asset) {
             }
           } else {
             if ($cron) {
-              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read info blocks folder to find the ID of the block</div>';
+              $o[1] .= 'Failed to read info blocks folder to find the ID of the block'."\n";
             } else {
               echo '<div class="f">Failed to read info blocks folder to find the ID of the block</div>';
             }
           }
         } else {
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Info Block Copy failed: '.$asset['path'].'</div>';
+            $o[1] .= 'Info Block Copy failed: '.$asset['path']."\n";
           } else {
             $result = $client->__getLastResponse();
             echo '<div class="f">Info Block Copy failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
@@ -228,7 +228,7 @@ function createAssignAccess($client, $auth, $asset) {
       }
     } else {
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read info blocks folder to see if a faculty block existed</div>';
+        $o[1] .= 'Failed to read info blocks folder to see if a faculty block existed'."\n";
       } else {
         echo '<div class="f">Failed to read info blocks folder to see if a faculty block existed</div>';
       }
@@ -284,7 +284,7 @@ function createAssignAccess($client, $auth, $asset) {
           $editAccess = $client->editAccessRights ( array ('authentication' => $auth, 'accessRightsInformation' => $accessRightsInformation, 'applyToChildren' => false ) );
           if ($editAccess->editAccessRightsReturn->success == 'true') {
             if ($cron) {
-              $o[2] .= '<div style="color:#090;">Edit rights success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$blockID.'&type=block_XHTML_DATADEFINITION#highlight">'.$asset['path']."</a></div>";
+              $o[2] .= 'Edit rights success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$blockID.'&type=block_XHTML_DATADEFINITION'."\n";
             } else {
               echo '<div class="s">Edit rights success</div>';
             }
@@ -293,7 +293,7 @@ function createAssignAccess($client, $auth, $asset) {
           } else {
             
             if ($cron) {
-              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit rights failed: '.$asset['path'].'</div>';
+              $o[1] .= 'Edit rights failed: '.$asset['path']."\n";
             } else {
               $result = $client->__getLastResponse();
               echo '<div class="f">Edit rights failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
@@ -304,7 +304,7 @@ function createAssignAccess($client, $auth, $asset) {
 
         } else {
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Access Read failed</div>';
+            $o[1] .= 'Access Read failed'.print_r($blockAsset, true)."\n";
           } else {
             echo '<div class="f">Access Read failed</div>';
           }
@@ -312,7 +312,7 @@ function createAssignAccess($client, $auth, $asset) {
         }
       } else {  
         if ($cron) {
-          $o[1] .= '<div>No email, no access!</div>';
+          $o[1] .= 'No email, no access!'."\n";
         } else {
           echo 'No email, no access!';
         }

@@ -130,7 +130,7 @@ function changes(&$asset, $type) {
                 }
                 if ($create->createReturn->success === 'true') {
                   if ($cron) {
-                    $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
+                    $o[0] .= 'A reference was created for '.$asset['name']."\n". 'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type." in $discFolder/$year/related/\n";
                   } else {
                     echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
                   }
@@ -138,7 +138,7 @@ function changes(&$asset, $type) {
                 } else {
                   if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
                   if ($cron) {
-                    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+                    $o[1] .= 'Creation of a reference failed for '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page">'."\n".htmlspecialchars(extractMessage($result))."\n\n";
                   } else {
                     echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
                   }
@@ -149,14 +149,14 @@ function changes(&$asset, $type) {
               
           } else {
             if ($cron) {
-              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+              $o[1] .= 'Failed to read folder for '.$discFolder.' with ID '.$relatedIDs[$discFolder]."\n";
             } else {
-              echo '<div class="f">Failed to read folder: '.$discFolder.'</div>';
+              echo '<div class="f">Failed to read folder for '.$discFolder.' with ID '.$relatedIDs[$discFolder].'</div>';
             }
           }
         } else {  
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline related folder ID does not exist: '.$disc.'</div>';
+            $o[1] .= 'Discipline related folder ID does not exist: '.$disc."\n";
           } else {
             echo '<div class="f">Discipline related folder ID does not exist: '.$disc.'</div>';
           }
@@ -167,7 +167,7 @@ function changes(&$asset, $type) {
         }
         if ($disc !== '') {
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.' for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name'].'</a></div>';
+            $o[1] .= 'Related Discipline does not exist: '.$disc.' for '.$asset['name']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
           } else {
             echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
           }

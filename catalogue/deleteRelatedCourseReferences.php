@@ -100,7 +100,7 @@ function readReference($client, $auth, $id, $type) {
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
 
     if ($cron) {
-      $o[3] .= '<h3>Reference: '.$asset['path'].'</h3>';
+      $o[3] .= 'Reference: '.$asset['path']."\n";
     } else {
       echo '<h3>Reference: '.$asset['path'].'</h3>';
     }
@@ -179,14 +179,14 @@ function deleteReference($reference) {
   }
   if ($delete->deleteReturn->success == 'true') {
     if ($cron) {
-      $o[0] .= "<div style='color:#090;'>The reference ".$reference['path']. " was deleted</div>";
+      $o[0] .= "The reference ".$reference['path']. " was deleted\n";
     } else {
       echo '<div class="s">Deletion Success</div>';
     }
     $total['s']++;
   } else {
     if ($cron) {
-      $o[1] .= "<div style='padding:3px;color:#fff;background:#c00;'>".$reference['path']. " failed to delete</div>";
+      $o[1] .= $reference['path']. " failed to delete\n";
     } else {
       if ($_POST['action'] == 'edit') {
         $result = $client->__getLastResponse();

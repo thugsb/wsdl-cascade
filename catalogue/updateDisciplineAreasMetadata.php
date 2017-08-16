@@ -167,7 +167,7 @@ function indexFolder($client, $auth, $asset) {
         }
       } else {
         if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
+          $o[1] .= 'Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array'."\n";
         } else {
           echo '<div class="f">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
         }
@@ -219,7 +219,7 @@ function indexFolder($client, $auth, $asset) {
       }
     } else {
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline folder with ID '. $disciplineFolderID .' read failed</div>';
+        $o[1] .= 'Discipline folder with ID '. $disciplineFolderID .' read failed'."\n";
       } else {
         echo '<div class="f">Discipline folder read failed</div>';
       }
