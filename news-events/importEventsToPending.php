@@ -378,7 +378,7 @@ function readPage($client, $auth, $id, $type, $event_n) {
       echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     if ($cron) {
-      $o[3] .= $asset['path'].$name."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     }
     
     if (edittest($asset)) {
@@ -403,9 +403,9 @@ function readPage($client, $auth, $id, $type, $event_n) {
       $result = $client->__getLastResponse();
     }
     if ($cron) {
-      $o[1] .= 'FAILED to read page: '.$id['path']."\n".extractMessage($result)."\n\n";
+      $o[1] .= 'FAILED to read page: '.print_r($id, true)."\n".extractMessage($result)."\n\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id['path']."<div>".extractMessage($result)."</div></div>";
+      echo '<div class="f">Failed to read page: '.print_r($id, true)."<div>".extractMessage($result)."</div></div>";
     }
   }
 }
