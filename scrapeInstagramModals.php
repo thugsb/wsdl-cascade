@@ -26,7 +26,7 @@ if ( $site == 'sarahlawrencecollege' ) {
 	$serverPath = '/srv/www/test.slc.edu/_assets/instagram/';
 	$sitePath = '/_assets/instagram/';
 } elseif ($site == 'testcurb' ) {
-	$serverPath = '/srv/www/test.centerfortheurbanriver.org)/core/instagram/';
+	$serverPath = '/srv/www/test.centerfortheurbanriver.org/core/instagram/';
 	$sitePath = '/core/instagram/';
 }
 
