@@ -55,7 +55,7 @@ function readFolder($client, $auth, $id) {
     } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
-    if ($_POST['children'] == 'on' && !$cron) {
+    if (!$cron && $_POST['children'] == 'on') {
       echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset["children"]); // Shows all the children of the folder
       echo '</div></div>';
@@ -118,7 +118,7 @@ function readPage($client, $auth, $id) {
 function editPage($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   if (!$cron) {echo '<div class="page">';}
-  if ($_POST['before'] == 'on' && !$cron) {
+  if (!$cron && $_POST['before'] == 'on') {
     echo '<button class="btn" href="#bModal'.$asset['id'].'" data-toggle="modal">View Before</button><div id="bModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
       print_r($asset); // Shows the page in all its glory
     echo '</div></div>';
@@ -133,7 +133,7 @@ function editPage($client, $auth, $asset) {
   
   changes($asset);
   
-  if ($_POST['after'] == 'on' && !$cron) {
+  if (!$cron && $_POST['after'] == 'on') {
     echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
       print_r($asset); // Shows the page as it will be
     echo '</div></div>';
