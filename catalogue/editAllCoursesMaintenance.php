@@ -130,7 +130,7 @@ function changes(&$asset, $type) {
                 }
                 if ($create->createReturn->success === 'true') {
                   if ($cron) {
-                    $o[0] .= '<div style="color:#090;">A reference was created for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name']."</a> in $discFolder/$year/related/</div>";
+                    $o[0] .= 'A reference was created for '.$asset['name']."\n". 'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type." in $discFolder/$year/related/\n";
                   } else {
                     echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
                   }
@@ -138,7 +138,7 @@ function changes(&$asset, $type) {
                 } else {
                   if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
                   if ($cron) {
-                    $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation of a reference failed for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+                    $o[1] .= 'Creation of a reference failed for '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page">'."\n".htmlspecialchars(extractMessage($result))."\n\n";
                   } else {
                     echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
                   }
@@ -149,14 +149,14 @@ function changes(&$asset, $type) {
               
           } else {
             if ($cron) {
-              $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+              $o[1] .= 'Failed to read folder for '.$discFolder.' with ID '.$relatedIDs[$discFolder]."\n";
             } else {
-              echo '<div class="f">Failed to read folder: '.$discFolder.'</div>';
+              echo '<div class="f">Failed to read folder for '.$discFolder.' with ID '.$relatedIDs[$discFolder].'</div>';
             }
           }
         } else {  
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline related folder ID does not exist: '.$disc.'</div>';
+            $o[1] .= 'Discipline related folder ID does not exist: '.$disc."\n";
           } else {
             echo '<div class="f">Discipline related folder ID does not exist: '.$disc.'</div>';
           }
@@ -167,7 +167,7 @@ function changes(&$asset, $type) {
         }
         if ($disc !== '') {
           if ($cron) {
-            $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Related Discipline does not exist: '.$disc.' for <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['name'].'</a></div>';
+            $o[1] .= 'Related Discipline does not exist: '.$disc.' for '.$asset['name']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
           } else {
             echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
           }
@@ -193,7 +193,7 @@ function readFolder($client, $auth, $id) {
     
     $asset = ( array ) $folder->readReturn->asset->$asset_type;
     if ($cron) {
-      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
@@ -209,9 +209,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
   }
 }
@@ -243,7 +243,7 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
@@ -271,9 +271,9 @@ function readPage($client, $auth, $id, $type) {
     
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
+      $o[1] .= 'Failed to read page: '.print_r($id, true)."\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id.'</div>';
+      echo '<div class="f">Failed to read page: '.print_r($id, true).'</div>';
     }
   }
 }
@@ -296,7 +296,7 @@ function editPage($client, $auth, $asset, $type) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type.'#highlight">'.$asset['path']."</a></div>";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -306,7 +306,7 @@ function editPage($client, $auth, $asset, $type) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type.'#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
       }

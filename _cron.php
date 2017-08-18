@@ -44,7 +44,7 @@ $ids = explode(',',$start_asset);
 
 
 
-if (!function_exists(readFolder)) {
+if (!function_exists('readFolder')) {
 
   function readFolder($client, $auth, $id) {
     global $asset_type, $asset_children_type, $data, $o, $total;

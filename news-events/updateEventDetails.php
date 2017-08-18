@@ -162,9 +162,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= 'FAILED to read folder: '.$asset["path"]."\n";
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
   }
 }
@@ -196,7 +196,7 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
@@ -224,9 +224,9 @@ function readPage($client, $auth, $id, $type) {
     
   } else {
     if ($cron) {
-      $o[1] .= 'FAILED to read page: '.$id."\n";
+      $o[1] .= 'Failed to read page: '.print_r($id, true)."\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id.'</div>';
+      echo '<div class="f">Failed to read page: '.print_r($id, true).'</div>';
     }
   }
 }
@@ -249,7 +249,7 @@ function editPage($client, $auth, $asset) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -259,14 +259,14 @@ function editPage($client, $auth, $asset) {
         $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => $asset_children_type, 'id' => $asset['id']), 'unpublish' => false ) ) );
         if ($publish->publishReturn->success == 'true') {
           if ($cron) {
-            $o[2] .= $asset['path'].' was published';
+            $o[2] .= $asset['path'].' was published'."\n";
           } else {
             echo '<div class="s">'.$asset['path'].' was published</div>';
           }
           $total['s']++;
         } else {
           if ($cron) {
-            $o[1] .= $asset['path'].' FAILED to publish';
+            $o[1] .= $asset['path'].' FAILED to publish'."\n";
           } else {
             echo '<div class="f">'.$asset['path'].' could not be published</div>';
             print_r($publish);
@@ -280,7 +280,7 @@ function editPage($client, $auth, $asset) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".htmlspecialchars(extractMessage($result))."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".htmlspecialchars(extractMessage($result)).'</div></div>';
       }

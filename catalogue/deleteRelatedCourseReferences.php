@@ -51,7 +51,7 @@ function readFolder($client, $auth, $id) {
     
     $asset = ( array ) $folder->readReturn->asset->$asset_type;
     if ($cron) {
-      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
@@ -63,9 +63,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
   }
 }
@@ -100,7 +100,7 @@ function readReference($client, $auth, $id, $type) {
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
 
     if ($cron) {
-      $o[3] .= '<h3>Reference: '.$asset['path'].'</h3>';
+      $o[3] .= 'Reference: '.$asset['path']."\n";
     } else {
       echo '<h3>Reference: '.$asset['path'].'</h3>';
     }
@@ -138,7 +138,7 @@ function readPage($client, $auth, $id, $disciplineName, $reference) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$id['type'].'#highlight">'.$asset['path']."</a></h4>";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
@@ -164,9 +164,9 @@ function readPage($client, $auth, $id, $disciplineName, $reference) {
     
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id->id.'</div>';
+      $o[1] .= 'Failed to read page: '.print_r($id, true)."\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id->id.'. This is probably because the course page was deleted, and so the reference to it will be deleted also.</div>';
+      echo '<div class="f">Failed to read page: '.print_r($id, true).'. This is probably because the course page was deleted, and so the reference to it will be deleted also.</div>';
     }
     deleteReference($reference);
   }
@@ -179,14 +179,14 @@ function deleteReference($reference) {
   }
   if ($delete->deleteReturn->success == 'true') {
     if ($cron) {
-      $o[0] .= "<div style='color:#090;'>The reference ".$reference['path']. " was deleted</div>";
+      $o[0] .= "The reference ".$reference['path']. " was deleted\n";
     } else {
       echo '<div class="s">Deletion Success</div>';
     }
     $total['s']++;
   } else {
     if ($cron) {
-      $o[1] .= "<div style='padding:3px;color:#fff;background:#c00;'>".$reference['path']. " failed to delete</div>";
+      $o[1] .= $reference['path']. " failed to delete\n";
     } else {
       if ($_POST['action'] == 'edit') {
         $result = $client->__getLastResponse();

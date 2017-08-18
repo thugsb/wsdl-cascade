@@ -108,7 +108,7 @@ function readFolder($client, $auth, $id) {
     }
 
     if ($cron) {
-      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
@@ -120,9 +120,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
   }
 }
@@ -167,7 +167,7 @@ function indexFolder($client, $auth, $asset) {
         }
       } else {
         if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
+          $o[1] .= 'Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array'."\n";
         } else {
           echo '<div class="f">Warning: Discipline "'. $disciplineFolderName .'" is not in lookup array</div>';
         }
@@ -219,7 +219,7 @@ function indexFolder($client, $auth, $asset) {
       }
     } else {
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Discipline folder with ID '. $disciplineFolderID .' read failed</div>';
+        $o[1] .= 'Discipline folder with ID '. $disciplineFolderID .' read failed'."\n";
       } else {
         echo '<div class="f">Discipline folder read failed</div>';
       }
@@ -242,7 +242,7 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
@@ -256,9 +256,9 @@ function readPage($client, $auth, $id, $type) {
     
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
+      $o[1] .= 'Failed to read page: '.print_r($id, true)."\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id.'</div>';
+      echo '<div class="f">Failed to read page: '.print_r($id, true).'</div>';
     }
   }
 }
@@ -281,7 +281,7 @@ function editFolder($client, $auth, $asset, $dyn) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -291,7 +291,7 @@ function editFolder($client, $auth, $asset, $dyn) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".htmlspecialchars(extractMessage($result)).'</div></div>';
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
       }

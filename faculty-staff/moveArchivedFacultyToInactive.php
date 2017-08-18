@@ -51,11 +51,11 @@ function readFolder($client, $auth, $id) {
     
     $asset = ( array ) $folder->readReturn->asset->$asset_type;
     if ($cron) {
-      $o[4] .= "<h4>Folder: ".$asset["path"]."</h4>";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     } elseif ($_POST['folder'] == 'on') {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
-    if ($_POST['children'] == 'on' && !$cron) {
+    if (!$cron && $_POST['children'] == 'on') {
       echo '<button class="btn" href="#cModal'.$asset['id'].'" data-toggle="modal">View Children</button><div id="cModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
         print_r($asset["children"]); // Shows all the children of the folder
       echo '</div></div>';
@@ -63,9 +63,9 @@ function readFolder($client, $auth, $id) {
     indexFolder($client, $auth, $asset);
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read folder: '.$asset["path"].'</div>';
+      $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
-      echo '<div class="f">Failed to read folder: '.$asset["path"].'</div>';
+      echo '<div class="f">Failed to read folder: '.$id["id"].'</div>';
     }
     $total['f']++;
   }
@@ -95,7 +95,7 @@ function readPage($client, $auth, $id) {
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
     if ($cron) {
-      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       echo '<h4>'.$asset['path']."</h4>";
     }
@@ -106,9 +106,9 @@ function readPage($client, $auth, $id) {
     
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Failed to read page: '.$id.'</div>';
+      $o[1] .= 'Failed to read page: '.print_r($id, true)."\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id.'</div>';
+      echo '<div class="f">Failed to read page: '.print_r($id, true).'</div>';
     }
     $total['f']++;
   }
@@ -118,7 +118,7 @@ function readPage($client, $auth, $id) {
 function editPage($client, $auth, $asset) {
   global $total, $asset_type, $asset_children_type, $data, $changed, $o, $cron;
   if (!$cron) {echo '<div class="page">';}
-  if ($_POST['before'] == 'on' && !$cron) {
+  if (!$cron && $_POST['before'] == 'on') {
     echo '<button class="btn" href="#bModal'.$asset['id'].'" data-toggle="modal">View Before</button><div id="bModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
       print_r($asset); // Shows the page in all its glory
     echo '</div></div>';
@@ -133,7 +133,7 @@ function editPage($client, $auth, $asset) {
   
   changes($asset);
   
-  if ($_POST['after'] == 'on' && !$cron) {
+  if (!$cron && $_POST['after'] == 'on') {
     echo '<button class="btn" href="#aModal'.$asset['id'].'" data-toggle="modal">View After</button><div id="aModal'.$asset['id'].'" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-body">';
       print_r($asset); // Shows the page as it will be
     echo '</div></div>';
@@ -145,14 +145,14 @@ function editPage($client, $auth, $asset) {
       $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $asset["id"]), 'unpublish' => true ) ) );
       if ($publish->publishReturn->success == 'true') {
         if ($cron) {
-          $o[2] .= $asset['name'].' was unpublished<br>';
+          $o[2] .= $asset['name'].' was unpublished'."\n";
         } else {
           echo '<div class="s">'.$asset['name'].' was unpublished</div>';
         }
         $total['s']++;
       } else {
         if ($cron) {
-          $o[1] .= $asset['name'].' FAILED to unpublish<br>';
+          $o[1] .= $asset['name'].' FAILED to unpublish'."\n";
         } else {
           echo '<div class="f">'.$asset['name'].' could not be unpublished</div>';
           print_r($publish);
@@ -164,7 +164,7 @@ function editPage($client, $auth, $asset) {
       $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'6824bab27f00000101b7715d4c99fd4c'), 'doWorkflow'=>false) ) );
       if ($move->moveReturn->success == 'true') {
         if ($cron) {
-          $o[2] .= '<div style="color:#090;">Move success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[2] .= 'Move success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
         } else {
           echo '<div class="s">Move success</div>';
         }
@@ -174,7 +174,7 @@ function editPage($client, $auth, $asset) {
           $result = $client->__getLastResponse();
         }
         if ($cron) {
-          $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Move failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
+          $o[1] .= 'Move failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
         } else {
           echo '<div class="f">Move failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
         }

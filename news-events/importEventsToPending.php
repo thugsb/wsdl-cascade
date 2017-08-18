@@ -182,9 +182,6 @@ function changes(&$asset, $event_n) {
 
 if (array_key_exists('submit',$_POST) || $cron) {
   if ($cron) {
-    $o[1] .= '';
-  }
-  if ($cron) {
     $client = new SoapClient ( 'https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl', array ('trace' => 1 ) );	
     $auth = array ('username' => $username, 'password' => $password );  
   } else {
@@ -275,7 +272,7 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     if ($cron) {
-      $o[4] .= 'Folder: '.$asset["path"]."\n";
+      $o[4] .= "Folder: ".$asset["path"]."\n";
     }
 
     if ($_POST['children'] == 'on' && !$cron) {
@@ -284,7 +281,7 @@ function readFolder($client, $auth, $id) {
       echo '</div></div>';
     }
     indexFolder($client, $auth, $asset);
-  } else {  
+  } else {
     if ($cron) {
       $o[1] .= 'FAILED to read folder with given ID '.$id["id"]."\n";
     } else {
@@ -378,7 +375,7 @@ function readPage($client, $auth, $id, $type, $event_n) {
       echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     if ($cron) {
-      $o[3] .= $asset['path'].$name."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
     }
     
     if (edittest($asset)) {
@@ -403,9 +400,9 @@ function readPage($client, $auth, $id, $type, $event_n) {
       $result = $client->__getLastResponse();
     }
     if ($cron) {
-      $o[1] .= 'FAILED to read page: '.$id['path']."\n".extractMessage($result)."\n\n";
+      $o[1] .= 'FAILED to read page: '.print_r($id, true)."\n".extractMessage($result)."\n\n";
     } else {
-      echo '<div class="f">Failed to read page: '.$id['path']."<div>".extractMessage($result)."</div></div>";
+      echo '<div class="f">Failed to read page: '.print_r($id, true)."<div>".extractMessage($result)."</div></div>";
     }
   }
 }
@@ -428,7 +425,7 @@ function editPage($client, $auth, $asset, $event_n) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -439,7 +436,7 @@ function editPage($client, $auth, $asset, $event_n) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".extractMessage($result)."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       }
