@@ -146,10 +146,10 @@ foreach ($media as $key => $value) {
 		$output .= '				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
 				.'			</a></div>'."\n"
 				.'		</div></div>'."\n"
-				.'		<div class="inner-right"><section class="field-body">'."\n"
+				.'		<div class="inner-right"><div class="field-body">'."\n"
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
 				.'			<p><a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/">Open in Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></p>'."\n"
-				.'		</section></div>'."\n"
+				.'		</div></div>'."\n"
 				.'	</div>'."\n";
 
 	$output .= '</div>'."\n\n";
