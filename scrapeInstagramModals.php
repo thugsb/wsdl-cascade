@@ -121,6 +121,8 @@ foreach ($media as $key => $value) {
 	$captionWithUsers  = preg_replace($matchUser, '<a class="instagram-user" href="https://www.instagram.com/$1/">@$1</a>', $value->caption);
 	$captionWithHashes = preg_replace($matchHash, '<a class="instagram-hashtag" href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
 
+	$nf = new NumberFormatter('en_US', NumberFormatter::ORDINAL);
+
 	if ($key < 4 ) {
 		$output .= '<div class="list-instagram link-exp-lbx lbx-wide">'."\n";
 	} else {
@@ -148,7 +150,7 @@ foreach ($media as $key => $value) {
 				.'		</div></div>'."\n"
 				.'		<div class="inner-right"><div class="field-body">'."\n"
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
-				.'			<p><a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/">Open in Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></p>'."\n"
+				.'			<p><a target="instagram" aria-label="View the '.$nf->format($key+1).' most recently published image in Instagram" href="https://www.instagram.com/p/'.$value->code.'/">Open in Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></p>'."\n"
 				.'		</div></div>'."\n"
 				.'	</div>'."\n";
 
