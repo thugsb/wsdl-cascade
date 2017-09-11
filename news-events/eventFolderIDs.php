@@ -19,6 +19,7 @@ if ( $events_year == '2017-2018' ) {
   $pending_folder = 'c967458bc0a8022b686c5474c124a14e';
   $rejected_folder = 'c9674494c0a8022b686c5474449cc282';
   $deleted_folder = 'c9674514c0a8022b686c5474a12a169b';
+  $previous_deleted_folder = '21885fb5c0a8022b048dce3c06a1d6f5';
   $acad_year = '2017-2018';
   $yearstart = '2017-09-01';
   $yearend = '2018-08-31';
@@ -27,6 +28,7 @@ if ( $events_year == '2017-2018' ) {
   $pending_folder = '713572bec0a8022b0cc35af64a4aca7e';
   $rejected_folder = '713571e3c0a8022b0cc35af66793d191';
   $deleted_folder = '71357284c0a8022b0cc35af61d310b27';
+  $previous_deleted_folder = 'c9674514c0a8022b686c5474a12a169b';
   $acad_year = '2018-2019';
   $yearstart = '2018-09-01';
   $yearend = '2019-08-31';

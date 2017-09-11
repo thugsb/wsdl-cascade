@@ -91,18 +91,23 @@ function changes(&$asset) {
 if (!$cron) {include('../html_header.php');}
 
 if (array_key_exists('submit',$_POST)) {
-  $del_folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', id => $deleted_folder ) ) );
-  if ($del_folder->readReturn->success == 'true') {
-    $del_asset = ( array ) $del_folder->readReturn->asset->folder;
-    $deleted_events = $del_asset["children"]->child;
-    echo '<select name="deleted_event" id="deleted_events" class="deleted_events"> <option value="">Select a deleted event</option>';
-    foreach ($deleted_events as $del_event) {
-      echo "<option value='".$del_event->id."'>".$del_event->path->path."</option>";
+  echo '<select name="deleted_event" id="deleted_events" class="deleted_events"> <option value="">Select a deleted event</option>';
+  $deleted_folders = [$deleted_folder, $previous_deleted_folder];
+  foreach ($deleted_folders as $key => $folder) {
+    if ( isset($folder) ) {
+      $del_folder = $client->read ( array ('authentication' => $auth, 'identifier' => array ('type' => 'folder', id => $folder ) ) );
+      if ($del_folder->readReturn->success == 'true') {
+        $del_asset = ( array ) $del_folder->readReturn->asset->folder;
+        $deleted_events = $del_asset["children"]->child;
+        foreach ($deleted_events as $del_event) {
+          echo "<option value='".$del_event->id."'>".$del_event->path->path."</option>";
+        }
+      } else {
+        if (!$cron) {echo "<option>Couldn't read deleted events folder.</option>";}
+      }
     }
-    echo '</select>';
-  } else {
-    if (!$cron) {echo "Couldn't read deleted events folder.";}
   }
+  echo '</select>';
 }
 
 
