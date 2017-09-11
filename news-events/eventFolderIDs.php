@@ -3,26 +3,18 @@
 if ( isset($_GET['year']) ) {
   $events_year = $_GET['year'];
 } else {
-  $events_year = '2016-2017';
+  $events_year = '2017-2018';
 }
 
 $message .= 'You are currently curating the events for '. $events_year. '. ';
-if ( $events_year != '2016-2017' ) {
-  $message .= '<a href="?year=2016-2017">Click here for 2016-2017</a>. ';
-}
 if ( $events_year != '2017-2018' ) {
   $message .= '<a href="?year=2017-2018">Click here for 2017-2018</a>. ';
 }
+if ( $events_year != '2018-2019' ) {
+  $message .= '<a href="?year=2018-2019">Click here for 2018-2019</a>. ';
+}
 
-if ( $events_year == '2016-2017' ) {
-  $year_folder = '21885c37c0a8022b048dce3cddbe9449';
-  $pending_folder = '2188600ec0a8022b048dce3cbbf35c30';
-  $rejected_folder = '21885e09c0a8022b048dce3c8fffcd32';
-  $deleted_folder = '21885fb5c0a8022b048dce3c06a1d6f5';
-  $acad_year = '2016-2017';
-  $yearstart = '2016-09-01';
-  $yearend = '2017-08-31';
-} elseif ( $events_year == '2017-2018' ) {
+if ( $events_year == '2017-2018' ) {
   $year_folder = 'c9674124c0a8022b686c5474de639b04';
   $pending_folder = 'c967458bc0a8022b686c5474c124a14e';
   $rejected_folder = 'c9674494c0a8022b686c5474449cc282';
@@ -30,6 +22,14 @@ if ( $events_year == '2016-2017' ) {
   $acad_year = '2017-2018';
   $yearstart = '2017-09-01';
   $yearend = '2018-08-31';
+} elseif ( $events_year == '2018-2019' ) {
+  $year_folder = '713568b9c0a8022b0cc35af687a3ca8a';
+  $pending_folder = '713572bec0a8022b0cc35af64a4aca7e';
+  $rejected_folder = '713571e3c0a8022b0cc35af66793d191';
+  $deleted_folder = '71357284c0a8022b0cc35af61d310b27';
+  $acad_year = '2018-2019';
+  $yearstart = '2018-09-01';
+  $yearend = '2019-08-31';
 }
 
 
