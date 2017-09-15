@@ -1,6 +1,11 @@
 <?php
 $title = 'Graduate - Copying DD data to metadata for all course pages in specified years';
 
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
+
 // $type_override = 'page';
 $start_asset = '4e9e12a97f000001015d84e03ea3fb26';
 

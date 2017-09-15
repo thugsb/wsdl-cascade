@@ -1,6 +1,11 @@
 <?php
 $title = 'Copying DD data to metadata for all course pages in specified years';
 
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
+
 $start_asset = '817373157f00000101f92de5bea1554a';
 
 /*

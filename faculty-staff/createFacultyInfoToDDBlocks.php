@@ -1,5 +1,11 @@
 <?php
 date_default_timezone_set('America/New_York');
+
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
+
 $title = 'Cron job to create an Info DD block, assign it, and grant access to faculty pages that do not have one';
 
 // $type_override = 'page';
