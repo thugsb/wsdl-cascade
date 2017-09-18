@@ -5,8 +5,6 @@ include_once(__DIR__.'/../rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
-include_once('eventFolderIDs.php');
-
 
 $title = 'Update Discipline Folder Areas-of-Study metadata';
 
