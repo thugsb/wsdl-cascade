@@ -88,7 +88,11 @@ function changes(&$asset, $type) {
       // If editing archived years, you may wish to not create references. If so, uncomment this line:
       // continue;
       $disc = $field->text;
-      $discFolder = $discNames[$disc];
+      if ( !empty($disc) ) {
+        $discFolder = $discNames[$disc];
+      } else {
+        $discFolder = false;
+      }
       if ($discFolder) {
         if ($relatedIDs[$discFolder]) {
         

@@ -37,9 +37,6 @@ foreach ($all_events->event as $i=>$event) {
   array_push($event_names, $event_n);
 }
 
-?>
-
-<?php
 $title = 'Import events from the XML feed into Cascade as pending pages';
 
 $type_override = 'folder';
