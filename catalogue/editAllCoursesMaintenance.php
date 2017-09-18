@@ -1,6 +1,11 @@
 <?php
 $title = 'Copying DD data to metadata for all course pages in specified years';
 
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
+
 $start_asset = '817373157f00000101f92de5bea1554a';
 
 /*
@@ -83,7 +88,11 @@ function changes(&$asset, $type) {
       // If editing archived years, you may wish to not create references. If so, uncomment this line:
       // continue;
       $disc = $field->text;
-      $discFolder = $discNames[$disc];
+      if ( !empty($disc) ) {
+        $discFolder = $discNames[$disc];
+      } else {
+        $discFolder = false;
+      }
       if ($discFolder) {
         if ($relatedIDs[$discFolder]) {
         

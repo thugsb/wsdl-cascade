@@ -4,6 +4,11 @@ include_once(__DIR__.'/rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
+foreach(['after','before','children','folder','action'] as $key) {
+  if ( empty($_POST[$key]) ) {$_POST[$key] = false;}
+}
+$message = '';
+
 parse_str(implode('&', array_slice($argv, 1)), $_GET);
 
 $o = array('','','','','');

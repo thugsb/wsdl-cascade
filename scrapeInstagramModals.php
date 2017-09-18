@@ -94,7 +94,8 @@ $message = '';
 $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">'."\n\n";
 foreach ($media as $key => $value) {
 	$thumb_url = parse_url( $value->thumbnail_src );
-	$thumb_filename = end( explode( '/', $thumb_url['path'] ) );
+	$thumb_url_array = explode( '/', $thumb_url['path'] );
+	$thumb_filename = end( $thumb_url_array );
 	if( !file_exists( $serverPath . "thumb/".$account.'-'.$value->code.'.jpg') ) {
 		if ( $cron && copy($value->thumbnail_src, $serverPath ."thumb/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "Image thumb $key copied successfully.\n";
@@ -105,7 +106,8 @@ foreach ($media as $key => $value) {
 		}
 	}
 	$large_url = parse_url( $value->display_src );
-	$filename = end( explode( '/', $large_url['path'] ) );
+	$file_path_array = explode( '/', $large_url['path'] );
+	$filename = end( $file_path_array );
 	if( !file_exists( $serverPath ."large/".$account.'-'.$value->code.'.jpg') ) {
 		if ( $cron && copy($value->display_src, $serverPath ."large/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "Large image $key copied successfully.\n";

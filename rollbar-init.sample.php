@@ -5,7 +5,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
-require_once __DIR__ . '/_credentials.php';
+$rollbarToken = 'FILL_ME_IN_WITH_post_server_item';
+
 // Installs global error and exception handlers
 $rollbarConfig = array(
     // required

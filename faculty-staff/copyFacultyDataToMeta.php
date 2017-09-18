@@ -1,5 +1,11 @@
 <?php
 date_default_timezone_set('America/New_York');
+
+include_once(__DIR__.'/../rollbar-init.php');
+use \Rollbar\Rollbar;
+use \Rollbar\Payload\Level;
+
+
 $title = 'Copy Faculty Structured Data (Page Title, Bio and Affiliations) to Metadata';
 
 // $type_override = 'page';
