@@ -140,7 +140,7 @@ function indexFolder($client, $auth, $asset) {
 
   // We only want to edit the metadata for Clusters
   $isClusterFolder = false;
-  if (is_array($asset["metadata"]->dynamicFields->dynamicField) ) {
+  if (isset($asset["metadata"]->dynamicFields->dynamicField) && is_array($asset["metadata"]->dynamicFields->dynamicField) ) {
     foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
       if ($dyn->name == "folder-type" && $dyn->fieldValues->fieldValue->value == 'Cluster') {
         $isClusterFolder = true;
