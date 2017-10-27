@@ -108,16 +108,16 @@
         },
         {
             "name": "rollbar/rollbar",
-            "version": "v1.3.1",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollbar/rollbar-php.git",
-                "reference": "0fbaf82e8da7612e3f296d6e81ce3db1c8b3e951"
+                "reference": "e45f3ad83ea20c899efdd4f91d774e087ec5b4cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/0fbaf82e8da7612e3f296d6e81ce3db1c8b3e951",
-                "reference": "0fbaf82e8da7612e3f296d6e81ce3db1c8b3e951",
+                "url": "https://api.github.com/repos/rollbar/rollbar-php/zipball/e45f3ad83ea20c899efdd4f91d774e087ec5b4cc",
+                "reference": "e45f3ad83ea20c899efdd4f91d774e087ec5b4cc",
                 "shasum": ""
             },
             "require": {
@@ -164,7 +164,7 @@
                 "logging",
                 "monitoring"
             ],
-            "time": "2017-08-02T19:32:28+00:00"
+            "time": "2017-09-20T22:44:48+00:00"
         }
     ],
     "packages-dev": [],
