@@ -52,6 +52,8 @@ if (!isset($data)) {$data = '';}
   body {padding:1em 1em 100px;}
   a {text-decoration:none;color:#334}
   input[type=text], input[type=password], select {width:120px;}
+  fieldset {display: inline-block;}
+  .radio-label {display: inline-block; vertical-align: bottom; padding-top: 5px;}
   #id {width:255px;}
   #read {margin-left:1em;}
   .right {float:right;}
@@ -111,7 +113,16 @@ if (!isset($data)) {$data = '';}
       <a href="./">./</a>
       <input name="login" type="text" placeholder="username" size="8" value="<?php echo $_POST['login']; ?>">
       <input name="password" type="password" size="8" placeholder="password" value="<?php echo $_POST['password']; ?>">
-      <input name="client" type="text" placeholder="client" size="8" value="<?php echo $client; ?>">
+      <fieldset>
+        <span class="radio-label">Cascade Instance:</span>
+        <?php if (!$_POST['client'] || strpos($_POST['client'], '8443') ) { ?>
+          <label for="live_client" class="radio inline"><input name="client" type="radio" id="live_client" checked="checked" value="https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl">Live</label>
+          <label for="dev_client" class="radio inline"><input name="client" type="radio" id="dev_client" value="https://cms.slc.edu:7443/ws/services/AssetOperationService?wsdl">Dev</label>
+        <?php } else { ?>
+          <label for="live_client" class="radio inline"><input name="client" type="radio" id="live_client" value="https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl">Live</label>
+          <label for="dev_client" class="radio inline"><input name="client" type="radio" id="dev_client" checked="checked" value="https://cms.slc.edu:7443/ws/services/AssetOperationService?wsdl">Dev</label>
+        <?php } ?>
+      </fieldset>
       <select name="type">
         <?php foreach($asset_types as $type) {
           if ($_POST['type'] == $type) {

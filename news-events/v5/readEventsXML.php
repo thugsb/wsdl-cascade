@@ -238,7 +238,7 @@ if (array_key_exists('submit',$_POST) || $cron) {
     $o[1] .= '';
   }
   if ($cron) {
-    $client = new SoapClient ( 'https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl', array ('trace' => 1 ) );	
+    $client = new SoapClient ( $clientURL, array ('trace' => 1 ) );	
     $auth = array ('username' => $username, 'password' => $password );  
   } else {
     $client = new SoapClient ( $_POST['client'], array ('trace' => 1 ) );

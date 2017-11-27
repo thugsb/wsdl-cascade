@@ -30,6 +30,11 @@ if ($_GET['s']) {
 }
 
 
+if (!isset($clientURL) || empty($clientURL) ) {
+  echo '$clientURL must be specified and valid';
+  $response = Rollbar::log(Level::error(), "Script: ".$_GET['s'] . "\n\n" . '$clientURL must be specified and valid');
+  exit;
+}
 
 
 
@@ -43,7 +48,7 @@ if (!isset($asset_type)) {
 }
 if (!isset($data)) {$data = '';}
 
-$client = new SoapClient ( 'https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl', array ('trace' => 1 ) );	
+$client = new SoapClient ( $clientURL, array ('trace' => 1 ) );	
 $auth = array ('username' => $username, 'password' => $password );
 $ids = explode(',',$start_asset);
 
