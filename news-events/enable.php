@@ -54,6 +54,7 @@ function addTags(&$asset) {
   if(isset($_POST['studies'])){if (is_array($_POST['studies'])) {$studies = $_POST['studies'];} else {$studies = array($_POST['studies']);}} else {$studies = array();}
   if(isset($_POST['audiences'])){if (is_array($_POST['audiences'])) {$audiences = $_POST['audiences'];} else {$audiences = array($_POST['audiences']);}} else {$audiences = array();}
   if(isset($_POST['themes'])){if (is_array($_POST['themes'])) {$themes = $_POST['themes'];} else {$themes = array($_POST['themes']);}} else {$themes = array();}
+  if(isset($_POST['channels'])){if (is_array($_POST['channels'])) {$channels = $_POST['channels'];} else {$channels = array($_POST['channels']);}} else {$channels = array();}
   if(in_array('Careers',$themes)){$careers = true;}
   
   if(isset($_POST['sponsors'])){if (is_array($_POST['sponsors'])) {$sponsors = $_POST['sponsors'];} else {$sponsors = array($_POST['sponsors']);}} else {$sponsors = array();}
@@ -111,6 +112,20 @@ function addTags(&$asset) {
       }
     }
     
+  }
+
+  foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
+    if ($sdnode->identifier == "group-settings") {
+      $text = '';
+      foreach ($channels as $key => $value) {
+        $text .= '::CONTENT-XML-CHECKBOX::' . $value;
+      }
+      $newnode = new StdClass();
+      $newnode->type = 'text';
+      $newnode->identifier = 'channels';
+      $newnode->text = $text;
+      array_unshift($sdnode->structuredDataNodes->structuredDataNode, $newnode);
+    }
   }
 }
 
