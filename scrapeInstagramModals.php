@@ -57,7 +57,7 @@ if ($curlresult === false) {
 
 
 //$scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_server_guess": true}/', $curlresult, $matches);
-$scrape = preg_match('/window\._sharedData = .*\}/', $curlresult, $matches); // loosen regex; Jeff Fowler 2017-01-20
+$scrape = preg_match('/window\._sharedData = .*};/', $curlresult, $matches); // Make sure the end of the regex is the end of the JSON
 
 // echo $matches[0];
 
@@ -74,6 +74,7 @@ if ( count($matches) < 1 ) {
 }
 
 $json = str_replace('window._sharedData = ','', $matches[0]);
+$json = preg_replace('/\};$/','}', $json);
 
 $data = json_decode($json);
 
