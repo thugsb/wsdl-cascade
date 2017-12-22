@@ -57,7 +57,7 @@ if ($curlresult === false) {
 
 
 //$scrape = preg_match('/window\._sharedData = .*environment_switcher_visible_server_guess": true}/', $curlresult, $matches);
-$scrape = preg_match('/window\._sharedData = .*\}/', $curlresult, $matches); // loosen regex; Jeff Fowler 2017-01-20
+$scrape = preg_match('/window\._sharedData = .*};/', $curlresult, $matches); // Make sure the end of the regex is the end of the JSON
 
 // echo $matches[0];
 
@@ -74,6 +74,7 @@ if ( count($matches) < 1 ) {
 }
 
 $json = str_replace('window._sharedData = ','', $matches[0]);
+$json = preg_replace('/\};$/','}', $json);
 
 $data = json_decode($json);
 
@@ -97,11 +98,14 @@ foreach ($media as $key => $value) {
 	$thumb_url_array = explode( '/', $thumb_url['path'] );
 	$thumb_filename = end( $thumb_url_array );
 	if( !file_exists( $serverPath . "thumb/".$account.'-'.$value->code.'.jpg') ) {
-		if ( $cron && copy($value->thumbnail_src, $serverPath ."thumb/".$account.'-'.$value->code.'.jpg' ) ) {
+		if ( $cron && !empty($value->thumbnail_src) && copy($value->thumbnail_src, $serverPath ."thumb/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "Image thumb $key copied successfully.\n";
 			$imageChanged = true;
 		} else {
 			$message .= "Image thumb $key copy FAILED. The .html output file will NOT be modified.\n";
+			if (empty($value->thumbnail_src)) {
+				$message .= "The value->thumbnail_src is empty.\n";
+			}
 			$copyFail = true;
 		}
 	}
@@ -109,11 +113,14 @@ foreach ($media as $key => $value) {
 	$file_path_array = explode( '/', $large_url['path'] );
 	$filename = end( $file_path_array );
 	if( !file_exists( $serverPath ."large/".$account.'-'.$value->code.'.jpg') ) {
-		if ( $cron && copy($value->display_src, $serverPath ."large/".$account.'-'.$value->code.'.jpg' ) ) {
+		if ( $cron && !empty($value->display_src) && copy($value->display_src, $serverPath ."large/".$account.'-'.$value->code.'.jpg' ) ) {
 			$message .= "Large image $key copied successfully.\n";
 			$imageChanged = true;
 		} else {
 			$message .= "Large image $key copy FAILED. The .html output file will NOT be modified.\n";
+			if (empty($value->display_src)) {
+				$message .= "The value->display_src is empty.\n";
+			}
 			$copyFail = true;
 		}
 	}
@@ -175,10 +182,10 @@ if ($message == '') {$message = 'No changes needed for the https://www.instagram
 
 if ($cron) {
 	$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
-	$subject = 'Instagram Image Scraper';
-	$rollbarOutput = $subject . "\n" . $message;
+	$subject = 'Instagram Image Scraper failed';
+	$rollbarOutput = $subject . "\n" . $message . "\n Full scraped JSON: \n". $json;
 	if ($copyFail || $writeFail) {
-		$response = Rollbar::log(Level::error(), $rollbarOutput);
+		$response = Rollbar::log(Level::warning(), $rollbarOutput);
 	  	if (!$response->wasSuccessful()) {
 	      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $rollbarOutput, $headers);
 	  	}
