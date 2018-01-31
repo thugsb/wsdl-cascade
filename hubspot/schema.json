@@ -1,0 +1,75 @@
+3708457939 : 39 http://info.sarahlawrence.edu/publish-and-promote-your-book
+3610973427 : 16 http://info.sarahlawrence.edu/end-of-life-care
+2727039822 : 5  http://info.sarahlawrence.edu/sarah-lawrence-college-in-florence-0 (Abroad thank yous)
+2739477215 : 7  http://info.sarahlawrence.edu/sarah-lawrence-college-in-florence (Abroad – 3x Paris go to same Thanks page)
+2825612865 : 5  http://info.sarahlawrence.edu/ecc-preschool
+2717273776 : 2  http://info.sarahlawrence.edu/essential and essential-1
+2714252634 : 1  http://info.sarahlawrence.edu/ecc-thank-you
+3756569187 : 1  http://info.sarahlawrence.edu/introducing-giving-day
+3804361816 : 1  http://info.sarahlawrence.edu/finding-sarah-lawrence
+3861550297 : 1  http://info.sarahlawrence.edu/finding-sarah-lawrence-thank-you
+4089560110 : 1  http://info.sarahlawrence.edu/seminarroom
+3868229819 : 1  http://info.sarahlawrence.edu/giving-day-kit
+4963411109 : 1  http://info.sarahlawrence.edu/giving-day (Tagboard)
+4445061688 : 1  http://info.sarahlawrence.edu/ilovesarahlawrence (Tagboard)
+
+
+3610973427, 3708457939, 2717273776, 2825612865
+	widget_containers
+		module_14283407904137244 (main content)
+			linked_image (main image)
+x			global_widget (mobile button)
+√			rich_text (main text)
+		module_14283405926493359 (sidebar)
+√			rich_text (sidebar text)
+			raw_html (form)
+	widgets
+√		module_1429555843225755 (Remarketing)
+			raw_html (JS)
+√		module_14283409281039348
+			form (hubspot)
+
+
+2739477215, 2727039822 (no form)
+	widget_containers
+		module_14289431900819920
+			rich_text (main content)
+	widgets
+		module_14289399781291220
+			linked_image (full width)
+		module_142894356158614085
+			rich_text (sidebar text)
+		module_14289400169452566
+			form (hubspot)
+
+
+2825612865
+	widget_containers
+		module_14283407904137244 (main content)
+			linked_image (only want 2nd image)
+	widgets
+		left_column
+			rich_text
+		module_14283409281039348
+			form (hubspot)
+		module_14285965085372868
+			rich_text (intro to form)
+		module_14308427865192134
+			rich_text (sidebar text)
+		module_14308428058493126
+			header
+
+
+
+page.
+	slug
+	archived (4 are, 78 not)
+	attached_stylesheets
+	title
+	label (short label, e.g. for nav)
+	template_path
+	widget_containers
+		module_14283407904137244
+		module_14283405926493359
+	widgets
+		module_1487022010833448
