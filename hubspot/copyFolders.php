@@ -6,7 +6,7 @@ use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
 
-$title = 'Test';
+$title = 'Copy an asset factory folder to all the named locations in an array';
 
 // $type_override = 'page';
 // $start_asset = 'e59cc45a7f00000100c46dcf503b2144';
@@ -16,23 +16,19 @@ $title = 'Test';
 // $asset_children_type = 'assetFactory';
 
 function pagetest($child) {
-  if (preg_match('/[a-z]/', $child->path->path))
-    return true;
+    return false;
 }
 function foldertest($child) {
-  if (preg_match('/^_[a-z]/', $child->path->path))
-    return true;
+    return false;
 }
 function edittest($asset) {
-  if (preg_match('/[a-z]/', $asset["contentTypePath"]))
-    return true;
+    return false;
 }
 
 function changes(&$asset) {
   /* If you wish to use $changed, make sure it's global, and set it to false. 
    * When something is changed, it becomes true: */
   global $changed;
-  $asd = $asset['structuredData'];
   $changed = false;
   // if ($asset["metadata"]->teaser != 'test') {
   //    $changed = true;
@@ -43,10 +39,6 @@ function changes(&$asset) {
   //     // Do stuff
   //   }
   // }
-  //
-  // $wys = getNode(['group-primary','wysiwyg'],'text', $asd);
-  // editNode('::CONTENT-XML-CHECKBOX::On', ['group-settings', 'primary'], 'text', $asd);
-  //
   // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
   //   if ($sdnode->identifier == "xxx") {
   //     // Do stuff
@@ -54,9 +46,60 @@ function changes(&$asset) {
   // }
 }
 
-if (!$cron) {include(__DIR__.'/html_header.php');}
+if (!$cron) {include(__DIR__.'/../html_header.php');}
 
+$folders = [
+"sarah-lawrence-college-in-beijing",
+"finding-sarah-lawrence",
+"sarah-lawrence-college-in-cuba",
+"mfa-writing-sarah-lawrence-college",
+"mfa-dance-sarah-lawrence-college",
+"mfa-theatre-sarah-lawrence-college",
+"health-advocacy-sarah-lawrence-college",
+"writing-institute-sarah-lawrence-college",
+"womens-history-sarah-lawrence-college",
+"summer-at-sarah-lawrence-college",
+"art-of-teaching-sarah-lawrence-college",
+"mayapple",
+"summer-film",
+"publish-and-promote-your-book",
+"end-of-life-care",
+"publishing-certificate-sarah-lawrence-college",
+"summer-film-fb",
+"summer-at-sarah-lawrence-college-fb",
+"health-advocacy-children",
+"masters-sarah-lawrence-college",
+"health-advocacy-sarah-lawrence-college-aarp",
+"art-of-teaching-ybs",
+"end-of-life-care-trailer",
+"health-advocacy-fb",
+"health-advocacy-children-fb",
+"health-advocacy-wp",
+"health-advocacy-children-wp",
+"dance-movement-therapy",
+"summer-seminar-writers"];
 
+if (array_key_exists('submit',$_POST)) {
+  foreach ($folders as $key => $f) {
+    $destFolder = array ('type' => 'folder', 'id' => 'fa1e9949c0a8022b06d5e847645d3e4e');
+    $copyParams = array ("newName" => $f, 'destinationContainerIdentifier' => $destFolder, "doWorkflow" => false);
+    // The asset you're $copying
+    $copying = array ('type' => 'folder', 'id' => '04bdc414c0a8022b5fe70b02b0bb0ce7' ); 
+    if ($_POST['action'] == 'edit') {
+      $copy = $client->copy ( array ('authentication' => $auth, 'identifier' => $copying, 'copyParameters' => $copyParams ) );
+    }
+    if ($copy->copyReturn->success == 'true') {
+      echo '<div class="s">Created successfully: '.$blockName.'</div>';
+      $total['s']++;
+    } else {
+      if ($_POST['debug'] == 'on' || $cron) {
+        $result = $client->__getLastResponse();
+      }
+      echo '<div class="f">Creation failed: '.$blockName.'<div>'.extractMessage($result).'</div></div>';
+      $total['f']++;
+    }
+  }
+}
 
 function readFolder($client, $auth, $id) {
   global $asset_type, $asset_children_type, $data, $o, $cron;

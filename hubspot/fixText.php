@@ -1,30 +1,28 @@
 <?php
 date_default_timezone_set('America/New_York');
 
-include_once(__DIR__.'/rollbar-init.php');
+include_once(__DIR__.'/../rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
 
-$title = 'Test';
+$title = 'Fix WYSIWYG Text encoding';
 
 // $type_override = 'page';
-// $start_asset = 'e59cc45a7f00000100c46dcf503b2144';
+$start_asset = '6e4829e8c0a8022b11e4367d7f93ee47';
 
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
 // $asset_children_type = 'assetFactory';
 
 function pagetest($child) {
-  if (preg_match('/[a-z]/', $child->path->path))
+  if (!preg_match('/^article\/index$/', $child->path->path))
     return true;
 }
 function foldertest($child) {
-  if (preg_match('/^_[a-z]/', $child->path->path))
-    return true;
+    return false;
 }
 function edittest($asset) {
-  if (preg_match('/[a-z]/', $asset["contentTypePath"]))
     return true;
 }
 
@@ -34,27 +32,55 @@ function changes(&$asset) {
   global $changed;
   $asd = $asset['structuredData'];
   $changed = false;
-  // if ($asset["metadata"]->teaser != 'test') {
-  //    $changed = true;
-  //    $asset["metadata"]->teaser = 'test';
-  // }
-  // foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-  //   if ($dyn->name == "xxx") {
-  //     // Do stuff
-  //   }
-  // }
-  //
-  // $wys = getNode(['group-primary','wysiwyg'],'text', $asd);
-  // editNode('::CONTENT-XML-CHECKBOX::On', ['group-settings', 'primary'], 'text', $asd);
-  //
-  // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
-  //   if ($sdnode->identifier == "xxx") {
-  //     // Do stuff
-  //   }
-  // }
+  foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
+    if ($sdnode->identifier == "content") {
+      foreach ($sdnode->structuredDataNodes->structuredDataNode as $contentnode) {
+        if ($contentnode->identifier == "wysiwyg" && $contentnode->text != "") {
+          $wys = $contentnode->text;
+          $wys = str_replace('Ã¢&amp;#128;&amp;#152;', "'", $wys);
+          $wys = str_replace('Ã¢&amp;#128;&amp;#153;', "'", $wys);
+          $wys = str_replace('Ã¢&amp;#128;&amp;#148;', "—", $wys);
+          $wys = str_replace('Ã¢&amp;#128;&amp;#156;', '"', $wys);
+          $wys = str_replace('Ã¢&amp;#128;&amp;#157;', '"', $wys);
+          $wys = str_replace('&amp;#226;&amp;#8364;&amp;#8482;', "'", $wys);
+          $wys = str_replace('&amp;#226;&amp;#8364;&amp;#339;', '"', $wys);
+          $wys = str_replace('&amp;#226;&amp;#8364;&amp;#157;', '"', $wys);
+          $wys = str_replace('&amp;#226;&amp;#8364;&amp;#8221;', '—', $wys);
+          $wys = str_replace('â&#128;&#152;', "'", $wys);
+          $wys = str_replace('â&#128;&#153;', "'", $wys);
+          $wys = str_replace('â&#128;&#156;', '"', $wys);
+          $wys = str_replace('â&#128;&#157;', '"', $wys);
+          $wys = str_replace('â&#128;&#148;', '—', $wys);
+          $wys = str_replace('â&#128;&#147;', '–', $wys);
+          $wys = str_replace('â&#128;¦', '…', $wys);
+          $wys = str_replace('â&#128;¨', ' ', $wys);
+          $wys = str_replace('&#226;&#8364;&#8482;', "'", $wys);
+          if (preg_match('/&[0-9#]+;........./', $wys, $matches ) ) {
+            foreach ($matches as $key => $value) {
+              echo htmlentities($value);
+            }
+          }
+          preg_replace('/&(amp;)?#226;&(amp;)?#8364;&(amp;)?#8482;/', "'", $wys);
+          preg_replace('/&(amp;)?#226;&(amp;)?#8364;&(amp;)?#339;/', '"', $wys);
+          preg_replace('/&(amp;)?#226;&(amp;)?#8364;&(amp;)?#157;/', '"', $wys);
+          preg_replace('/&(amp;)?#226;&(amp;)?#8364;&(amp;)?#8221;/', '—', $wys);
+          $wys = html_entity_decode(html_entity_decode(mb_convert_encoding(stripslashes($wys), "HTML-ENTITIES", 'UTF-8')));
+          echo '<div style="display:flex"><div>';
+          echo $wys;
+          echo '</div><div>';
+          echo $contentnode->text;
+          echo '</div></div>';
+          if ($wys != $contentnode->text) {
+            $contentnode->text = $wys;
+            $changed = true;
+          }
+        }
+      }
+    }
+  }
 }
 
-if (!$cron) {include(__DIR__.'/html_header.php');}
+if (!$cron) {include(__DIR__.'/../html_header.php');}
 
 
 

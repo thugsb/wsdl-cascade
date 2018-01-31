@@ -1,15 +1,15 @@
 <?php
 date_default_timezone_set('America/New_York');
 
-include_once(__DIR__.'/rollbar-init.php');
+include_once(__DIR__.'/../rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
 
-$title = 'Test';
+$title = 'Landing Pages Headings and Skip text';
 
 // $type_override = 'page';
-// $start_asset = 'e59cc45a7f00000100c46dcf503b2144';
+$start_asset = 'fa1e9949c0a8022b06d5e847645d3e4e';
 
 // Optionally override the container/child types
 // $asset_type = 'assetFactoryContainer';
@@ -20,7 +20,7 @@ function pagetest($child) {
     return true;
 }
 function foldertest($child) {
-  if (preg_match('/^_[a-z]/', $child->path->path))
+  if (preg_match('/^[a-z]/', $child->path->path))
     return true;
 }
 function edittest($asset) {
@@ -34,27 +34,27 @@ function changes(&$asset) {
   global $changed;
   $asd = $asset['structuredData'];
   $changed = false;
-  // if ($asset["metadata"]->teaser != 'test') {
-  //    $changed = true;
-  //    $asset["metadata"]->teaser = 'test';
-  // }
-  // foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
-  //   if ($dyn->name == "xxx") {
-  //     // Do stuff
-  //   }
-  // }
-  //
-  // $wys = getNode(['group-primary','wysiwyg'],'text', $asd);
-  // editNode('::CONTENT-XML-CHECKBOX::On', ['group-settings', 'primary'], 'text', $asd);
-  //
-  // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
-  //   if ($sdnode->identifier == "xxx") {
-  //     // Do stuff
-  //   }
-  // }
+  $wys = getNode(['group-form-content','wysiwyg'],'text', $asd);
+
+  $pattern = '/^<h2([-a-z0-9=""\s]+)?>([-–a-zA-Z0-9_,!\?|;&#:<>"=\/\s\.’]+)<\/h2>/';
+  preg_match($pattern, $wys, $h1s);
+  echo '<pre>';
+  // echo htmlentities( $h1s[0] );
+  echo strip_tags($h1s[0]);
+  print_r($h1s);
+  echo '</pre>';
+
+  echo '<div style="display:flex"><div>' . $wys . '</div>';
+
+  if (!empty($h1s[0]) ) {
+    $wys = preg_replace($pattern, '', $wys);
+    editNode($wys, ['group-form-content','wysiwyg'],'text', $asd);
+  }
+
+  echo '<div>' . htmlentities($wys) . '</div></div>';
 }
 
-if (!$cron) {include(__DIR__.'/html_header.php');}
+if (!$cron) {include(__DIR__.'/../html_header.php');}
 
 
 
