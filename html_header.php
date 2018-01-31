@@ -24,6 +24,42 @@ function addCheckboxItem($val, &$array) {
   $array = array_values(array_filter($array));
 }
 
+function editNode($value, $layers, $field, $array) {
+  global $changed;
+  foreach ($array->structuredDataNodes->structuredDataNode as $node) {
+    if ($node->identifier == $layers[0] ) {
+      array_shift($layers);
+      $count = count($layers);
+      if ( $count == 0 ) {
+        if ($node->$field != $value) {
+          $node->$field = $value;
+          $changed = true;
+          $edited  = 'true';
+          echo '<div class="k">Editing <code>' . $node->identifier . '</code></div>';
+          return true;
+        }
+      } else {
+        $returnValue = editNode($value, $layers, $field, $node);
+      }
+    }
+  }
+  return $returnValue;
+}
+function getNode($layers, $field, $array) {
+  foreach ($array->structuredDataNodes->structuredDataNode as $node) {
+    if ($node->identifier == $layers[0] ) {
+      array_shift($layers);
+      $count = count($layers);
+      if ( $count == 0 ) {
+        return $node->$field;
+      } else {
+        $returnValue = getNode($layers, $field, $node);
+      }
+    }
+  }
+  return $returnValue;
+}
+
 include_once(__DIR__.'/rollbar-init.php');
 
 include(__DIR__."/web_services_util.php");

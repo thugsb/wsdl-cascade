@@ -32,6 +32,7 @@ function changes(&$asset) {
   /* If you wish to use $changed, make sure it's global, and set it to false. 
    * When something is changed, it becomes true: */
   global $changed;
+  $asd = $asset['structuredData'];
   $changed = false;
   // if ($asset["metadata"]->teaser != 'test') {
   //    $changed = true;
@@ -42,6 +43,10 @@ function changes(&$asset) {
   //     // Do stuff
   //   }
   // }
+  //
+  // $wys = getNode(['group-primary','wysiwyg'],'text', $asd);
+  // editNode('::CONTENT-XML-CHECKBOX::On', ['group-settings', 'primary'], 'text', $asd);
+  //
   // foreach ($asset["structuredData"]->structuredDataNodes->structuredDataNode as $sdnode) {
   //   if ($sdnode->identifier == "xxx") {
   //     // Do stuff
