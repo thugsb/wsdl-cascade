@@ -18,7 +18,7 @@ $asset_children_type = 'reference';
 include_once(__DIR__.'/relatedIDs.php');
 
 
-$year = '2017-2018';
+$year = '2018-2019';
 
 function referencetest($child) {
   global $year;

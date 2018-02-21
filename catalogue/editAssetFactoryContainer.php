@@ -8,9 +8,17 @@ $type_override = 'assetfactorycontainer';
 $start_asset = '859908207f00000101f92de53e7c4d71,8598eabf7f00000101f92de5a7354dea,8562da157f00000101f92de5a835ef7d,859869be7f00000101f92de5fdd29102,8598b47d7f00000101f92de5f0838d0e'; // Undergrad
 // $start_asset = '4e9e12dc7f000001015d84e0032be71f'; // Grad
 
-$lastyear = '/2016-2017/';
-$nextyearregex = '/2017-2018/';
-$nextyear = '2017-2018';
+$lastyear = '/2017-2018/';
+$nextyearregex = '/2018-2019/';
+$nextyear = '2018-2019';
+
+function foldertest($asset) {
+  return true; // Undergrad
+  // return false; // Grad
+}
+
+
+
 
 $asset_type = 'assetFactoryContainer';
 $asset_children_type = 'assetFactory';
@@ -22,10 +30,6 @@ function assetfactorytest($child) {
 function pagetest($child) {
   if (preg_match('/[a-z]/', $child->path->path))
     return true;
-}
-function foldertest($asset) {
-  return true; // Undergrad
-  // return false; // Grad
 }
 function edittest($asset) {
   return true;
