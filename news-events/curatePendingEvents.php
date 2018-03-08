@@ -361,7 +361,7 @@ function readPage($client, $auth, $id, $type) {
         echo '<input type="hidden" name="id" value="'.$asset['id'].'"/>';
         echo '<h4><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page&">'.$asset['metadata']->title.'</a></h4>';
         echo '<div>'.$asset['path'].$name.'</div>';
-        echo '<div class="k">'.gmdate("D M dS, H:i", $begin).'</div> - <div class="k">'.gmdate('D M dS, H:i', $end).'</div>'.($recurring == 'False' ? '' : '<div class="label label-info">Recurring</div>').' <a class="label label-success" target="_blank" href="'.$eventsource.'">Source</a>';
+        echo '<div class="k">'.date("D M dS, H:i", $begin).'</div> - <div class="k">'.date('D M dS, H:i', $end).'</div>'.($recurring == 'False' ? '' : '<div class="label label-info">Recurring</div>').' <a class="label label-success" target="_blank" href="'.$eventsource.'">Source</a>';
         echo '<div><strong>Location:</strong> '.$location.'</div>';
         echo '<div><strong>Sponsor:</strong> '.$sponsor.'</div>';
         echo '<div><strong>Type:</strong> '.$type.'</div>';
