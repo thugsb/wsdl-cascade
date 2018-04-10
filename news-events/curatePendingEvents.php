@@ -8,30 +8,24 @@ include_once('eventFolderIDs.php');
 $start_asset = $pending_folder;
 
 $message .= 'NOTE: This page requires JavaScript. Optionally, use the GET argument "?date=yyyy-mm-dd" to filter by date, where dd and mm are not required. The "Read only" vs "Edit" radio options have no effect on this page.';
-$user = $_POST['login'];
-$password = $_POST['password'];
-$client = $_POST['client'];
+$htmlHead = "<link href='../lib/selectize.default.css' rel='stylesheet'/><script src='../lib/selectize.min.js'></script>";
 $script = <<<EOS
 
 $(function() {
 
   window.types = [
-    "areas",
-    "disciplines",
-    "programs",
-    "studies",
+    "academics",
     "audiences",
     "themes",
     "sponsors",
-    "channels"
+    "channels",
+    "faculty"
   ];
-  window.areas = [
+  window.academics = [
     "Humanities",
     "History and the Social Sciences",
     "Science and Mathematics",
-    "Creative and Performing Arts"
-  ];
-  window.disciplines = [
+    "Creative and Performing Arts",
     "Africana Studies",
     "Anthropology",
     "Art History",
@@ -91,9 +85,7 @@ $(function() {
     "Printmaking",
     "Sculpture",
     "Women’s Studies",
-    "Writing"
-  ];
-  window.programs = [
+    "Writing",
     "Art of Teaching",
     "Child Development",
     "MFA Dance",
@@ -102,9 +94,7 @@ $(function() {
     "Human Genetics",
     "MFA Theatre",
     "Womens History",
-    "MFA Writing"
-  ];
-  window.studies = [
+    "MFA Writing",
     "Continuing Education",
     "Child Development Institute",
     "Early Childhood Center",
@@ -158,55 +148,565 @@ $(function() {
     "InTouch",
     "CURB"
   ]
+  window.faculty = [
+"abernethy-colin-d.",
+"abraham-julie",
+"abrams-samuel",
+"abuba-ernest-h.",
+"acting-faculty-",
+"adams-jefferson",
+"afzal-cameron-c.",
+"agard-jones-vanessa",
+"aggarwal-ujju",
+"agresta-kirsten",
+"alan-gilbert",
+"albarelli-gerry",
+"alexander-glenn",
+"alexis-melissa",
+"algire-andrew",
+"ancona-marina",
+"anderson-abraham",
+"anderson-william",
+"andriole-stephanie",
+"anhalt-emily-katz",
+"appel-cathy",
+"arditi-neil",
+"ash-erin",
+"bajaj-komal",
+"baker-damani",
+"baker-nancy",
+"balasubramaniam-tanjore",
+"balkite-elisabeth-a.",
+"barenboim-carl",
+"barenboim-deanna",
+"barnard-mary",
+"basilio-jorge",
+"beard-jo-ann",
+"beavan-colin",
+"begelman-igor",
+"belcastro-sarah-marie",
+"benzoni-stefania",
+"berg-bruce",
+"bernstein-david",
+"biscardi-chester",
+"blake-lorna-knowles",
+"blalock-lucas",
+"bosselaar-laure-anne",
+"bower-bill-l.",
+"bradshaw-patti",
+"brand-roy",
+"breitbart-vicki",
+"brodzki-bella",
+"brown-adam",
+"brown-karen",
+"brown-kurt",
+"brown-wesley",
+"buckley-jennifer",
+"bukiet-melvin-jules",
+"burnley-gary",
+"calvin-scott",
+"canick-jacob",
+"carbon-lorayne",
+"carstens-marie",
+"carter-suzanne",
+"castillo-mauricio",
+"castriota-david",
+"catanzaro-william",
+"catterson-pat",
+"chang-tina",
+"chapman-susannah",
+"charles-persis",
+"cheng-eileen-ka-may",
+"chen-mengyu",
+"chen-priscilla",
+"cho-john-song-pae",
+"christle-heather",
+"chung-una",
+"clark-sarah",
+"cleary-heather",
+"cohen-rachel",
+"confoy-kevin",
+"conlan-kelli",
+"corva-dominic",
+"cottrell-margaret",
+"cottrell-peggy",
+"cramer-michael",
+"cressman-drew-e.",
+"cruz-cynthia",
+"curulla-annelle",
+"dance-faculty-",
+"dasgupta-sayantani",
+"datta-rhea",
+"davis-michael",
+"de-leon-cora",
+"delne-claudy",
+"de-sena-isabel",
+"desjarlais-robert-r.",
+"devine-emily",
+"diamond-david",
+"dillard-mary",
+"ditkoff-beth-ann",
+"dixon-jonathan",
+"dizenko-natalia",
+"dobyns-stephen",
+"dodds-jerrilynn",
+"dolan-siobhan",
+"dollinger-roland",
+"donzelli-aurora",
+"downs-patrick",
+"doyle-charlotte-l.",
+"driscoll-kermit",
+"drucker-jan",
+"du-boff-jill",
+"duce-scott",
+"dufresne-angela",
+"duggan-niamh",
+"dumbutshena-rujeko",
+"duran-nancy",
+"durcan-judith",
+"dynner-glenn",
+"earle-jason",
+"early-michael",
+"eger-david-j.",
+"ekman-june",
+"ellicson-kirsten",
+"ellis-matthew",
+"ellis-thomas-sayers",
+"emmons-beverly",
+"escobar-chaparro-gloria",
+"faculty-design",
+"faculty-music",
+"fader-oren",
+"fagan-charling-c.",
+"fajardo-margarita",
+"farrell-christine",
+"febos-melissa",
+"ferguson-kim",
+"ferraiolo-angela",
+"ferrell-carolyn",
+"folkman-marjorie",
+"forbes-barbara",
+"forte-joseph-c.",
+"foulk-t.-griffith",
+"frankel-marvin",
+"frazier-melissa",
+"frears-will",
+"friedman-donald",
+"fuchs-marek",
+"gabaston-liza",
+"garcia-laura",
+"gardinier-suzanne",
+"gay-jackson",
+"germano-roy",
+"gessen-keith",
+"gillis-graeme",
+"gilvary-sara",
+"goldberg-myra",
+"goldman-nina",
+"goldray-martin",
+"gorn-cindy",
+"gould-peggy",
+"greb-anne",
+"greenberg-michael",
+"greenwald-maggie",
+"grewal-gwenda-lin",
+"griepp-eva-bostein",
+"griffiths-rachel-eliza",
+"grob-rachel-n.",
+"gross-susan",
+"guest-artists-",
+"guests-",
+"gustafson-barret-charlie",
+"hallberg-garth-risk",
+"handy-catherine",
+"hansen-anneke",
+"hardy-dave",
+"harris-hilda",
+"harvey-matthea",
+"hassan-sarah",
+"hebron-mary",
+"helias-mark",
+"henkin-joshua",
+"heppermann-ann",
+"herb-alice",
+"hercher-laura",
+"heredia-luisa-laura",
+"herships-sally",
+"hersh-michelle",
+"higgins-niko",
+"hill-kathleen",
+"hoch-james",
+"hollander-david",
+"hong-cathy-park",
+"hoover-suzanne-r.",
+"horowitz-james",
+"howell-fanon",
+"howe-marie",
+"hsu-tishan",
+"hultman-iréne",
+"human-genetics-faculty-",
+"humbaugh-erin",
+"hurlin-dan",
+"hwang-koosil-ja",
+"hyman-yehuda",
+"iacoboni-daniel",
+"iliatova-vera",
+"index",
+"index.xml",
+"ingliss-robert",
+"jablonski-meghan",
+"jacques-lmsw-christobal--j.",
+"james-tara-elise",
+"jansma-kristopher",
+"jeter-james",
+"johnson-daniel",
+"johnson-kate-knapp",
+"johnson-rebecca-o.",
+"johnston-elizabeth",
+"jones-alwin-a.-d.",
+"jones-brian",
+"kahler-jean",
+"kaplan-shirley",
+"kart-susan",
+"katz-kuniko",
+"kaufmann-kathy",
+"kelley-william-melvin",
+"kelly-deborah",
+"kempson-sibyl",
+"kerekes-paul",
+"ketchum-barbara-bray",
+"khakpour-porochista",
+"kilroy-marac-kathleen",
+"king-daniel",
+"king-jonathan",
+"kirsch-adam",
+"klass-david",
+"klinkenborg-verlyn",
+"korsunskaia-ekaterina",
+"kreider-timothy",
+"kronn-david",
+"krugman-jason",
+"krupat-arnold",
+"kurland-justine",
+"kyle-peter",
+"lachapelle-mary",
+"lago-eduardo",
+"landdeck-kevin",
+"lang-allen",
+"lauinger-ann",
+"lauinger-joseph",
+"lavigne-sharon",
+"lawrence-karen-r.",
+"lee-michelle",
+"lee-tom",
+"leonelli-laurie-beth",
+"leveau-eric",
+"lewis-linwood-j.",
+"lewis-margot",
+"lieber-caroline",
+"lieberman-sandy",
+"lieu-jocelyn",
+"lin-tao",
+"liu-wan-chun",
+"liu-wen",
+"long-laura-i.",
+"lux-thomas",
+"lyons-robert",
+"machugh-doug",
+"macías-patrisia",
+"macmillan-brian",
+"macpherson-greg",
+"magnuson-robert",
+"maillo-pozo-ruben",
+"manago-alexander-merceditas",
+"mañago-alexander-merceditas",
+"mandel-thomas",
+"mark-rona-naomi",
+"marshall-james",
+"martinez-deluca-margaret",
+"matthews-amy",
+"may-juliana",
+"mazmanian-victor",
+"mccarthy-janelle",
+"mcdaniel-jeffrey",
+"mcfarland-stephen",
+"mcghee-elena",
+"mcguire-liz",
+"mcintyre-dianne",
+"mcpherson-elizabeth",
+"mcree-william-d.",
+"means-angelia",
+"medley-cassandra",
+"meira-la",
+"melnick-jodi-melnick",
+"miller-jeffrey",
+"miller-timothy",
+"mills-joseph",
+"mills-nicolaus",
+"minsky-greta",
+"misra-lavanya",
+"mitchell-rashaun",
+"mizelle-nike",
+"mizrahi-terry",
+"moe-ruth",
+"mofidi-shideh",
+"moger-angela",
+"moos-katherine",
+"morejon-diana-punales",
+"morris-mary",
+"mort-bari",
+"morton-brian",
+"mosolino-april-reynolds",
+"moudud-jamee-k.",
+"muchmore-patrick",
+"muldavin-joshua",
+"murolo-priscilla",
+"murray-katie",
+"muther-catherine",
+"naka-cheiko",
+"naka-chieko",
+"neely-evan",
+"negroni-maria",
+"neskar-ellen",
+"neumann-david",
+"newhouse-erica",
+"newman-leigh",
+"nolin-sally",
+"novas-julie",
+"nurkse-dennis",
+"oconnor-john",
+"oconnor-stephen",
+"offill-jenny",
+"olson-leah",
+"ording-philip",
+"orlandersmith-dael",
+"ornstein-sloan-magdalena",
+"oshea-marygrace",
+"oyama-sayuri-i.",
+"oziashvili-yekaterina",
+"paramaditha-intan",
+"parker-matthew",
+"partin-ted",
+"pearce-nicole",
+"peixoto-michael",
+"pelletier-carol-ann",
+"peritz-david",
+"petty-lauren",
+"pfordresher-jeanne1",
+"philipps-kris",
+"philogene-gina",
+"pierce-young-eddye",
+"pilkington-kevin",
+"pollack-maika",
+"pollak-max",
+"porter-karen",
+"porter-mary-a.",
+"power-marilyn",
+"prieto-josé-manuel",
+"rainer-yvonne",
+"raja-kanishka",
+"rakoff-joanna-smith",
+"redel-victoria",
+"reich-elsa",
+"reifler-nelly",
+"reilly-janet",
+"reksten-nicholas",
+"rezai-hamid",
+"rhodes-martha",
+"richards-peter",
+"risher-elise",
+"rivera-colon-edgar",
+"robinson-sandra",
+"rodenbeck-judith",
+"rodgers-liz",
+"romano-patrick",
+"rorandelli-tristana",
+"rosenthal-lucy",
+"rouse-shahnaz",
+"rudner-sara",
+"ruen-kathleen",
+"ryan-david",
+"sampson-efeya-ifadayo-m",
+"sanborn-erica",
+"sanchez-misael",
+"sanders-wayne",
+"sands-kristin-zahra",
+"saptanyana-nyoman",
+"saxon-la-rose",
+"schachter-amanda",
+"schecter-barbara",
+"scheier-fanchon-miller",
+"schlesinger-mark-j.",
+"schmidt-carsten",
+"schneider-ursula",
+"schorsch-jonathan",
+"schrader-astrid",
+"schultz-anthony",
+"schultz-tony",
+"scotch-marmo-malia",
+"sealander-rebecca",
+"seibel-jean",
+"seigle-samuel-b.",
+"serafini-sauli-judith-p.",
+"seshadri-vijay",
+"shafer-susan-h.",
+"shemy-deganit",
+"sherman-maxine",
+"shuford-gabriel",
+"shullenberger-william",
+"shulman-mark-r.",
+"siff-michael",
+"silber-joan",
+"simons-lake",
+"singh-kanwal",
+"singh-paul",
+"sivesind-david",
+"sizer-lyde-cullen",
+"slichter-jacob",
+"smith-michael-j.",
+"smoler-fredric",
+"snead-pamela",
+"sohn-sungrai",
+"soiseth-alexandra",
+"sosnowy-collette",
+"southgate-martha",
+"spano-michael",
+"speer-james-w.",
+"speight-rico",
+"spencer-stuart",
+"starbuck-robin",
+"sternfeld-joel",
+"stevens-brooke",
+"strype-frederick-michael",
+"swann-sterling",
+"swoboda-philip",
+"tba-faculty",
+"technical-staff-",
+"thomas-nadeen-m.",
+"thom-rose-anne",
+"thurber-lucy",
+"to-be-announced-",
+"tomasulo-frank",
+"truax-alice",
+"turvey-malcolm",
+"ulmert-megan",
+"uttley-lois",
+"vahrenwald-michael",
+"vasudevan-preeti",
+"vesely-flad-rima",
+"vincenot-dash-stella",
+"vitkin-marina",
+"voice-faculty-",
+"volpe-francine",
+"wachs-ilja",
+"weil-laura",
+"weis-cathy",
+"weiss-heidi",
+"wentworth-jean",
+"weschler-lawrence",
+"westwater-kathy",
+"wiersma-cal",
+"wilbur-jennifer-scalia",
+"wilcox-sarah",
+"wilford-sara",
+"wilson-fiona",
+"wilson-matthew",
+"winter-joe",
+"winters-heather",
+"woodard-komozi",
+"woolfson-joseph-w.",
+"wright-alexandra",
+"wunderlich-mark",
+"yamamoto-miyabi",
+"yang-min",
+"yannelli-john",
+"yates-jonathan",
+"yin-mali",
+"yionoulis-evan",
+"yoo-mia",
+"yoon-paul",
+"young-thomas",
+"zambreno-kate",
+"zerfas-francine",
+"zerner-charles",
+"zevin-dan",
+"zollar-keisha",
+"zoref-carol",
+"zuern-elke"
+  ]
 
 
-  $('body').append('<iframe name="result" id="result" style="position:fixed; bottom:0; right:0; width:50%; background:#fff; transition:height .35s;"></iframe><div class="btn btn-info" id="iframe-expander" style="position:fixed; bottom:0; right:50%;">Expand Results</div>');
-  $('#iframe-expander').click(function() { $('#result').toggleClass('bigger'); });
+  // $('body').append('<iframe name="result" id="result" style="position:fixed; bottom:0; right:0; width:50%; background:#fff; transition:height .35s;"></iframe><div class="btn btn-info" id="iframe-expander" style="position:fixed; bottom:0; right:50%;">Expand Results</div>');
+  // $('#iframe-expander').click(function() { $('#result').toggleClass('bigger'); });
 
-  $('.event-form').prepend('<div class="btn btn-info pull-right collapser">Expand/Collapse</div>');
-  $('.event-form .collapser').click(function() {\$(this).parent().find('.tag-section').slideToggle().parent().find('.btn-group').slideToggle()});
+  $('.event-form .collapser').click(function() {\$(this).closest('.event-form').find('.event-details').slideToggle().parent().find('.btn-group').slideToggle()});
 
-  $('.event-form').append('<div class="tag-section tag-areas"><h3>Academics</h3></div>');
-  $('.event-form').append('<div class="tag-section tag-disciplines"></div>');
-  $('.event-form').append('<div class="tag-section tag-programs"></div>');
-  $('.event-form').append('<div class="tag-section tag-studies"></div>');
-  $('.event-form').append('<div class="tag-section tag-audiences"><h3>Audiences</h3></div>');
-  $('.event-form').append('<div class="tag-section tag-themes"><h3>Themes</h3></div>');
-  $('.event-form').append('<div class="tag-section tag-sponsors"><h3>Sponsors</h3></div>');
-  $('.event-form').append('<div class="tag-section tag-channels"><h3>Channels</h3></div>');
+  String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
 
-  $.each(types, function(i,t) {
-    $.each(window[t], function(i,v) {
-      $('.tag-'+t).append('<label><input type="checkbox" name="' + t + '[]" value="' + v + '"/>' + v + '</label>');
+  function selectizeOptions(arr) {
+    options = [];
+    $.each(arr, function(i,v) {
+      options.push({text: v, value: v});
     });
+    return options;
+  }
+  function selectItems(t) {
+    items = [];
+    if (t === 'channels') {items.push('WWW')}
+    return items;
+  }
+
+  $('.event-form').each(function(i,v) {
+    var id = $(this).data('id');
+    window['selectize'+id] = [];
+    $.each(types, function(i,t) {
+      var inputID = 'sel-'+t+'-'+id;
+      $(v).find('.event-tags').append('<div class="tag-section"><label for="'+inputID+ '">'+ t.capitalize() +'</label><input id="'+inputID+ '" name="'+ t +'" type="text"></div>');
+      window['selectize'+id][i] = $('#'+inputID).selectize({
+        delimiter: ";",
+        options: selectizeOptions(window[t]),
+        placeholder: t.capitalize(),
+        items: selectItems(t),
+        maxItems: t === "faculty" ? 1 : null
+      });
+    });
+
+    $('#deleted_events').clone().removeAttr('id').wrap('<div class="tag-section deleted-events"/>').parent().appendTo( $(this).find('.event-details') ); 
+    $(this).find('.deleted-events').append('<input type="submit" name="submit" class="btn btn-info btn-copy btn-action" value="Copy data"/>'); 
+    $(this).find('.deleted-events select').selectize();
+
+    $(this).find('.loading-tagging').remove();
+
+    $('.event-actions').removeClass('hidden');
   });
-
-  $('.tag-channels input[value=WWW]').prop('checked', true);
-
-  $('.event-form').append('<div class="tag-section tag-faculty">Faculty: <select name="faculty-tag" id="faculty-selector"><option value="" selected="selected"></option><option value="abernethy-colin-d.">abernethy-colin-d.</option><option value="abraham-julie">abraham-julie</option><option value="abrams-samuel">abrams-samuel</option><option value="abuba-ernest-h.">abuba-ernest-h.</option><option value="acting-faculty-">acting-faculty-</option><option value="adams-jefferson">adams-jefferson</option><option value="afzal-cameron-c.">afzal-cameron-c.</option><option value="agard-jones-vanessa">agard-jones-vanessa</option><option value="aggarwal-ujju">aggarwal-ujju</option><option value="agresta-kirsten">agresta-kirsten</option><option value="alan-gilbert">alan-gilbert</option><option value="albarelli-gerry">albarelli-gerry</option><option value="alexander-glenn">alexander-glenn</option><option value="alexis-melissa">alexis-melissa</option><option value="algire-andrew">algire-andrew</option><option value="ancona-marina">ancona-marina</option><option value="anderson-abraham">anderson-abraham</option><option value="anderson-william">anderson-william</option><option value="andriole-stephanie">andriole-stephanie</option><option value="anhalt-emily-katz">anhalt-emily-katz</option><option value="appel-cathy">appel-cathy</option><option value="arditi-neil">arditi-neil</option><option value="ash-erin">ash-erin</option><option value="bajaj-komal">bajaj-komal</option><option value="baker-damani">baker-damani</option><option value="baker-nancy">baker-nancy</option><option value="balasubramaniam-tanjore">balasubramaniam-tanjore</option><option value="balkite-elisabeth-a.">balkite-elisabeth-a.</option><option value="barenboim-carl">barenboim-carl</option><option value="barenboim-deanna">barenboim-deanna</option><option value="barnard-mary">barnard-mary</option><option value="basilio-jorge">basilio-jorge</option><option value="beard-jo-ann">beard-jo-ann</option><option value="beavan-colin">beavan-colin</option><option value="begelman-igor">begelman-igor</option><option value="belcastro-sarah-marie">belcastro-sarah-marie</option><option value="benzoni-stefania">benzoni-stefania</option><option value="berg-bruce">berg-bruce</option><option value="bernstein-david">bernstein-david</option><option value="biscardi-chester">biscardi-chester</option><option value="blake-lorna-knowles">blake-lorna-knowles</option><option value="blalock-lucas">blalock-lucas</option><option value="bosselaar-laure-anne">bosselaar-laure-anne</option><option value="bower-bill-l.">bower-bill-l.</option><option value="bradshaw-patti">bradshaw-patti</option><option value="brand-roy">brand-roy</option><option value="breitbart-vicki">breitbart-vicki</option><option value="brodzki-bella">brodzki-bella</option><option value="brown-adam">brown-adam</option><option value="brown-karen">brown-karen</option><option value="brown-kurt">brown-kurt</option><option value="brown-wesley">brown-wesley</option><option value="buckley-jennifer">buckley-jennifer</option><option value="bukiet-melvin-jules">bukiet-melvin-jules</option><option value="burnley-gary">burnley-gary</option><option value="calvin-scott">calvin-scott</option><option value="canick-jacob">canick-jacob</option><option value="carbon-lorayne">carbon-lorayne</option><option value="carstens-marie">carstens-marie</option><option value="carter-suzanne">carter-suzanne</option><option value="castillo-mauricio">castillo-mauricio</option><option value="castriota-david">castriota-david</option><option value="catanzaro-william">catanzaro-william</option><option value="catterson-pat">catterson-pat</option><option value="chang-tina">chang-tina</option><option value="chapman-susannah">chapman-susannah</option><option value="charles-persis">charles-persis</option><option value="cheng-eileen-ka-may">cheng-eileen-ka-may</option><option value="chen-mengyu">chen-mengyu</option><option value="chen-priscilla">chen-priscilla</option><option value="cho-john-song-pae">cho-john-song-pae</option><option value="christle-heather">christle-heather</option><option value="chung-una">chung-una</option><option value="clark-sarah">clark-sarah</option><option value="cleary-heather">cleary-heather</option><option value="cohen-rachel">cohen-rachel</option><option value="confoy-kevin">confoy-kevin</option><option value="conlan-kelli">conlan-kelli</option><option value="corva-dominic">corva-dominic</option><option value="cottrell-margaret">cottrell-margaret</option><option value="cottrell-peggy">cottrell-peggy</option><option value="cramer-michael">cramer-michael</option><option value="cressman-drew-e.">cressman-drew-e.</option><option value="cruz-cynthia">cruz-cynthia</option><option value="curulla-annelle">curulla-annelle</option><option value="dance-faculty-">dance-faculty-</option><option value="dasgupta-sayantani">dasgupta-sayantani</option><option value="datta-rhea">datta-rhea</option><option value="davis-michael">davis-michael</option><option value="de-leon-cora">de-leon-cora</option><option value="delne-claudy">delne-claudy</option><option value="de-sena-isabel">de-sena-isabel</option><option value="desjarlais-robert-r.">desjarlais-robert-r.</option><option value="devine-emily">devine-emily</option><option value="diamond-david">diamond-david</option><option value="dillard-mary">dillard-mary</option><option value="ditkoff-beth-ann">ditkoff-beth-ann</option><option value="dixon-jonathan">dixon-jonathan</option><option value="dizenko-natalia">dizenko-natalia</option><option value="dobyns-stephen">dobyns-stephen</option><option value="dodds-jerrilynn">dodds-jerrilynn</option><option value="dolan-siobhan">dolan-siobhan</option><option value="dollinger-roland">dollinger-roland</option><option value="donzelli-aurora">donzelli-aurora</option><option value="downs-patrick">downs-patrick</option><option value="doyle-charlotte-l.">doyle-charlotte-l.</option><option value="driscoll-kermit">driscoll-kermit</option><option value="drucker-jan">drucker-jan</option><option value="du-boff-jill">du-boff-jill</option><option value="duce-scott">duce-scott</option><option value="dufresne-angela">dufresne-angela</option><option value="duggan-niamh">duggan-niamh</option><option value="dumbutshena-rujeko">dumbutshena-rujeko</option><option value="duran-nancy">duran-nancy</option><option value="durcan-judith">durcan-judith</option><option value="dynner-glenn">dynner-glenn</option><option value="earle-jason">earle-jason</option><option value="early-michael">early-michael</option><option value="eger-david-j.">eger-david-j.</option><option value="ekman-june">ekman-june</option><option value="ellicson-kirsten">ellicson-kirsten</option><option value="ellis-matthew">ellis-matthew</option><option value="ellis-thomas-sayers">ellis-thomas-sayers</option><option value="emmons-beverly">emmons-beverly</option><option value="escobar-chaparro-gloria">escobar-chaparro-gloria</option><option value="faculty-design">faculty-design</option><option value="faculty-music">faculty-music</option><option value="fader-oren">fader-oren</option><option value="fagan-charling-c.">fagan-charling-c.</option><option value="fajardo-margarita">fajardo-margarita</option><option value="farrell-christine">farrell-christine</option><option value="febos-melissa">febos-melissa</option><option value="ferguson-kim">ferguson-kim</option><option value="ferraiolo-angela">ferraiolo-angela</option><option value="ferrell-carolyn">ferrell-carolyn</option><option value="folkman-marjorie">folkman-marjorie</option><option value="forbes-barbara">forbes-barbara</option><option value="forte-joseph-c.">forte-joseph-c.</option><option value="foulk-t.-griffith">foulk-t.-griffith</option><option value="frankel-marvin">frankel-marvin</option><option value="frazier-melissa">frazier-melissa</option><option value="frears-will">frears-will</option><option value="friedman-donald">friedman-donald</option><option value="fuchs-marek">fuchs-marek</option><option value="gabaston-liza">gabaston-liza</option><option value="garcia-laura">garcia-laura</option><option value="gardinier-suzanne">gardinier-suzanne</option><option value="gay-jackson">gay-jackson</option><option value="germano-roy">germano-roy</option><option value="gessen-keith">gessen-keith</option><option value="gillis-graeme">gillis-graeme</option><option value="gilvary-sara">gilvary-sara</option><option value="goldberg-myra">goldberg-myra</option><option value="goldman-nina">goldman-nina</option><option value="goldray-martin">goldray-martin</option><option value="gorn-cindy">gorn-cindy</option><option value="gould-peggy">gould-peggy</option><option value="greb-anne">greb-anne</option><option value="greenberg-michael">greenberg-michael</option><option value="greenwald-maggie">greenwald-maggie</option><option value="grewal-gwenda-lin">grewal-gwenda-lin</option><option value="griepp-eva-bostein">griepp-eva-bostein</option><option value="griffiths-rachel-eliza">griffiths-rachel-eliza</option><option value="grob-rachel-n.">grob-rachel-n.</option><option value="gross-susan">gross-susan</option><option value="guest-artists-">guest-artists-</option><option value="guests-">guests-</option><option value="gustafson-barret-charlie">gustafson-barret-charlie</option><option value="hallberg-garth-risk">hallberg-garth-risk</option><option value="handy-catherine">handy-catherine</option><option value="hansen-anneke">hansen-anneke</option><option value="hardy-dave">hardy-dave</option><option value="harris-hilda">harris-hilda</option><option value="harvey-matthea">harvey-matthea</option><option value="hassan-sarah">hassan-sarah</option><option value="hebron-mary">hebron-mary</option><option value="helias-mark">helias-mark</option><option value="henkin-joshua">henkin-joshua</option><option value="heppermann-ann">heppermann-ann</option><option value="herb-alice">herb-alice</option><option value="hercher-laura">hercher-laura</option><option value="heredia-luisa-laura">heredia-luisa-laura</option><option value="herships-sally">herships-sally</option><option value="hersh-michelle">hersh-michelle</option><option value="higgins-niko">higgins-niko</option><option value="hill-kathleen">hill-kathleen</option><option value="hoch-james">hoch-james</option><option value="hollander-david">hollander-david</option><option value="hong-cathy-park">hong-cathy-park</option><option value="hoover-suzanne-r.">hoover-suzanne-r.</option><option value="horowitz-james">horowitz-james</option><option value="howell-fanon">howell-fanon</option><option value="howe-marie">howe-marie</option><option value="hsu-tishan">hsu-tishan</option><option value="hultman-iréne">hultman-iréne</option><option value="human-genetics-faculty-">human-genetics-faculty-</option><option value="humbaugh-erin">humbaugh-erin</option><option value="hurlin-dan">hurlin-dan</option><option value="hwang-koosil-ja">hwang-koosil-ja</option><option value="hyman-yehuda">hyman-yehuda</option><option value="iacoboni-daniel">iacoboni-daniel</option><option value="iliatova-vera">iliatova-vera</option><option value="index">index</option><option value="index.xml">index.xml</option><option value="ingliss-robert">ingliss-robert</option><option value="jablonski-meghan">jablonski-meghan</option><option value="jacques-lmsw-christobal--j.">jacques-lmsw-christobal--j.</option><option value="james-tara-elise">james-tara-elise</option><option value="jansma-kristopher">jansma-kristopher</option><option value="jeter-james">jeter-james</option><option value="johnson-daniel">johnson-daniel</option><option value="johnson-kate-knapp">johnson-kate-knapp</option><option value="johnson-rebecca-o.">johnson-rebecca-o.</option><option value="johnston-elizabeth">johnston-elizabeth</option><option value="jones-alwin-a.-d.">jones-alwin-a.-d.</option><option value="jones-brian">jones-brian</option><option value="kahler-jean">kahler-jean</option><option value="kaplan-shirley">kaplan-shirley</option><option value="kart-susan">kart-susan</option><option value="katz-kuniko">katz-kuniko</option><option value="kaufmann-kathy">kaufmann-kathy</option><option value="kelley-william-melvin">kelley-william-melvin</option><option value="kelly-deborah">kelly-deborah</option><option value="kempson-sibyl">kempson-sibyl</option><option value="kerekes-paul">kerekes-paul</option><option value="ketchum-barbara-bray">ketchum-barbara-bray</option><option value="khakpour-porochista">khakpour-porochista</option><option value="kilroy-marac-kathleen">kilroy-marac-kathleen</option><option value="king-daniel">king-daniel</option><option value="king-jonathan">king-jonathan</option><option value="kirsch-adam">kirsch-adam</option><option value="klass-david">klass-david</option><option value="klinkenborg-verlyn">klinkenborg-verlyn</option><option value="korsunskaia-ekaterina">korsunskaia-ekaterina</option><option value="kreider-timothy">kreider-timothy</option><option value="kronn-david">kronn-david</option><option value="krugman-jason">krugman-jason</option><option value="krupat-arnold">krupat-arnold</option><option value="kurland-justine">kurland-justine</option><option value="kyle-peter">kyle-peter</option><option value="lachapelle-mary">lachapelle-mary</option><option value="lago-eduardo">lago-eduardo</option><option value="landdeck-kevin">landdeck-kevin</option><option value="lang-allen">lang-allen</option><option value="lauinger-ann">lauinger-ann</option><option value="lauinger-joseph">lauinger-joseph</option><option value="lavigne-sharon">lavigne-sharon</option><option value="lawrence-karen-r.">lawrence-karen-r.</option><option value="lee-michelle">lee-michelle</option><option value="lee-tom">lee-tom</option><option value="leonelli-laurie-beth">leonelli-laurie-beth</option><option value="leveau-eric">leveau-eric</option><option value="lewis-linwood-j.">lewis-linwood-j.</option><option value="lewis-margot">lewis-margot</option><option value="lieber-caroline">lieber-caroline</option><option value="lieberman-sandy">lieberman-sandy</option><option value="lieu-jocelyn">lieu-jocelyn</option><option value="lin-tao">lin-tao</option><option value="liu-wan-chun">liu-wan-chun</option><option value="liu-wen">liu-wen</option><option value="long-laura-i.">long-laura-i.</option><option value="lux-thomas">lux-thomas</option><option value="lyons-robert">lyons-robert</option><option value="machugh-doug">machugh-doug</option><option value="macías-patrisia">macías-patrisia</option><option value="macmillan-brian">macmillan-brian</option><option value="macpherson-greg">macpherson-greg</option><option value="magnuson-robert">magnuson-robert</option><option value="maillo-pozo-ruben">maillo-pozo-ruben</option><option value="manago-alexander-merceditas">manago-alexander-merceditas</option><option value="mañago-alexander-merceditas">mañago-alexander-merceditas</option><option value="mandel-thomas">mandel-thomas</option><option value="mark-rona-naomi">mark-rona-naomi</option><option value="marshall-james">marshall-james</option><option value="martinez-deluca-margaret">martinez-deluca-margaret</option><option value="matthews-amy">matthews-amy</option><option value="may-juliana">may-juliana</option><option value="mazmanian-victor">mazmanian-victor</option><option value="mccarthy-janelle">mccarthy-janelle</option><option value="mcdaniel-jeffrey">mcdaniel-jeffrey</option><option value="mcfarland-stephen">mcfarland-stephen</option><option value="mcghee-elena">mcghee-elena</option><option value="mcguire-liz">mcguire-liz</option><option value="mcintyre-dianne">mcintyre-dianne</option><option value="mcpherson-elizabeth">mcpherson-elizabeth</option><option value="mcree-william-d.">mcree-william-d.</option><option value="means-angelia">means-angelia</option><option value="medley-cassandra">medley-cassandra</option><option value="meira-la">meira-la</option><option value="melnick-jodi-melnick">melnick-jodi-melnick</option><option value="miller-jeffrey">miller-jeffrey</option><option value="miller-timothy">miller-timothy</option><option value="mills-joseph">mills-joseph</option><option value="mills-nicolaus">mills-nicolaus</option><option value="minsky-greta">minsky-greta</option><option value="misra-lavanya">misra-lavanya</option><option value="mitchell-rashaun">mitchell-rashaun</option><option value="mizelle-nike">mizelle-nike</option><option value="mizrahi-terry">mizrahi-terry</option><option value="moe-ruth">moe-ruth</option><option value="mofidi-shideh">mofidi-shideh</option><option value="moger-angela">moger-angela</option><option value="moos-katherine">moos-katherine</option><option value="morejon-diana-punales">morejon-diana-punales</option><option value="morris-mary">morris-mary</option><option value="mort-bari">mort-bari</option><option value="morton-brian">morton-brian</option><option value="mosolino-april-reynolds">mosolino-april-reynolds</option><option value="moudud-jamee-k.">moudud-jamee-k.</option><option value="muchmore-patrick">muchmore-patrick</option><option value="muldavin-joshua">muldavin-joshua</option><option value="murolo-priscilla">murolo-priscilla</option><option value="murray-katie">murray-katie</option><option value="muther-catherine">muther-catherine</option><option value="naka-cheiko">naka-cheiko</option><option value="naka-chieko">naka-chieko</option><option value="neely-evan">neely-evan</option><option value="negroni-maria">negroni-maria</option><option value="neskar-ellen">neskar-ellen</option><option value="neumann-david">neumann-david</option><option value="newhouse-erica">newhouse-erica</option><option value="newman-leigh">newman-leigh</option><option value="nolin-sally">nolin-sally</option><option value="novas-julie">novas-julie</option><option value="nurkse-dennis">nurkse-dennis</option><option value="oconnor-john">oconnor-john</option><option value="oconnor-stephen">oconnor-stephen</option><option value="offill-jenny">offill-jenny</option><option value="olson-leah">olson-leah</option><option value="ording-philip">ording-philip</option><option value="orlandersmith-dael">orlandersmith-dael</option><option value="ornstein-sloan-magdalena">ornstein-sloan-magdalena</option><option value="oshea-marygrace">oshea-marygrace</option><option value="oyama-sayuri-i.">oyama-sayuri-i.</option><option value="oziashvili-yekaterina">oziashvili-yekaterina</option><option value="paramaditha-intan">paramaditha-intan</option><option value="parker-matthew">parker-matthew</option><option value="partin-ted">partin-ted</option><option value="pearce-nicole">pearce-nicole</option><option value="peixoto-michael">peixoto-michael</option><option value="pelletier-carol-ann">pelletier-carol-ann</option><option value="peritz-david">peritz-david</option><option value="petty-lauren">petty-lauren</option><option value="pfordresher-jeanne1">pfordresher-jeanne1</option><option value="philipps-kris">philipps-kris</option><option value="philogene-gina">philogene-gina</option><option value="pierce-young-eddye">pierce-young-eddye</option><option value="pilkington-kevin">pilkington-kevin</option><option value="pollack-maika">pollack-maika</option><option value="pollak-max">pollak-max</option><option value="porter-karen">porter-karen</option><option value="porter-mary-a.">porter-mary-a.</option><option value="power-marilyn">power-marilyn</option><option value="prieto-josé-manuel">prieto-josé-manuel</option><option value="rainer-yvonne">rainer-yvonne</option><option value="raja-kanishka">raja-kanishka</option><option value="rakoff-joanna-smith">rakoff-joanna-smith</option><option value="redel-victoria">redel-victoria</option><option value="reich-elsa">reich-elsa</option><option value="reifler-nelly">reifler-nelly</option><option value="reilly-janet">reilly-janet</option><option value="reksten-nicholas">reksten-nicholas</option><option value="rezai-hamid">rezai-hamid</option><option value="rhodes-martha">rhodes-martha</option><option value="richards-peter">richards-peter</option><option value="risher-elise">risher-elise</option><option value="rivera-colon-edgar">rivera-colon-edgar</option><option value="robinson-sandra">robinson-sandra</option><option value="rodenbeck-judith">rodenbeck-judith</option><option value="rodgers-liz">rodgers-liz</option><option value="romano-patrick">romano-patrick</option><option value="rorandelli-tristana">rorandelli-tristana</option><option value="rosenthal-lucy">rosenthal-lucy</option><option value="rouse-shahnaz">rouse-shahnaz</option><option value="rudner-sara">rudner-sara</option><option value="ruen-kathleen">ruen-kathleen</option><option value="ryan-david">ryan-david</option><option value="sampson-efeya-ifadayo-m">sampson-efeya-ifadayo-m</option><option value="sanborn-erica">sanborn-erica</option><option value="sanchez-misael">sanchez-misael</option><option value="sanders-wayne">sanders-wayne</option><option value="sands-kristin-zahra">sands-kristin-zahra</option><option value="saptanyana-nyoman">saptanyana-nyoman</option><option value="saxon-la-rose">saxon-la-rose</option><option value="schachter-amanda">schachter-amanda</option><option value="schecter-barbara">schecter-barbara</option><option value="scheier-fanchon-miller">scheier-fanchon-miller</option><option value="schlesinger-mark-j.">schlesinger-mark-j.</option><option value="schmidt-carsten">schmidt-carsten</option><option value="schneider-ursula">schneider-ursula</option><option value="schorsch-jonathan">schorsch-jonathan</option><option value="schrader-astrid">schrader-astrid</option><option value="schultz-anthony">schultz-anthony</option><option value="schultz-tony">schultz-tony</option><option value="scotch-marmo-malia">scotch-marmo-malia</option><option value="sealander-rebecca">sealander-rebecca</option><option value="seibel-jean">seibel-jean</option><option value="seigle-samuel-b.">seigle-samuel-b.</option><option value="serafini-sauli-judith-p.">serafini-sauli-judith-p.</option><option value="seshadri-vijay">seshadri-vijay</option><option value="shafer-susan-h.">shafer-susan-h.</option><option value="shemy-deganit">shemy-deganit</option><option value="sherman-maxine">sherman-maxine</option><option value="shuford-gabriel">shuford-gabriel</option><option value="shullenberger-william">shullenberger-william</option><option value="shulman-mark-r.">shulman-mark-r.</option><option value="siff-michael">siff-michael</option><option value="silber-joan">silber-joan</option><option value="simons-lake">simons-lake</option><option value="singh-kanwal">singh-kanwal</option><option value="singh-paul">singh-paul</option><option value="sivesind-david">sivesind-david</option><option value="sizer-lyde-cullen">sizer-lyde-cullen</option><option value="slichter-jacob">slichter-jacob</option><option value="smith-michael-j.">smith-michael-j.</option><option value="smoler-fredric">smoler-fredric</option><option value="snead-pamela">snead-pamela</option><option value="sohn-sungrai">sohn-sungrai</option><option value="soiseth-alexandra">soiseth-alexandra</option><option value="sosnowy-collette">sosnowy-collette</option><option value="southgate-martha">southgate-martha</option><option value="spano-michael">spano-michael</option><option value="speer-james-w.">speer-james-w.</option><option value="speight-rico">speight-rico</option><option value="spencer-stuart">spencer-stuart</option><option value="starbuck-robin">starbuck-robin</option><option value="sternfeld-joel">sternfeld-joel</option><option value="stevens-brooke">stevens-brooke</option><option value="strype-frederick-michael">strype-frederick-michael</option><option value="swann-sterling">swann-sterling</option><option value="swoboda-philip">swoboda-philip</option><option value="tba-faculty">tba-faculty</option><option value="technical-staff-">technical-staff-</option><option value="thomas-nadeen-m.">thomas-nadeen-m.</option><option value="thom-rose-anne">thom-rose-anne</option><option value="thurber-lucy">thurber-lucy</option><option value="to-be-announced-">to-be-announced-</option><option value="tomasulo-frank">tomasulo-frank</option><option value="truax-alice">truax-alice</option><option value="turvey-malcolm">turvey-malcolm</option><option value="ulmert-megan">ulmert-megan</option><option value="uttley-lois">uttley-lois</option><option value="vahrenwald-michael">vahrenwald-michael</option><option value="vasudevan-preeti">vasudevan-preeti</option><option value="vesely-flad-rima">vesely-flad-rima</option><option value="vincenot-dash-stella">vincenot-dash-stella</option><option value="vitkin-marina">vitkin-marina</option><option value="voice-faculty-">voice-faculty-</option><option value="volpe-francine">volpe-francine</option><option value="wachs-ilja">wachs-ilja</option><option value="weil-laura">weil-laura</option><option value="weis-cathy">weis-cathy</option><option value="weiss-heidi">weiss-heidi</option><option value="wentworth-jean">wentworth-jean</option><option value="weschler-lawrence">weschler-lawrence</option><option value="westwater-kathy">westwater-kathy</option><option value="wiersma-cal">wiersma-cal</option><option value="wilbur-jennifer-scalia">wilbur-jennifer-scalia</option><option value="wilcox-sarah">wilcox-sarah</option><option value="wilford-sara">wilford-sara</option><option value="wilson-fiona">wilson-fiona</option><option value="wilson-matthew">wilson-matthew</option><option value="winter-joe">winter-joe</option><option value="winters-heather">winters-heather</option><option value="woodard-komozi">woodard-komozi</option><option value="woolfson-joseph-w.">woolfson-joseph-w.</option><option value="wright-alexandra">wright-alexandra</option><option value="wunderlich-mark">wunderlich-mark</option><option value="yamamoto-miyabi">yamamoto-miyabi</option><option value="yang-min">yang-min</option><option value="yannelli-john">yannelli-john</option><option value="yates-jonathan">yates-jonathan</option><option value="yin-mali">yin-mali</option><option value="yionoulis-evan">yionoulis-evan</option><option value="yoo-mia">yoo-mia</option><option value="yoon-paul">yoon-paul</option><option value="young-thomas">young-thomas</option><option value="zambreno-kate">zambreno-kate</option><option value="zerfas-francine">zerfas-francine</option><option value="zerner-charles">zerner-charles</option><option value="zevin-dan">zevin-dan</option><option value="zollar-keisha">zollar-keisha</option><option value="zoref-carol">zoref-carol</option><option value="zuern-elke">zuern-elke</option></select></div>');
-
-  $('.event-form').append('<input name="login" type="hidden" value="$user"/><input name="password" type="hidden" value="$password"/><input name="client" type="hidden" value="$client"/><input name="type" type="hidden" value="page"/><input name="action" type="hidden" value="edit"/>');
-  $('.event-form').each(function(i,v) { $('#deleted_events').clone().removeAttr('id').appendTo( $(this) ); $(this).append('<input type="submit" name="submit" class="btn btn-info" value="Copy data"/>'); });
-  $('.event-form').each(function(i,v) {\$(v).append('<div class="btn-group pull-right"><input type="submit" name="submit" class="btn btn-success" value="Enable and Tag '+ \$(v).find('h4').text() +'"/><input type="submit" name="submit" class="btn btn-warning" value="Reject"/></div>')});
   $('#deleted_events').remove();
 
-  $('.event-form .btn-success').click(function(e) {
+  $('.event-form .btn-enable').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','enable.php?year=$events_year');
-    $(this).closest('form').append('<div class="label label-success pull-right">Enable request sent</div>');
-    $(this).closest('form').find('.btn').addClass('disabled');
+    $(this).closest('form').find('h5').append('<div class="label label-success">Enable request sent</div>');
+    $(this).closest('form').find('.btn-action').addClass('disabled');
+    $(this).closest('form').find('.event-actions, .deleted-events').remove();
+    id = $(this).closest('form').data('id');
+    $.each(window['selectize'+id], function() {
+      this[0].selectize.lock();
+    });
   });
-  $('.event-form .btn-warning').click(function(e) {
+  $('.event-form .btn-reject').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','reject.php?year=$events_year');
-    $(this).closest('form').append('<div class="label label-important pull-right">Reject request sent</div>');
-    $(this).closest('form').find('.btn').addClass('disabled');
+    $(this).closest('form').find('h5').append('<div class="label label-important">Reject request sent</div>');
+    $(this).closest('form').find('.btn-action').addClass('disabled');
+    $(this).closest('form').find('.event-actions, .event-tags, .deleted-events').remove();
   });
-  $('.event-form .btn-info').click(function(e) {
+  $('.event-form .btn-copy').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','copyData.php?year=$events_year');
-    $(this).closest('form').append('<div class="label label-important pull-right">Copy request sent</div>');
-    $(this).closest('form').find('.btn').addClass('disabled');
+    $(this).closest('form').find('h5').append('<div class="label label-info">Copy request sent</div>');
+    $(this).closest('form').find('.btn-action').addClass('disabled');
+    $(this).closest('form').find('.event-actions, .event-tags').remove();
   });
 
 });
@@ -357,16 +857,29 @@ function readPage($client, $auth, $id, $type) {
           }
         }
       }
-      echo '<form class="event-form clearfix" method="POST" target="result">';
+      if (strpos($_POST['client'], 'https://cms.slc.edu:8443') === false) {
+        $cmsLink = 'https://cms.slc.edu:7443';
+      } else {
+        $cmsLink = 'https://cms.slc.edu:8443';
+      }
+      echo '<form class="event-form clearfix" method="POST" target="result-'.$asset['id'].'" data-id="'.$asset['id'].'">';
+        echo '<div class="btn btn-info pull-right collapser">Expand/Collapse</div>';
         echo '<input type="hidden" name="id" value="'.$asset['id'].'"/>';
-        echo '<h4><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page&">'.$asset['metadata']->title.'</a></h4>';
-        echo '<div>'.$asset['path'].$name.'</div>';
-        echo '<div class="k">'.date("D M dS, H:i", $begin).'</div> - <div class="k">'.date('D M dS, H:i', $end).'</div>'.($recurring == 'False' ? '' : '<div class="label label-info">Recurring</div>').' <a class="label label-success" target="_blank" href="'.$eventsource.'">Source</a>';
-        echo '<div><strong>Location:</strong> '.$location.'</div>';
-        echo '<div><strong>Sponsor:</strong> '.$sponsor.'</div>';
-        echo '<div><strong>Type:</strong> '.$type.'</div>';
-        echo '<div style="max-width:600px; background:#dde;">'.$asset['metadata']->summary.'</div>';
-        echo '<div style="max-width:600px;">'.$content.'</div>';
+        echo '<h4><a target="_blank" href="'. $cmsLink .'/entity/open.act?id='.$asset['id'].'&type=page&">'.$asset['metadata']->title.'</a></h4>';
+        echo '<div class="event-details">';
+          echo '<div>'.$asset['path'].$name.'</div>';
+          echo '<div class="k">'.date("D M dS, H:i", $begin).'</div> - <div class="k">'.date('D M dS, H:i', $end).'</div>'.($recurring == 'False' ? '' : '<div class="label label-info">Recurring</div>').' <a class="label label-success" target="_blank" href="'.$eventsource.'">Source</a>';
+          echo '<div><strong>Location:</strong> '.$location.'</div>';
+          echo '<div><strong>Sponsor:</strong> '.$sponsor.'</div>';
+          echo '<div><strong>Type:</strong> '.$type.'</div>';
+          echo '<div style="max-width:600px; background:#dde;">'.$asset['metadata']->summary.'</div>';
+          echo '<div style="max-width:600px;">'.$content.'</div>';
+          echo '<div class="event-tags"><div class="loading-tagging">Loading...</div></div>';
+          echo '<input name="login" type="hidden" value="'. $_POST['login'] .'"/><input name="password" type="hidden" value="'. $_POST['password'] .'"/><input name="client" type="hidden" value="'. $_POST['client'] .'"/><input name="type" type="hidden" value="page"/><input name="action" type="hidden" value="edit"/>';
+          echo '<div class="event-actions hidden text-center"><div class="btn-group"><input type="submit" name="submit" class="btn btn-success btn-enable btn-action" value="Enable and Tag '. $asset['metadata']->title .'"/><input type="submit" name="submit" class="btn btn-warning btn-reject btn-action" value="Reject"/></div> OR...</div>';
+        echo '</div>';
+        echo '<h5>Action results:</h5>';
+        echo '<iframe name="result-'. $asset['id'] .'" id="result-'. $asset['id'] .'" class="actionOutputIframe"></iframe>';
       echo "</form>";
     }
 

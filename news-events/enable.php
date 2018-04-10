@@ -48,43 +48,29 @@ if ($read->readReturn->success == 'true') {
 
 function addTags(&$asset) {
   
-  if(isset($_POST['areas'])){if (is_array($_POST['areas'])) {$areas = $_POST['areas'];} else {$areas = array($_POST['areas']);}} else {$areas = array();}
-  if(isset($_POST['disciplines'])){if (is_array($_POST['disciplines'])) {$disciplines = $_POST['disciplines'];} else {$disciplines = array($_POST['disciplines']);}} else {$disciplines = array();}
-  if(isset($_POST['programs'])){if (is_array($_POST['programs'])) {$programs = $_POST['programs'];} else {$programs = array($_POST['programs']);}} else {$programs = array();}
-  if(isset($_POST['studies'])){if (is_array($_POST['studies'])) {$studies = $_POST['studies'];} else {$studies = array($_POST['studies']);}} else {$studies = array();}
-  if(isset($_POST['audiences'])){if (is_array($_POST['audiences'])) {$audiences = $_POST['audiences'];} else {$audiences = array($_POST['audiences']);}} else {$audiences = array();}
-  if(isset($_POST['themes'])){if (is_array($_POST['themes'])) {$themes = $_POST['themes'];} else {$themes = array($_POST['themes']);}} else {$themes = array();}
-  if(isset($_POST['channels'])){if (is_array($_POST['channels'])) {$channels = $_POST['channels'];} else {$channels = array($_POST['channels']);}} else {$channels = array();}
+  if(isset($_POST['academics'])){if (strpos($_POST['academics'],';') === false) {$academics = array($_POST['academics']);} else {$academics = explode(';',$_POST['academics']);}} else {$academics = array();}
+  if(isset($_POST['audiences'])){if (strpos($_POST['audiences'],';') === false) {$audiences = array($_POST['audiences']);} else {$audiences = explode(';',$_POST['audiences']);}} else {$audiences = array();}
+  if(isset($_POST['themes'])   ){if (strpos($_POST['themes'],   ';') === false) {$themes    = array($_POST['themes']);}    else {$themes    = explode(';',$_POST['themes']);}   } else {$themes = array();}
+  if(isset($_POST['channels']) ){if (strpos($_POST['channels'], ';') === false) {$channels  = array($_POST['channels']);}  else {$channels  = explode(';',$_POST['channels']);} } else {$channels = array();}
+  if(isset($_POST['sponsors']) ){if (strpos($_POST['sponsors'], ';') === false) {$sponsors  = array($_POST['sponsors']);}  else {$sponsors  = explode(';',$_POST['sponsors']);} } else {$sponsors = array();}
+
   if(in_array('Careers',$themes)){$careers = true;}
   
-  if(isset($_POST['sponsors'])){if (is_array($_POST['sponsors'])) {$sponsors = $_POST['sponsors'];} else {$sponsors = array($_POST['sponsors']);}} else {$sponsors = array();}
+  
   
   
   foreach ($asset["metadata"]->dynamicFields->dynamicField as $dyn) {
     if ($dyn->name == 'faculty-tag') {
-      if (isset($_POST['faculty-tag'])) {
-        $dyn->fieldValues->fieldValue->value = $_POST['faculty-tag'];
+      if (isset($_POST['faculty'])) {
+        $dyn->fieldValues->fieldValue = new StdClass();
+        $dyn->fieldValues->fieldValue->value = $_POST['faculty'];
       } else {
+        $dyn->fieldValues->fieldValue = new StdClass();
         $dyn->fieldValues->fieldValue->value = '';
       }
     } elseif ($dyn->name == 'academics') {
       $dyn->fieldValues->fieldValue = array();
-      foreach($areas as $val) {
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-      foreach($disciplines as $val) {
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-      foreach($programs as $val) {
-        $node = new StdClass();
-        $node->value = $val;
-        array_push($dyn->fieldValues->fieldValue, $node);
-      }
-      foreach($studies as $val) {
+      foreach($academics as $val) {
         $node = new StdClass();
         $node->value = $val;
         array_push($dyn->fieldValues->fieldValue, $node);
