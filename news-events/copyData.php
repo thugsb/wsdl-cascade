@@ -2,6 +2,10 @@
 date_default_timezone_set('America/New_York');
 $title = 'Copy Data from Deleted Event';
 
+echo 'Copying...';
+ob_flush();
+flush();
+
 include_once('eventFolderIDs.php');
 include("../web_services_util.php");
 
