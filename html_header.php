@@ -117,14 +117,17 @@ if (!isset($data)) {$data = '';}
   
   .modal {width:100%;left:0;margin-left:0;}
   .modal-body {max-height:500px;white-space:pre;}
-  
-  #result {height:70px;}
-  #result.bigger {height:300px;}
-  .tag-section {margin: .5em; background-color: #ccc;}
+  .event-actions {margin: 1em;}
+  .event-tags {display: grid;  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .tag-section {padding: .5em; background-color: #ccc;}
   .tag-section.calendar {background: #fec;}
   .tag-section label {display: inline-block; vertical-align:top; width: 250px;}
   .tag-section label input {margin:0 5px 0 0;}
   .deleted_events {width: 300px; margin:0;}
+  .actionOutputIframe {display:block; width:100%; height:110px; border: inset 8px violet; box-sizing:border-box;}
+  .loading-tagging {font-size:3em; line-height: 4; text-align:center; border: dashed 8px teal;}
+  .selectize-input.locked {background-color: #eee;}
+  .selectize-control.multi .selectize-input.locked .item {background: #666;}
   </style>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
@@ -140,6 +143,7 @@ if (!isset($data)) {$data = '';}
   });
   </script>
   
+  <?php if (isset($htmlHead)) {echo $htmlHead;} ?>
   <?php if (isset($script)) {echo '<script>'.$script.'</script>';} ?>
 </head>
 <body>
