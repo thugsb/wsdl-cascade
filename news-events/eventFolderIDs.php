@@ -1,6 +1,6 @@
 <?php
 
-if ( isset($_GET['year']) ) {
+if ( isset($_GET['year']) && preg_match('/20[0-9][0-9]-20[0-9][0-9]/', $_GET['year']) ) {
   $events_year = $_GET['year'];
 } else {
   $events_year = '2017-2018';
