@@ -688,25 +688,28 @@ $(function() {
     $(this).closest('form').attr('action','enable.php?year=$events_year');
     $(this).closest('form').find('h5').append('<div class="label label-success">Enable request sent</div>');
     $(this).closest('form').find('.btn-action').addClass('disabled');
-    $(this).closest('form').find('.event-actions, .deleted-events').remove();
+    $(this).closest('form').find('.event-actions, .deleted-events').hide();
     id = $(this).closest('form').data('id');
-    $.each(window['selectize'+id], function() {
-      this[0].selectize.lock();
-    });
+    selectizedFormInputs = window['selectize'+id];
+    if (typeof selectizedFormInputs !== 'undefined' && Array.isArray(selectizedFormInputs) ) {
+      $.each(selectizedFormInputs, function() {
+        this[0].selectize.lock();
+      });
+    }
   });
   $('.event-form .btn-reject').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','reject.php?year=$events_year');
     $(this).closest('form').find('h5').append('<div class="label label-important">Reject request sent</div>');
     $(this).closest('form').find('.btn-action').addClass('disabled');
-    $(this).closest('form').find('.event-actions, .event-tags, .deleted-events').remove();
+    $(this).closest('form').find('.event-actions, .event-tags, .deleted-events').hide();
   });
   $('.event-form .btn-copy').click(function(e) {
     if ( $(this).is('.disabled') ) { e.preventDefault(); return false; }
     $(this).closest('form').attr('action','copyData.php?year=$events_year');
     $(this).closest('form').find('h5').append('<div class="label label-info">Copy request sent</div>');
     $(this).closest('form').find('.btn-action').addClass('disabled');
-    $(this).closest('form').find('.event-actions, .event-tags').remove();
+    $(this).closest('form').find('.event-actions, .event-tags').hide();
   });
 
 });
