@@ -105,8 +105,8 @@ if (!isset($data)) {$data = '';}
   });
   </script>
   
-  <?php if (isset($htmlHead)) {echo $htmlHead;} ?>
   <?php if (isset($script)) {echo '<script>'.$script.'</script>';} ?>
+  <?php if (isset($htmlHead)) {echo $htmlHead;} ?>
 </head>
 <body>
   <nav>
