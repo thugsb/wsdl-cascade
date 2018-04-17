@@ -80,7 +80,7 @@ $data = json_decode($json);
 
 //print_r($data);
 
-$media = $data->entry_data->ProfilePage[0]->user->media->nodes;
+$media = $data->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges;
 
 if ( !is_array($media) ) {
 	$media = array($media);
@@ -94,40 +94,51 @@ $matchHash = '/(?:#)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-
 $message = '';
 $output = '<div class="component cpt-instagram"><div class="list-inner"><h2><a target="blank" href="https://www.instagram.com/'.$account.'/">Instagram <div class="icon i-ext-link" data-grunticon-embed="data-grunticon-embed"></div><small>'.$account.'</small></a></h2><div class="content">'."\n\n";
 foreach ($media as $key => $value) {
-	$thumb_url = parse_url( $value->thumbnail_src );
+	// echo '<pre>';
+	// print_r($value);
+	// echo '</pre>';
+	// Set all the values here:
+	$imageCaption = $value->node->edge_media_to_caption->edges[0]->node->text;
+	$imageShortcode = $value->node->shortcode;
+	$imageThumbnailSrc = $value->node->thumbnail_src;
+	$imageDisplaySrc = $value->node->display_url;
+	$imageWidth = $value->node->dimensions->width;
+	$imageHeight = $value->node->dimensions->height;
+
+	$thumb_url = parse_url( $imageThumbnailSrc );
 	$thumb_url_array = explode( '/', $thumb_url['path'] );
 	$thumb_filename = end( $thumb_url_array );
-	if( !file_exists( $serverPath . "thumb/".$account.'-'.$value->code.'.jpg') ) {
-		if ( $cron && !empty($value->thumbnail_src) && copy($value->thumbnail_src, $serverPath ."thumb/".$account.'-'.$value->code.'.jpg' ) ) {
+	if( !file_exists( $serverPath . "thumb/".$account.'-'.$imageShortcode.'.jpg') ) {
+		if ( $cron && !empty($imageThumbnailSrc) && copy($imageThumbnailSrc, $serverPath ."thumb/".$account.'-'.$imageShortcode.'.jpg' ) ) {
 			$message .= "Image thumb $key copied successfully.\n";
 			$imageChanged = true;
 		} else {
 			$message .= "Image thumb $key copy FAILED. The .html output file will NOT be modified.\n";
-			if (empty($value->thumbnail_src)) {
+			if (empty($imageThumbnailSrc)) {
 				$message .= "The value->thumbnail_src is empty.\n";
 			}
 			$copyFail = true;
 		}
 	}
-	$large_url = parse_url( $value->display_src );
+	$large_url = parse_url( $imageDisplaySrc );
 	$file_path_array = explode( '/', $large_url['path'] );
 	$filename = end( $file_path_array );
-	if( !file_exists( $serverPath ."large/".$account.'-'.$value->code.'.jpg') ) {
-		if ( $cron && !empty($value->display_src) && copy($value->display_src, $serverPath ."large/".$account.'-'.$value->code.'.jpg' ) ) {
+	if( !file_exists( $serverPath ."large/".$account.'-'.$imageShortcode.'.jpg') ) {
+		if ( $cron && !empty($imageDisplaySrc) && copy($imageDisplaySrc, $serverPath ."large/".$account.'-'.$imageShortcode.'.jpg' ) ) {
 			$message .= "Large image $key copied successfully.\n";
 			$imageChanged = true;
 		} else {
 			$message .= "Large image $key copy FAILED. The .html output file will NOT be modified.\n";
-			if (empty($value->display_src)) {
+			if (empty($imageDisplaySrc)) {
 				$message .= "The value->display_src is empty.\n";
 			}
 			$copyFail = true;
 		}
 	}
-	// echo "<a href='https://www.instagram.com/p/$value->code/'><img src='$value->thumbnail_src'></a>";
+	// echo "<a href='https://www.instagram.com/p/$imageShortcode/'><img src='$imageThumbnailSrc'></a>";
 
 
-	$captionWithUsers  = preg_replace($matchUser, '<a class="instagram-user" href="https://www.instagram.com/$1/">@$1</a>', $value->caption);
+	$captionWithUsers  = preg_replace($matchUser, '<a class="instagram-user" href="https://www.instagram.com/$1/">@$1</a>', $imageCaption);
 	$captionWithHashes = preg_replace($matchHash, '<a class="instagram-hashtag" href="https://www.instagram.com/explore/tags/$1/">#$1</a>', $captionWithUsers);
 
 	$nf = new NumberFormatter('en_US', NumberFormatter::ORDINAL);
@@ -138,9 +149,9 @@ foreach ($media as $key => $value) {
 		$output .= '<div class="list-instagram link-exp-lbx lbx-wide lbx-only">'."\n";
 	}
 		if ($key < 4 ) {
-			$output .= '	<a href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n"
+			$output .= '	<a href="https://www.instagram.com/p/'.$imageShortcode.'/" data-code="'.$imageShortcode.'">'."\n"
 					.'		<span class="img-wrap">'."\n"
-					.'			<img src="'. $sitePath .'thumb/'.$account.'-'.$value->code.'.jpg'.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n"
+					.'			<img src="'. $sitePath .'thumb/'.$account.'-'.$imageShortcode.'.jpg'.'" alt="'.str_replace('"','',$imageCaption).'"/>'."\n"
 					.'			<span class="icon i-exp-img" data-grunticon-embed=""></span>'."\n"
 					.'		</span>'."\n"
 					.'	</a>'."\n";
@@ -148,18 +159,18 @@ foreach ($media as $key => $value) {
 		$output .= '	<div class="cpt-lightbox" id="modal-instagram-'.$key.'">'."\n"
 				.'		<div class="cpt-instagram"><h2><a href="https://www.instagram.com/'. $account .'/">Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></h2></div>'."\n"
 				.'		<div class="inner-left"><div class="field-image ">'."\n"
-				.'			<div class="link-wrap"><a target="instagram" href="https://www.instagram.com/p/'.$value->code.'/" data-code="'.$value->code.'">'."\n";
+				.'			<div class="link-wrap"><a target="instagram" href="https://www.instagram.com/p/'.$imageShortcode.'/" data-code="'.$imageShortcode.'">'."\n";
 		if ($key < 4 ) {
-			$output .= '				<img class="lazy" data-original="'. $sitePath .'large/'.$account.'-'.$value->code.'.jpg'.'" src="'. $sitePath .'thumb/'.$account.'-'.$value->code.'.jpg'.'" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
+			$output .= '				<img class="lazy" data-original="'. $sitePath .'large/'.$account.'-'.$imageShortcode.'.jpg'.'" src="'. $sitePath .'thumb/'.$account.'-'.$imageShortcode.'.jpg'.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.str_replace('"','',$imageCaption).'"/>'."\n";
 		} else {
-			$output .= '				<img class="lazy" data-original="'. $sitePath .'large/'.$account.'-'.$value->code.'.jpg'.'" src="'. $sitePath .'loading.gif" width="'.$value->dimensions->width.'" height="'.$value->dimensions->height.'" alt="'.str_replace('"','',$value->caption).'"/>'."\n";
+			$output .= '				<img class="lazy" data-original="'. $sitePath .'large/'.$account.'-'.$imageShortcode.'.jpg'.'" src="'. $sitePath .'loading.gif" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.str_replace('"','',$imageCaption).'"/>'."\n";
 		}
 		$output .= '				<span class="icon i-ext-link" data-grunticon-embed=""></span>'."\n"
 				.'			</a></div>'."\n"
 				.'		</div></div>'."\n"
 				.'		<div class="inner-right"><div class="field-body">'."\n"
 				.'			<p>'. $captionWithHashes .'</p>'."\n"
-				.'			<p><a target="instagram" aria-label="View the '.$nf->format($key+1).' most recently published image in Instagram" href="https://www.instagram.com/p/'.$value->code.'/">Open in Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></p>'."\n"
+				.'			<p><a target="instagram" aria-label="View the '.$nf->format($key+1).' most recently published image in Instagram" href="https://www.instagram.com/p/'.$imageShortcode.'/">Open in Instagram<span class="icon i-ext-link" data-grunticon-embed=""></span></a></p>'."\n"
 				.'		</div></div>'."\n"
 				.'	</div>'."\n";
 
