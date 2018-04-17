@@ -83,7 +83,16 @@ $data = json_decode($json);
 $media = $data->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges;
 
 if ( !is_array($media) ) {
-	$media = array($media);
+	echo 'Exiting';
+	$subject = 'Instagram JSON Structure has CHANGED';
+	$match_fail_message = 'The array of images was not found within the JSON, likely meaning the structure of the JSON itself has changed. The Scraper script will now exit and will NOT overwrite the HTML files. The instagram cURL worked and the scrape matched the regex. '."\n".'This occurrred while running for the '. $account .' account.';
+	$output = $subject . "\n" . $match_fail_message;
+	$response = Rollbar::log(Level::error(), $output);
+  	if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+  	}
+	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	exit;
 }
 
 $imageChanged = false;
