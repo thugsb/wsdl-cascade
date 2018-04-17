@@ -84,48 +84,13 @@ if (!isset($data)) {$data = '';}
   <title>WSDL - <?php echo $title; ?></title>
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-  <style type="text/css">
-  body {padding:1em 1em 100px;}
-  a {text-decoration:none;color:#334}
-  input[type=text], input[type=password], select {width:120px;}
-  fieldset {display: inline-block;}
-  .radio-label {display: inline-block; vertical-align: bottom; padding-top: 5px;}
-  #id {width:255px;}
-  #read {margin-left:1em;}
-  .right {float:right;}
-  .hidden {display:none;}
-  .s, .k, .d, .f {display:inline-block;margin:0 1em;}
-  .s {color:#090;}
-  .k {color:#009;}
-  .d {color:#900;}
-  .f {padding:1em;font-size:1em;color:#fff;background:#c00;}
-  .left_label {display:inline-block;width:50%;}
-  
-  .advanced {font-size:0.8em;}
-  .totals {position:fixed;top:0;right:0;padding:0.5em;box-shadow:0 0 5px #000;background:#fff;}
-  
-  .output {margin-top:1em;border-top:1px solid #ccc;}
-  .page {border-bottom:2px solid #ccc;margin-bottom:0.2em;}
-  h4 {margin:0;}
-  
-  .fullpage {display:block;white-space:pre;height:4.5em;padding:0.2em;overflow:hidden;box-shadow:inset 0 0 5px #000;}
-  input:checked + .fullpage {height:auto;}
-  #expandAll:checked + section .modal {display:block !important;position:static;width:90%;margin:0 auto;}
-  
-  .odd {background:#eee;}
-  .asset {padding:1em;}
-  
-  .modal {width:100%;left:0;margin-left:0;}
-  .modal-body {max-height:500px;white-space:pre;}
-  
-  #result {height:70px;}
-  #result.bigger {height:300px;}
-  .tag-section {margin: .5em; background-color: #ccc;}
-  .tag-section.calendar {background: #fec;}
-  .tag-section label {display: inline-block; vertical-align:top; width: 250px;}
-  .tag-section label input {margin:0 5px 0 0;}
-  .deleted_events {width: 300px; margin:0;}
-  </style>
+  <?php 
+  if ( file_exists(dirname($_SERVER["SCRIPT_FILENAME"]) . '/html_header.php') ) {
+    echo '<link href="styling.css" rel="stylesheet">';
+  } else {
+    echo '<link href="../styling.css" rel="stylesheet">';
+  }
+  ?>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
   <script>
@@ -141,6 +106,7 @@ if (!isset($data)) {$data = '';}
   </script>
   
   <?php if (isset($script)) {echo '<script>'.$script.'</script>';} ?>
+  <?php if (isset($htmlHead)) {echo $htmlHead;} ?>
 </head>
 <body>
   <nav>

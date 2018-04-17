@@ -2,6 +2,10 @@
 date_default_timezone_set('America/New_York');
 $title = 'Reject Event';
 
+echo 'Rejecting...';
+ob_flush();
+flush();
+
 include_once('eventFolderIDs.php');
 include("../web_services_util.php");
 
