@@ -124,7 +124,7 @@ foreach ($media as $key => $value) {
 		} else {
 			$message .= "Image thumb $key copy FAILED. The .html output file will NOT be modified.\n";
 			if (empty($imageThumbnailSrc)) {
-				$message .= "The value->thumbnail_src is empty.\n";
+				$message .= "The thumbnail image SRC is empty.\n";
 			}
 			$copyFail = true;
 		}
@@ -139,7 +139,7 @@ foreach ($media as $key => $value) {
 		} else {
 			$message .= "Large image $key copy FAILED. The .html output file will NOT be modified.\n";
 			if (empty($imageDisplaySrc)) {
-				$message .= "The value->display_src is empty.\n";
+				$message .= "The display (large) image URL is empty.\n";
 			}
 			$copyFail = true;
 		}
@@ -189,7 +189,7 @@ $output .= "\n\n".'</div></div></div>';
 
 $existingFileContents = file_get_contents($serverPath ."instagram-$account.html");
 
-if ($imageChanged || !file_exists($serverPath ."instagram-$account.html") || $output !== $existingFileContents ) {
+if ($imageChanged || !file_exists($serverPath ."instagram-$account.html") || $output !== $existingFileContents || !$copyFail ) {
 	if ($cron && file_put_contents($serverPath ."instagram-$account.html", $output) ) {
 		$message .= 'File HTML written successfully.'."\n";
 	} else {
@@ -214,6 +214,15 @@ if ($cron) {
 	echo '<pre>'.$message.'</pre>';
 	echo $output;
 	echo '<pre>';print_r($data);echo '</pre>';
+	echo '
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+	$("img").each(function() {
+		if ( $(this).has("data-original") ) {
+			$(this).attr("src", $(this).data("original"))
+		}
+	});
+	</script>';
 	// echo '<script>var data = "'. htmlspecialchars($curlresult) .'"; console.log(data);</script>';
 }
 
