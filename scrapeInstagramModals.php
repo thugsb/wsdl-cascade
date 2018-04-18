@@ -214,6 +214,15 @@ if ($cron) {
 	echo '<pre>'.$message.'</pre>';
 	echo $output;
 	echo '<pre>';print_r($data);echo '</pre>';
+	echo '
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+	$("img").each(function() {
+		if ( $(this).has("data-original") ) {
+			$(this).attr("src", $(this).data("original"))
+		}
+	});
+	</script>';
 	// echo '<script>var data = "'. htmlspecialchars($curlresult) .'"; console.log(data);</script>';
 }
 
