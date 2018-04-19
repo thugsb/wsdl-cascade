@@ -1,8 +1,10 @@
 <?php
 
+require_once implode(DIRECTORY_SEPARATOR, array(__DIR__, 'vendor', 'autoload.php'));
 include_once(__DIR__.'/rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
+use JsonSchema\Validator;
 
 if (PHP_SAPI == 'cli') {
 	parse_str(implode('&', array_slice($argv, 1)), $_GET);
@@ -40,7 +42,11 @@ curl_close($curl);
 
 $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
 
+if (!isset($email) ) {
+	$email = 'stu@t.apio.ca';
+}
 
+/* To use the local test JSON, comment out from here down to the two $testFile lines (and uncomment those) */
 
 if ($curlresult === false) {
 	$subject = 'Instagram Image Scraper cURL returned FALSE';
@@ -48,7 +54,7 @@ if ($curlresult === false) {
 	$output = $subject . "\n" . $match_fail_message;
 	$response = Rollbar::log(Level::warning(), $output);
   	if (!$response->wasSuccessful()) {
-      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+      mail($email, 'Logging with Rollbar FAILED', $output, $headers);
   	}
 	exit;
 }
@@ -67,7 +73,7 @@ if ( count($matches) < 1 ) {
 	$output = $subject . "\n" . $match_fail_message;
 	$response = Rollbar::log(Level::warning(), $output);
   	if (!$response->wasSuccessful()) {
-      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+      mail($email, 'Logging with Rollbar FAILED', $output, $headers);
   	}
 	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
@@ -78,20 +84,46 @@ $json = preg_replace('/\};$/','}', $json);
 
 $data = json_decode($json);
 
+/*
+$testFile = implode(DIRECTORY_SEPARATOR, array(__DIR__, 'instagram-test-data.json'));
+$data = json_decode(file_get_contents($testFile));
+*/
+
+$validator = new JsonSchema\Validator;
+$schemaFile	= implode(DIRECTORY_SEPARATOR, array(__DIR__, 'instagram-schema.json'));
+$schema		= json_decode(file_get_contents($schemaFile));
+
+$validator->validate($data, $schema);
+if ($validator->isValid()) {
+    if (!$cron) { echo "<p style='color:#090'>The supplied JSON validates against the schema.</p>\n"; }
+} else {
+	$subject = "ERROR: Instagram JSON does not validate.";
+	$validationError = 'The JSON scraped from Instagram does not validate against the schema.'."\n".'This occurrred while running for the '. $account .' account.'."\n Violations:\n";
+    foreach ($validator->getErrors() as $error) {
+        $validationError .= sprintf("[%s] %s\n", $error['property'], $error['message']);
+    }
+	$output = $subject . "\n" . $validationError;
+	$response = Rollbar::log(Level::error(), $output);
+  	if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED', $output, $headers);
+  	}
+    if (!$cron) { echo str_replace('\n','<br/>', $subject) . '<br/>' . str_replace('\n','<br/>', $validationError); }
+    exit;
+}
+
 //print_r($data);
 
 $media = $data->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges;
 
 if ( !is_array($media) ) {
-	echo 'Exiting';
+	if (!$cron) { echo 'Exiting'; }
 	$subject = 'Instagram JSON Structure has CHANGED';
 	$match_fail_message = 'The array of images was not found within the JSON, likely meaning the structure of the JSON itself has changed. The Scraper script will now exit and will NOT overwrite the HTML files. The instagram cURL worked and the scrape matched the regex. '."\n".'This occurrred while running for the '. $account .' account.';
 	$output = $subject . "\n" . $match_fail_message;
 	$response = Rollbar::log(Level::error(), $output);
   	if (!$response->wasSuccessful()) {
-      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
+      mail($email, 'Logging with Rollbar FAILED', $output, $headers);
   	}
-	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
 	exit;
 }
 
@@ -207,7 +239,7 @@ if ($cron) {
 	if ($copyFail || $writeFail) {
 		$response = Rollbar::log(Level::warning(), $rollbarOutput);
 	  	if (!$response->wasSuccessful()) {
-	      mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $rollbarOutput, $headers);
+	      mail($email, 'Logging with Rollbar FAILED', $rollbarOutput, $headers);
 	  	}
 	}
 } else {
