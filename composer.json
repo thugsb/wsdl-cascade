@@ -1,5 +1,6 @@
 {
     "require": {
-        "rollbar/rollbar": "~1.0"
+        "rollbar/rollbar": "~1.0",
+        "justinrainbow/json-schema": "^5.2"
     }
 }
