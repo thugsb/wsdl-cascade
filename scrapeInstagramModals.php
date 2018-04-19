@@ -1,8 +1,10 @@
 <?php
 
+require_once implode(DIRECTORY_SEPARATOR, array(__DIR__, 'vendor', 'autoload.php'));
 include_once(__DIR__.'/rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
+use JsonSchema\Validator;
 
 if (PHP_SAPI == 'cli') {
 	parse_str(implode('&', array_slice($argv, 1)), $_GET);
@@ -80,6 +82,29 @@ $json = str_replace('window._sharedData = ','', $matches[0]);
 $json = preg_replace('/\};$/','}', $json);
 
 $data = json_decode($json);
+
+
+$validator = new JsonSchema\Validator;
+$schemaFile	= implode(DIRECTORY_SEPARATOR, array(__DIR__, 'instagram-schema.json'));
+$schema		= json_decode(file_get_contents($schemaFile));
+
+$validator->validate($data, $schema);
+if ($validator->isValid()) {
+    if (!$cron) { echo "<p style='color:#090'>The supplied JSON validates against the schema.</p>\n"; }
+} else {
+	$subject = "ERROR: Instagram JSON does not validate.";
+	$validationError = 'The JSON scraped from Instagram does not validate against the schema.'."\n".'This occurrred while running for the '. $account .' account.'."\n Violations:\n";
+    foreach ($validator->getErrors() as $error) {
+        $validationError .= sprintf("[%s] %s\n", $error['property'], $error['message']);
+    }
+	$output = $subject . "\n" . $validationError;
+	$response = Rollbar::log(Level::error(), $output);
+  	if (!$response->wasSuccessful()) {
+      mail($email, 'Logging with Rollbar FAILED', $output, $headers);
+  	}
+    if (!$cron) { echo str_replace('\n','<br/>', $subject) . '<br/>' . str_replace('\n','<br/>', $validationError); }
+    exit;
+}
 
 //print_r($data);
 

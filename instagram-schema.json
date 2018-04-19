@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Event",
+  "description": "A Sarah Lawrence College event",
+  "type": "object",
+  "properties": {
+    "entry_data": {
+      "type": "object",
+      "required": ["ProfilePage"],
+      "properties": {
+        "ProfilePage": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["graphql"],
+            "properties": {
+              "graphql": {
+                "type": "object",
+                "required": ["user"],
+                "properties": {
+                  "user": {
+                    "type": "object",
+                    "required": ["edge_owner_to_timeline_media"],
+                    "properties": {
+                      "edge_owner_to_timeline_media": {
+                        "type": "object",
+                        "required": ["edges"],
+                        "properties": {
+                          "edges": {
+                            "type": "array",
+                            "items": { 
+                              "type": "object",
+                              "required": ["node"],
+                              "properties": {
+                                "node": {
+                                  "type": "object",
+                                  "required": ["dimensions", "shortcode", "thumbnail_src", "display_url", "edge_media_to_caption"],
+                                  "properties": {
+                                    "dimensions": {
+                                      "type": "object",
+                                      "required": ["width", "height"],
+                                      "properties": {
+                                        "width": {
+                                          "type": "integer"
+                                        }
+                                      },
+                                      "properties": {
+                                        "height": {
+                                          "type": "integer"
+                                        }
+                                      }
+                                    },
+                                    "shortcode": {
+                                      "type": "string",
+                                      "pattern": "^[-_a-zA-Z0-9]{11}$"
+                                    },
+                                    "thumbnail_src": {
+                                      "type": "string"
+                                    },
+                                    "display_url": {
+                                      "type": "string"
+                                    },
+                                    "edge_media_to_caption": {
+                                      "type": "object",
+                                      "required": ["edges"],
+                                      "properties": {
+                                        "edges": {
+                                          "type": "array",
+                                          "items": {
+                                            "type": "object",
+                                            "required": ["node"],
+                                            "properties": {
+                                              "node": {
+                                                "type": "object",
+                                                "required": ["text"],
+                                                "properties": {
+                                                  "text": {
+                                                    "type": "string"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["entry_data"]
+}
