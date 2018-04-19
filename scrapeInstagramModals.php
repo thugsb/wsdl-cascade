@@ -46,6 +46,7 @@ if (!isset($email) ) {
 	$email = 'stu@t.apio.ca';
 }
 
+/* To use the local test JSON, comment out from here down to the two $testFile lines (and uncomment those) */
 
 if ($curlresult === false) {
 	$subject = 'Instagram Image Scraper cURL returned FALSE';
@@ -83,6 +84,10 @@ $json = preg_replace('/\};$/','}', $json);
 
 $data = json_decode($json);
 
+/*
+$testFile = implode(DIRECTORY_SEPARATOR, array(__DIR__, 'instagram-test-data.json'));
+$data = json_decode(file_get_contents($testFile));
+*/
 
 $validator = new JsonSchema\Validator;
 $schemaFile	= implode(DIRECTORY_SEPARATOR, array(__DIR__, 'instagram-schema.json'));
