@@ -55,8 +55,10 @@ if (array_key_exists('submit',$_POST)) {
       if ($del_folder->readReturn->success == 'true') {
         $del_asset = ( array ) $del_folder->readReturn->asset->folder;
         $deleted_events = $del_asset["children"]->child;
-        foreach ($deleted_events as $del_event) {
-          echo "<option value='".$del_event->id."'>".$del_event->path->path."</option>";
+        if (is_array($deleted_events) ) {
+          foreach ($deleted_events as $del_event) {
+            echo "<option value='".$del_event->id."'>".$del_event->path->path."</option>";
+          }
         }
       } else {
         if (!$cron) {echo "<option>Couldn't read deleted events folder.</option>";}
