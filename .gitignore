@@ -6,3 +6,4 @@ rollbar-init.php
 *.sublime-*
 indexes/
 vendor/
+news-events/_events_array.html
