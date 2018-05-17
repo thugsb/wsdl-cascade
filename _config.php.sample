@@ -1,0 +1,13 @@
+<?php
+
+define('CMS_BASE_PATH', 		'https://cms.CASCADESERVER.edu:8443');
+define('CMS_PATH', 				CMS_BASE_PATH.'/ws/services/AssetOperationService?wsdl');
+define('CMS_OPEN_PATH', 		CMS_BASE_PATH.'/entity/open.act?id=');
+define('CMS_ENTITY_PATH', 		CMS_BASE_PATH.'/entity/');
+
+define('CMS_DEV_BASE_PATH', 	'https://cms.CASCADESERVER.edu:7443');
+define('CMS_DEV_PATH', 			CMS_DEV_BASE_PATH.'/ws/services/AssetOperationService?wsdl');
+define('CMS_DEV_OPEN_PATH', 	CMS_DEV_BASE_PATH.'/entity/open.act?id=');
+define('CMS_DEV_ENTITY_PATH', 	CMS_DEV_BASE_PATH.'/entity/');
+
+?>
