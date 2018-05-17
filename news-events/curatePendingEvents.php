@@ -126,7 +126,7 @@ function readPage($client, $auth, $id, $type) {
 
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
+      $o[3] .= '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h4>";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
@@ -163,10 +163,10 @@ function readPage($client, $auth, $id, $type) {
           }
         }
       }
-      if (strpos($_POST['client'], 'https://cms.slc.edu:8443') === false) {
-        $cmsLink = 'https://cms.slc.edu:7443';
+      if (strpos($_POST['client'], CMS_BASE_PATH) === false) {
+        $cmsLink = CMS_DEV_BASE_PATH;
       } else {
-        $cmsLink = 'https://cms.slc.edu:8443';
+        $cmsLink = CMS_BASE_PATH;
       }
       echo '<form class="event-form clearfix" method="POST" target="result-'.$asset['id'].'" data-id="'.$asset['id'].'">';
         echo '<div class="btn btn-info pull-right collapser">Expand/Collapse</div>';

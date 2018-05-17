@@ -101,7 +101,7 @@ function readPage($client, $auth, $id) {
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
     if ($cron) {
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+      $o[3] .= $asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       echo '<h4>'.$asset['path']."</h4>";
     }
@@ -170,7 +170,7 @@ function editPage($client, $auth, $asset) {
       $move = $client->move ( array ('authentication' => $auth, 'identifier' => array('type' => 'page', 'id' => $asset["id"]), 'moveParameters' => array('destinationContainerIdentifier'=> array('type'=>'folder', 'id'=>'6824bab27f00000101b7715d4c99fd4c'), 'doWorkflow'=>false) ) );
       if ($move->moveReturn->success == 'true') {
         if ($cron) {
-        $o[2] .= 'Move success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+        $o[2] .= 'Move success: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
         } else {
           echo '<div class="s">Move success</div>';
         }
@@ -180,7 +180,7 @@ function editPage($client, $auth, $asset) {
           $result = $client->__getLastResponse();
         }
         if ($cron) {
-          $o[1] .= 'Move failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
+          $o[1] .= 'Move failed: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
         } else {
           echo '<div class="f">Move failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
         }

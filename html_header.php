@@ -1,5 +1,6 @@
 <?php
 
+require_once(__DIR__.'/_config.php');
 
 function removeCheckboxItem($val, &$array) {
   global $changed, $cron;
@@ -118,11 +119,11 @@ if (!isset($data)) {$data = '';}
       <fieldset>
         <span class="radio-label">Cascade Instance:</span>
         <?php if (!$_POST['client'] || strpos($_POST['client'], '8443') ) { ?>
-          <label for="live_client" class="radio inline"><input name="client" type="radio" id="live_client" checked="checked" value="https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl">Live</label>
-          <label for="dev_client" class="radio inline"><input name="client" type="radio" id="dev_client" value="https://cms.slc.edu:7443/ws/services/AssetOperationService?wsdl">Dev</label>
+          <label for="live_client" class="radio inline"><input name="client" type="radio" id="live_client" checked="checked" value="<?php echo CMS_PATH; ?>">Live</label>
+          <label for="dev_client" class="radio inline"><input name="client" type="radio" id="dev_client" value="<?php echo CMS_DEV_PATH; ?>">Dev</label>
         <?php } else { ?>
-          <label for="live_client" class="radio inline"><input name="client" type="radio" id="live_client" value="https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl">Live</label>
-          <label for="dev_client" class="radio inline"><input name="client" type="radio" id="dev_client" checked="checked" value="https://cms.slc.edu:7443/ws/services/AssetOperationService?wsdl">Dev</label>
+          <label for="live_client" class="radio inline"><input name="client" type="radio" id="live_client" value="<?php echo CMS_PATH; ?>">Live</label>
+          <label for="dev_client" class="radio inline"><input name="client" type="radio" id="dev_client" checked="checked" value="<?php echo CMS_DEV_PATH; ?>">Dev</label>
         <?php } ?>
       </fieldset>
       <select name="type">

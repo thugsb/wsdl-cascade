@@ -11,8 +11,9 @@
 <body>
 <?php
 include("../web_services_util.php");
+require_once('../_config.php');
 
-$client = new SoapClient ( "https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl", array ('trace' => 1 ) );	
+$client = new SoapClient ( CMS_PATH, array ('trace' => 1 ) );	
 $auth = array ('username' => '', 'password' => '' );
 $id = array ('type' => 'page', 'id' => 'c1bc72317f00000201b98c3e815f00ef' );	
 $destFolder = array ('type' => 'folder', 'id' => '019ab6c77f00000101f92de57a5e5aaf');

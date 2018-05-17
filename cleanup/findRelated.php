@@ -79,7 +79,7 @@ function readPage($client, $auth, $id, $type, $path) {
             print_r($reply); // Shows the page in all its glory
           echo '</div></div>';
         }
-        echo '<h4>This has subscribers: <a href="https://cms.slc.edu:8443/entity/relationships.act?id='.$id['id'].'&type='.$type.'#highlight">'.$path."</a></h4>";
+        echo '<h4>This has subscribers: <a href="'.CMS_ENTITY_PATH.'relationships.act?id='.$id['id'].'&type='.$type.'#highlight">'.$path."</a></h4>";
         echo '</div>';
         
         if ($_POST['action'] == 'edit') {
@@ -89,13 +89,13 @@ function readPage($client, $auth, $id, $type, $path) {
           if ( !preg_match('/charset/', $contents) ) {
             fwrite($fh, "<!DOCTYPE html>\n<html>\n<head>\n  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>\n</head>\n<body>\n");
           }
-          $str = "<hr/><div><a href='https://cms.slc.edu:8443/entity/open.act?id=".$id['id']."&type=page#highlight'>".$path."</a></div>\n";
+          $str = "<hr/><div><a href='".CMS_OPEN_PATH.$id['id']."&type=page#highlight'>".$path."</a></div>\n";
           
           if (!is_array($reply->listSubscribersReturn->subscribers->assetIdentifier)) {
             $reply->listSubscribersReturn->subscribers->assetIdentifier=array($reply->listSubscribersReturn->subscribers->assetIdentifier);
           }
           foreach ($reply->listSubscribersReturn->subscribers->assetIdentifier as $relatedPage) {
-            $related = "<div>Related to <a href='https://cms.slc.edu:8443/entity/open.act?id=".$relatedPage->id."&type=".$relatedPage->type."#highlight'>".$relatedPage->path->siteName.'/'.$relatedPage->path->path."</a></div>\n";
+            $related = "<div>Related to <a href='".CMS_OPEN_PATH.$relatedPage->id."&type=".$relatedPage->type."#highlight'>".$relatedPage->path->siteName.'/'.$relatedPage->path->path."</a></div>\n";
             echo $related;
             $str .= $related;
           }
@@ -104,7 +104,7 @@ function readPage($client, $auth, $id, $type, $path) {
         }
       }
     } else {
-      echo '<h4>No subscribers: <a href="https://cms.slc.edu:8443/entity/relationships.act?id='.$id['id'].'&type='.$type.'#highlight">'.$path."</a></h4>";
+      echo '<h4>No subscribers: <a href="'.CMS_ENTITY_PATH.'relationships.act?id='.$id['id'].'&type='.$type.'#highlight">'.$path."</a></h4>";
       
       
     }

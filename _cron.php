@@ -4,6 +4,8 @@ include_once(__DIR__.'/rollbar-init.php');
 use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 
+require_once(__DIR__.'/_config.php');
+
 foreach(['after','before','children','folder','action'] as $key) {
   if ( empty($_POST[$key]) ) {$_POST[$key] = false;}
 }
@@ -94,7 +96,7 @@ if (!function_exists('readFolder')) {
     $reply = $client->read ( array ('authentication' => $auth, 'identifier' => $id ) );
     if ($reply->readReturn->success == 'true') {
       $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+      $o[3] .= $asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$type."\n";
     
       if (edittest($asset)) {
         editPage($client, $auth, $asset, $type);
@@ -116,10 +118,10 @@ if (!function_exists('readFolder')) {
     if ($changed == true) {
       $edit = $client->edit ( array ('authentication' => $auth, 'asset' => array($asset_children_type => $asset) ) );
       if ($edit->editReturn->success == 'true') {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$type."\n";
         $total['s']++;
       } else {
-        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".extractMessage($result)."\n";
+        $o[1] .= 'Edit FAILED: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$type."\n".extractMessage($result)."\n";
         $total['f']++;
       }
     } else {

@@ -139,7 +139,7 @@ function changes(&$asset, $type) {
                 }
                 if ($create->createReturn->success === 'true') {
                   if ($cron) {
-                    $o[0] .= 'A reference was created for '.$asset['name']."\n". 'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type." in $discFolder/$year/related/\n";
+                    $o[0] .= 'A reference was created for '.$asset['name']."\n". CMS_OPEN_PATH.$asset['id'].'&type='.$type." in $discFolder/$year/related/\n";
                   } else {
                     echo '<div class="s">Creation success: '.$asset['name'].' in '.$discFolder.'</div>';
                   }
@@ -147,7 +147,7 @@ function changes(&$asset, $type) {
                 } else {
                   if ($_POST['action'] == 'edit') {$result = $client->__getLastResponse();} else {$result = '';}
                   if ($cron) {
-                    $o[1] .= 'Creation of a reference failed for '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page">'."\n".htmlspecialchars(extractMessage($result))."\n\n";
+                    $o[1] .= 'Creation of a reference failed for '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type=page">'."\n".htmlspecialchars(extractMessage($result))."\n\n";
                   } else {
                     echo '<div class="f">Creation Failed: '.$asset['name'].' in '.$discFolder.'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
                   }
@@ -176,7 +176,7 @@ function changes(&$asset, $type) {
         }
         if ($disc !== '') {
           if ($cron) {
-            $o[1] .= 'Related Discipline does not exist: '.$disc.' for '.$asset['name']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n";
+            $o[1] .= 'Related Discipline does not exist: '.$disc.' for '.$asset['name']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$type."\n";
           } else {
             echo '<div class="f">Related Discipline does not exist: '.$disc.'</div>';
           }
@@ -252,11 +252,11 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+      $o[3] .= $asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+      echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     
     if (edittest($asset)) {
@@ -305,7 +305,7 @@ function editPage($client, $auth, $asset, $type) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -315,7 +315,7 @@ function editPage($client, $auth, $asset, $type) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
       }

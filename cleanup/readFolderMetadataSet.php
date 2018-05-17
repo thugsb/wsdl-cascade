@@ -46,7 +46,7 @@ function readFolder($client, $auth, $id) {
     }
     
     if ($asset['metadataSetPath'] != 'www_config:Default Sets/Site Section') {
-      $folderLink = '<a class="left_label" href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&amp;type=folder">'.$asset['siteName'].'://'.$asset["path"].'</a> '.$asset['metadataSetPath']."<br>\n";
+      $folderLink = '<a class="left_label" href="'.CMS_OPEN_PATH.$asset['id'].'&amp;type=folder">'.$asset['siteName'].'://'.$asset["path"].'</a> '.$asset['metadataSetPath']."<br>\n";
       echo $folderLink;
       if ($_POST['action'] == 'edit') {
         $myFile = "indexes/metaDataSets.html";

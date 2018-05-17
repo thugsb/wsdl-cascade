@@ -98,9 +98,9 @@ function readPage($client, $auth, $id, $type) {
     $name = '';
     if (!$asset['path']) {$name = $asset['name'];}
     if ($cron) {
-      $o[3] .= '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+      $o[3] .= '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     } elseif ($_POST['asset'] == 'on') {
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+      echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     
     if (edittest($asset)) {
@@ -149,14 +149,14 @@ function editPage($client, $auth, $asset) {
     }
     if ($move->moveReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= '<div style="color:#090;">Move success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[2] .= '<div style="color:#090;">Move success: <a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
       } else {
         echo '<div class="s">Move success</div>';
       }
       $total['s']++;
     } else {
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Move failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Move failed: <a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a><div>".extractMessage($result).'</div></div>';
       } else {
         echo '<div class="f">Move failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       }

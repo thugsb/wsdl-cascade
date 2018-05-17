@@ -161,7 +161,7 @@ function readPage($client, $auth, $id, $type) {
   if ($reply->readReturn->success == 'true') {
     $asset = ( array ) $reply->readReturn->asset->$asset_children_type;
     if ($_POST['asset'] == 'on') {
-      echo '<h2><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h2>";
+      echo '<h2><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></h2>";
     }
     
     if (edittest($asset)) {

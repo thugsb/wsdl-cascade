@@ -144,11 +144,11 @@ function readPage($client, $auth, $id, $disciplineName, $reference) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+      $o[3] .= $asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$id['type'].'#highlight">Related Page: '.$asset['path'].$name."</a></h4>";
+      echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$id['type'].'#highlight">Related Page: '.$asset['path'].$name."</a></h4>";
     }
     
     $relatedDisciplines = [];

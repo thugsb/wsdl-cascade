@@ -59,7 +59,7 @@ function readPage($client, $auth, $id, $asset) {
   $reply = $client->listSubscribers ( array ('authentication' => $auth, 'identifier' => $id ) );
   if ($reply->listSubscribersReturn->success == 'true') {
 
-    echo '<h4><a href="https://cms.slc.edu:8443/entity/relationships.act?type=file&id=' .$asset['id']. '">' . $asset['name'] . '</a></h4>';
+    echo '<h4><a href="'.CMS_ENTITY_PATH.'relationships.act?type=file&id=' .$asset['id']. '">' . $asset['name'] . '</a></h4>';
     $subscribers = $reply->listSubscribersReturn->subscribers;
     if ( is_array($subscribers->assetIdentifier) ) {
       echo 'Array';
@@ -69,7 +69,7 @@ function readPage($client, $auth, $id, $asset) {
       // echo '<pre>'; print_r($subscribers); echo '</pre>';
     } else {
       echo 'No relations';
-      $link = '<tr><td><a href="https://cms.slc.edu:8443/entity/open.act?type=file&id=' .$asset['id']. '">' . $asset['cachepath'] . '</a></td><td>' . $asset['shouldBePublished'] . '</td><td>' . $asset['shouldBeIndexed'] . '</td><td>' . date(DATE_ISO8601, intval($asset['lastDatePublished'])/1000 ) . '</td></tr>' . "\n";
+      $link = '<tr><td><a href="'.CMS_ENTITY_PATH.'open.act?type=file&id=' .$asset['id']. '">' . $asset['cachepath'] . '</a></td><td>' . $asset['shouldBePublished'] . '</td><td>' . $asset['shouldBeIndexed'] . '</td><td>' . date(DATE_ISO8601, intval($asset['lastDatePublished'])/1000 ) . '</td></tr>' . "\n";
       try {
         file_put_contents($file, $link, FILE_APPEND);
       } catch (Exception $e) {

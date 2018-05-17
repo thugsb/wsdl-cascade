@@ -125,11 +125,11 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+      $o[3] .= $asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+      echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     
     if (edittest($asset)) {
@@ -256,7 +256,7 @@ function createAssignAccess($client, $auth, $asset) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -290,7 +290,7 @@ function createAssignAccess($client, $auth, $asset) {
           $editAccess = $client->editAccessRights ( array ('authentication' => $auth, 'accessRightsInformation' => $accessRightsInformation, 'applyToChildren' => false ) );
           if ($editAccess->editAccessRightsReturn->success == 'true') {
             if ($cron) {
-              $o[2] .= 'Edit rights success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$blockID.'&type=block_XHTML_DATADEFINITION'."\n";
+              $o[2] .= 'Edit rights success: '.$asset['path']."\n".CMS_OPEN_PATH.$blockID.'&type=block_XHTML_DATADEFINITION'."\n";
             } else {
               echo '<div class="s">Edit rights success</div>';
             }
@@ -329,7 +329,7 @@ function createAssignAccess($client, $auth, $asset) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.htmlspecialchars(extractMessage($result)).'</div></div>';
       }

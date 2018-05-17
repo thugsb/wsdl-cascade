@@ -141,10 +141,10 @@ function indexFolder($client, $auth, $asset) {
           }
           $total['k']++;
       } else {
-        if (!$cron) {echo '<div><strong><a target="_blank" href="https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
+        if (!$cron) {echo '<div><strong><a target="_blank" href="'.CMS_OPEN_PATH.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
         $to      = 'tguiliano@sarahlawrence.edu';
         $subject = 'Event deleted from XML: '."\n";
-        $message = $name."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$child->id.'&type=page'."\n".'This event has been deleted from the XML event feed.'."\n";
+        $message = $name."\n".CMS_OPEN_PATH.$child->id.'&type=page'."\n".'This event has been deleted from the XML event feed.'."\n";
         $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
         
         $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array('id' => $child->id, 'type' => 'page') ) );

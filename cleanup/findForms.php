@@ -51,7 +51,7 @@ function changes(&$asset) {
               if ($_POST['action'] == 'edit') {
                 $myFile = "indexes/forms.html";
                 $fh = fopen($myFile, 'a') or die("can't open file");
-                $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
+                $str = '<div><a href="'.CMS_OPEN_PATH.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path']."</a></div>\n";
                 fwrite($fh, $str);
                 fclose($fh);
               }
@@ -67,7 +67,7 @@ function changes(&$asset) {
   // if (preg_match('/edgecast/si',$text) or preg_match('/blip/si',$text) ) {
   //   $name = '';
   //   if (!$asset['path']) {$name = $asset['name'];}
-  //   echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['path'].$name." (".(preg_match_count('/edgecast/si',$text)+preg_match_count('/blip/si',$text))." matches)</a></h4>";
+  //   echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type=page#highlight">'.$asset['path'].$name." (".(preg_match_count('/edgecast/si',$text)+preg_match_count('/blip/si',$text))." matches)</a></h4>";
   //   
   // }
 }

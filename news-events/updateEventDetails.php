@@ -43,7 +43,7 @@ function changes(&$asset) {
 	$to      = 'tguiliano@sarahlawrence.edu';
   $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
 		
-	$message = $asset['name']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page'."\n";
+	$message = $asset['name']."\n".CMS_OPEN_PATH.$asset['id'].'&type=page'."\n";
 
 
 	$eventFound = false;
@@ -107,7 +107,7 @@ function changes(&$asset) {
 		  }
 	  }
 	  if ($date_string != $event_date) {
-		  $d_change = 'The DAY has changed from '. $date_string .' to '. $event_date .' and so this asset needs to be moved.'."\n".'https://cms.slc.edu:8443/entity/move.act?id='.$asset['id'].'&type=page'."\n";
+		  $d_change = 'The DAY has changed from '. $date_string .' to '. $event_date .' and so this asset needs to be moved.'."\n".CMS_ENTITY_PATH.'move.act?id='.$asset['id'].'&type=page'."\n";
 			$message .= $d_change;
 	  } else {
 	  	if (!$cron) { echo '<div class="k">The day is the same.</div>'; }
@@ -196,11 +196,11 @@ function readPage($client, $auth, $id, $type) {
     
     $asset = ( array ) $reply->readReturn->asset->$returned_type;
     if ($cron) {
-      $o[3] .= $asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+      $o[3] .= $asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
     } elseif ($_POST['asset'] == 'on') {
       $name = '';
       if (!$asset['path']) {$name = $asset['name'];}
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+      echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     
     if (edittest($asset)) {
@@ -249,7 +249,7 @@ function editPage($client, $auth, $asset) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= 'Edit success: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n";
+        $o[2] .= 'Edit success: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -280,9 +280,9 @@ function editPage($client, $auth, $asset) {
         $result = $client->__getLastResponse();
       }
       if ($cron) {
-        $o[1] .= 'Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
+        $o[1] .= 'Edit failed: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$asset_children_type."\n".htmlentities(extractMessage($result))."\n\n";
       } else {
-        echo '<div class="f">Edit failed: '.$asset['path']."\n".'https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type."\n".htmlspecialchars(extractMessage($result)).'</div></div>';
+        echo '<div class="f">Edit failed: '.$asset['path']."\n".CMS_OPEN_PATH.$asset['id'].'&type='.$type."\n".htmlspecialchars(extractMessage($result)).'</div></div>';
       }
       $total['f']++;
     }

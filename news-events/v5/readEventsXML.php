@@ -284,15 +284,15 @@ foreach ($publish as $id) {
   $publish = $client->publish ( array ('authentication' => $auth, 'publishInformation' => array('identifier' => array('type' => 'page', 'id' => $id), 'unpublish' => false ) ) );
   if ($publish->publishReturn->success == 'true') {
     if ($cron) {
-      $o[2] .= '<div style="color:#090;">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
+      $o[2] .= '<div style="color:#090;">Publish success: <a href="'.CMS_OPEN_PATH.$id.'&type=page#highlight">'.$id.'</a></div>';
     } else {
-      echo '<div class="s">Publish success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
+      echo '<div class="s">Publish success: <a href="'.CMS_OPEN_PATH.$id.'&type=page#highlight">'.$id.'</a></div>';
     }
   } else {
     if ($cron) {
-      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Publish failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a></div>';
+      $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Publish failed: <a href="'.CMS_OPEN_PATH.$id.'&type=page#highlight">'.$id.'</a></div>';
     } else {
-      echo '<div class="f">Publish failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$id.'&type=page#highlight">'.$id.'</a><div>'.extractMessage($result).'</div></div>';
+      echo '<div class="f">Publish failed: <a href="'.CMS_OPEN_PATH.$id.'&type=page#highlight">'.$id.'</a><div>'.extractMessage($result).'</div></div>';
     }
     $total['f']++;
   }
@@ -449,10 +449,10 @@ function readPage($client, $auth, $id, $type, $event_n) {
     $name = '';
     if (!$asset['path']) {$name = $asset['name'];}
     if ($_POST['asset'] == 'on' && !$cron) {
-      echo '<h4><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
+      echo '<h4><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></h4>";
     }
     if ($cron) {
-      $o[3] .= '<div style="color:#090;"><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></div>";
+      $o[3] .= '<div style="color:#090;"><a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path'].$name."</a></div>";
     }
     
     if (edittest($asset)) {
@@ -499,7 +499,7 @@ function editPage($client, $auth, $asset, $event_n) {
     }
     if ($edit->editReturn->success == 'true') {
       if ($cron) {
-        $o[2] .= '<div style="color:#090;">Edit success: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[2] .= '<div style="color:#090;">Edit success: <a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
       } else {
         echo '<div class="s">Edit success</div>';
       }
@@ -509,7 +509,7 @@ function editPage($client, $auth, $asset, $event_n) {
       
     } else {
       if ($cron) {
-        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
+        $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Edit failed: <a href="'.CMS_OPEN_PATH.$asset['id'].'&type='.$type.'#highlight">'.$asset['path']."</a></div>";
       } else {
         echo '<div class="f">Edit failed: '.$asset['path'].'<div>'.extractMessage($result).'</div></div>';
       }

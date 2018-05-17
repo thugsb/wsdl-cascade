@@ -11,8 +11,9 @@
 <body>
 <?php
 include("../web_services_util.php");
+require_once('../_config.php');
 
-$client = new SoapClient ( "https://cms.slc.edu:8443/ws/services/AssetOperationService?wsdl", array ('trace' => 1 ) );	
+$client = new SoapClient ( CMS_PATH, array ('trace' => 1 ) );	
 $auth = array ('username' => '', 'password' => '' );
 $id = array ('type' => 'page', 'id' => '6633aa8a7f00000201f9140fc1e13b0f' );
 // $id = array ('type' => 'page', 'path' => array( 'path' => '/index', 'siteName' => 'www.sarahlawrence.edu+about' ));

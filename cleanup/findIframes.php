@@ -48,7 +48,7 @@ function changes(&$asset) {
     preg_match('/<iframe.+<\/\iframe>/', print_r($asset, true), $iframes);
     $t = print_r($iframes, true);
     echo str_replace("\n",'',htmlspecialchars($t));
-    $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '. str_replace("\n",'',htmlspecialchars($t)) ."</div>\n";
+    $str = '<div><a href="'.CMS_OPEN_PATH.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '. str_replace("\n",'',htmlspecialchars($t)) ."</div>\n";
     if ($_POST['action'] == 'edit' && file_put_contents("indexes/iframes.html", $str, FILE_APPEND) !== false) {
       $total['s']++;
       echo '<div class="s">Written to iframes.html</div>';

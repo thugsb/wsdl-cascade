@@ -49,7 +49,7 @@ function changes(&$asset) {
                 if ($_POST['action'] == 'edit') {
                   $myFile = "indexes/ssp.html";
                   $fh = fopen($myFile, 'a') or die("can't open file");
-                  $str = '<div><a href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '.$desktop->text."</div>\n";
+                  $str = '<div><a href="'.CMS_OPEN_PATH.$asset['id'].'&type=page#highlight">'.$asset['siteName'].'://'.$asset['path'].'</a>: '.$desktop->text."</div>\n";
                   fwrite($fh, $str);
                   fclose($fh);
                 }

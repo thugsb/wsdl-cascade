@@ -45,7 +45,7 @@ function readFolder($client, $auth, $id) {
       echo "<h1>Folder: ".$asset["path"]."</h1>";
     }
     
-    // $folderLink = '<a class="left_label" href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&amp;type=folder">'.$asset['siteName'].'://'.$asset["path"].'</a> '.$asset['metadataSetPath']."<br>\n";
+    // $folderLink = '<a class="left_label" href="'.CMS_OPEN_PATH.$asset['id'].'&amp;type=folder">'.$asset['siteName'].'://'.$asset["path"].'</a> '.$asset['metadataSetPath']."<br>\n";
     // echo $folderLink; // This shows all the folders, regardless of Metadata Set
     
     if (edittest($asset)) {
@@ -76,7 +76,7 @@ function indexFolder($client, $auth, $asset) {
 function editFolder($client, $auth, $asset) {
   global $total;
   
-  $folderLink = '<a class="left_label" href="https://cms.slc.edu:8443/entity/open.act?id='.$asset['id'].'&amp;type=folder">'.$asset['siteName'].'://'.$asset["path"].'</a> '.$asset['metadataSetPath']."<br>\n";
+  $folderLink = '<a class="left_label" href="'.CMS_OPEN_PATH.$asset['id'].'&amp;type=folder">'.$asset['siteName'].'://'.$asset["path"].'</a> '.$asset['metadataSetPath']."<br>\n";
   echo $folderLink; // Shows the folders that would get edited
   
   echo '<div class="page">';
