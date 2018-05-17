@@ -4542,7 +4542,7 @@
 	<!-- Make the binding available as a service -->
 	<wsdl:service name="AssetOperationHandlerService">
 		<wsdl:port binding="impl:AssetOperationServiceSoapBinding" name="AssetOperationService">
-			<wsdlsoap:address location="https://cms.slc.edu:7443/ws/services/AssetOperationService"/>
+			<wsdlsoap:address location="https://cms.CASCADESERVER.edu:7443/ws/services/AssetOperationService"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

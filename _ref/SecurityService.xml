@@ -206,7 +206,7 @@
 
         <wsdl:port binding="impl:SecurityServiceSoapBinding" name="SecurityService">
 
-            <wsdlsoap:address location="https://cms.slc.edu:8443/ws/services/SecurityService"/>
+            <wsdlsoap:address location="https://cms.CASCADESERVER.edu:8443/ws/services/SecurityService"/>
 
         </wsdl:port>
 
