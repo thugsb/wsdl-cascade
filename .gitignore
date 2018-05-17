@@ -7,3 +7,4 @@ rollbar-init.php
 indexes/
 vendor/
 news-events/_events_array.html
+news-events/alumniNews.php
