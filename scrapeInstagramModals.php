@@ -36,7 +36,7 @@ curl_close($curl);
 $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
 
 if (!isset($email) ) {
-	$email = 'stu@t.apio.ca';
+	$email = DEVELOPER_EMAIL;
 }
 
 /* To use the local test JSON, comment out from here down to the two $testFile lines (and uncomment those) */
@@ -68,7 +68,7 @@ if ( count($matches) < 1 ) {
   	if (!$response->wasSuccessful()) {
       mail($email, 'Logging with Rollbar FAILED', $output, $headers);
   	}
-	mail('stu@t.apio.ca', $subject, $match_fail_message, $headers);
+	mail(DEVELOPER_EMAIL, $subject, $match_fail_message, $headers);
 	exit;
 }
 

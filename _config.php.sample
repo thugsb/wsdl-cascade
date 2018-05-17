@@ -12,6 +12,7 @@ define('CMS_DEV_ENTITY_PATH', 		CMS_DEV_BASE_PATH.'/entity/');
 
 define('SERVER_EMAIL',				'cron@server.com');
 define('CC_EMAIL',					'another@developer.com');
+define('DEVELOPER_EMAIL', 			'stu@t.apio.ca');
 
 define('MOBILE_DESTINATION_REGEX', 	'/mobile.COLLEGE.edu/');
 

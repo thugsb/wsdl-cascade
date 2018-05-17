@@ -72,7 +72,7 @@ $message = '<div class="f">WARNING: Legacy script. <a href="./importEventsToPend
 
 if (array_key_exists('submit',$_POST)) {
   $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Content-type: text/html; charset=UTF-8';
-  mail('stu@t.apio.ca','WARNING: Legacy script submitted',"readEventsXML was submitted by $user.", $headers);
+  mail(DEVELOPER_EMAIL,'WARNING: Legacy script submitted',"readEventsXML was submitted by $user.", $headers);
 }
 
 $publish = array();
