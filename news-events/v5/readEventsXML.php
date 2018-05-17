@@ -30,11 +30,11 @@ if (isset($_GET['to'])) {
   $to = '';
 }
 
-$events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
-$private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$private_events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 // The full year
-// $events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from=2012-09-01&to=2013-08-31', 'SimpleXMLElement',LIBXML_NOCDATA);
-// $private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from=2012-09-01&to=2013-08-31', 'SimpleXMLElement',LIBXML_NOCDATA);
+// $events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=5&from=2012-09-01&to=2013-08-31', 'SimpleXMLElement',LIBXML_NOCDATA);
+// $private_events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=2&from=2012-09-01&to=2013-08-31', 'SimpleXMLElement',LIBXML_NOCDATA);
 
 // Merging the private into the public means the public events will be the ones created
 simplexml_merge($events, $private_events);
@@ -71,7 +71,7 @@ $message = '<div class="f">WARNING: Legacy script. <a href="./importEventsToPend
 //$message = 'Set ?from=yyyy-mm-dd&to=yyyy-mm-dd';
 
 if (array_key_exists('submit',$_POST)) {
-  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+  $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Content-type: text/html; charset=UTF-8';
   mail('stu@t.apio.ca','WARNING: Legacy script submitted',"readEventsXML was submitted by $user.", $headers);
 }
 
@@ -390,7 +390,7 @@ function indexFolder($client, $auth, $asset) {
     if (in_array($asset['path'].'/'.$event_n, $children)) {
       // echo "<div class='k'>".$event_n." exists</div>";
       if (pagetest($event_n)) {
-        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
+        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => CASCADE_SITE_PREFIX.'news-events') ), $asset_children_type, $event_n);
       }
 
 
@@ -427,7 +427,7 @@ function indexFolder($client, $auth, $asset) {
           echo '<div class="s">Created successfully: '.$event_n.'</div>';
         }
         $total['s']++;
-        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
+        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => CASCADE_SITE_PREFIX.'news-events') ), $asset_children_type, $event_n);
       } else {
         if ($cron) {
           $o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation failed: '.$event_n.'<div>'.extractMessage($result)."</div></div>";

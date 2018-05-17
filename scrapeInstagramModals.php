@@ -6,30 +6,23 @@ use \Rollbar\Rollbar;
 use \Rollbar\Payload\Level;
 use JsonSchema\Validator;
 
+require_once(__DIR__.'/_config.php');
+
 if (PHP_SAPI == 'cli') {
 	parse_str(implode('&', array_slice($argv, 1)), $_GET);
 	$cron = true;
 }
 if (!$cron) {echo '<p>Due to file permissions, this script can only be run from the command line. A preview of the output is below.</p>';}
 
-( isset($_GET['account']) ? $account = $_GET['account'] : $account = 'sarahlawrencecollege');
-( isset($_GET['site']) ? $site = $_GET['site'] : $site = 'sarahlawrencecollege');
+( isset($_GET['account']) ? $account = $_GET['account'] : $account = INSTAGRAM_ACCOUNT);
+( isset($_GET['site']) ? $site = $_GET['site'] : $site = INSTAGRAM_ACCOUNT);
 
-if ( $site == 'sarahlawrencecollege' ) {
+if ( $site == INSTAGRAM_ACCOUNT ) {
 	$serverPath = '/srv/www/htdocs/_assets/instagram/';
 	$sitePath = '/_assets/instagram/';
-} elseif ( $site == 'curb' ) {
-	$serverPath = '/srv/www/centerfortheurbanriver.org/core/instagram/';
-	$sitePath = '/core/instagram/';
 } elseif ($site == 'local' ) {
 	$serverPath = '/Users/Resist/Sites/instagram/';
 	$sitePath = '../instagram/';
-} elseif ($site == 'test' ) {
-	$serverPath = '/srv/www/test.slc.edu/_assets/instagram/';
-	$sitePath = '/_assets/instagram/';
-} elseif ($site == 'testcurb' ) {
-	$serverPath = '/srv/www/test.centerfortheurbanriver.org/core/instagram/';
-	$sitePath = '/core/instagram/';
 }
 
 $curl = curl_init();
@@ -40,7 +33,7 @@ curl_setopt_array($curl, array(
 $curlresult = curl_exec($curl);
 curl_close($curl);
 
-$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+$headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
 
 if (!isset($email) ) {
 	$email = 'stu@t.apio.ca';
@@ -233,7 +226,7 @@ if ($imageChanged || !file_exists($serverPath ."instagram-$account.html") || $ou
 if ($message == '') {$message = 'No changes needed for the https://www.instagram.com/'.$account.' account.'."\n";} else {$message .= 'The script ran for the https://www.instagram.com/'.$account.' account.'."\n";}
 
 if ($cron) {
-	$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+	$headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
 	$subject = 'Instagram Image Scraper failed';
 	$rollbarOutput = $subject . "\n" . $message . "\n Full scraped JSON: \n". $json;
 	if ($copyFail || $writeFail) {

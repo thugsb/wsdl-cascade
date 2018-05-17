@@ -19,7 +19,7 @@ if (isset($_GET['to'])) {
 } else {
   $to = $yearend;
 }
-$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$all_events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 
 $event_names = array();
 foreach ($all_events->event as $i=>$event) {
@@ -142,10 +142,10 @@ function indexFolder($client, $auth, $asset) {
           $total['k']++;
       } else {
         if (!$cron) {echo '<div><strong><a target="_blank" href="'.CMS_OPEN_PATH.$child->id.'&type=page">'.$name.'</a></strong> has been deleted from the XML feed.</div>';}
-        $to      = 'tguiliano@sarahlawrence.edu';
+        $to      = CONTENT_CREATOR_EMAIL;
         $subject = 'Event deleted from XML: '."\n";
         $message = $name."\n".CMS_OPEN_PATH.$child->id.'&type=page'."\n".'This event has been deleted from the XML event feed.'."\n";
-        $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+        $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
         
         $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array('id' => $child->id, 'type' => 'page') ) );
         if ($reply->readReturn->success == 'true') {

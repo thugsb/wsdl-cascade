@@ -53,15 +53,15 @@ foreach ($lines as $path) {
   }
 
   if (preg_match('/^news-events\//', $cascadePath) ) {
-    $siteName = 'www.sarahlawrence.edu+news-events';
+    $siteName = CASCADE_SITE_PREFIX.'news-events';
     $cascadePath = substr($cascadePath, 12);
     echo '<div class="k">Reading '.$cascadePath.' in '.$siteName.'</div>';
   } elseif (preg_match('/^magazine\//', $cascadePath) ) {
-    $siteName = 'www.sarahlawrence.edu+magazine';
+    $siteName = CASCADE_SITE_PREFIX.'magazine';
     $cascadePath = substr($cascadePath, 9);
     echo '<div class="k">Reading '.$cascadePath.' in '.$siteName.'</div>';
   } else {
-    $siteName = 'SarahLawrence.edu';
+    $siteName = MAIN_SITE_NAME;
     echo '<div class="k">Reading '.$cascadePath.'</div>';
   }
 

@@ -6,8 +6,8 @@ $title = 'Create references for the new course folders, and remove the oldest on
 $start_asset = '817373157f00000101f92de5bea1554a'; // Undergrad
 // $start_asset = '4e9e12a97f000001015d84e03ea3fb26'; // Grad
 
-$siteName = 'www.sarahlawrence.edu+catalogue';
-// $siteName = 'www.sarahlawrence.edu+grad-catalogue';
+$siteName = CASCADE_SITE_PREFIX.'catalogue';
+// $siteName = CASCADE_SITE_PREFIX.'grad-catalogue';
 
 $oldyear = '2014-2015';
 $nextyear = '2018-2019';

@@ -101,7 +101,7 @@ function changes(&$asset, $type) {
               'name' => $asset['name'],
               'parentFolderId' => $relatedIDs[$discFolder],
               'referencedAssetId' => $asset['id'],
-              'siteName' => 'www.sarahlawrence.edu+catalogue',
+              'siteName' => CASCADE_SITE_PREFIX.'catalogue',
               'referencedAssetType' => 'page'
             )
           );

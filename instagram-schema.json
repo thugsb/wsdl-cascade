@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Event",
-  "description": "A Sarah Lawrence College event",
+  "description": "A College event",
   "type": "object",
   "properties": {
     "entry_data": {

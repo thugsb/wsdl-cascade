@@ -16,7 +16,7 @@ include("../_config.php");
 $client = new SoapClient ( CMS_PATH, array ('trace' => 1 ) );	
 $auth = array ('username' => $username, 'password' => $password );
 $id = array ('type' => 'page', 'id' => '6633aa8a7f00000201f9140fc1e13b0f' );
-// $id = array ('type' => 'page', 'path' => array( 'path' => '/index', 'siteName' => 'www.sarahlawrence.edu+about' ));
+// $id = array ('type' => 'page', 'path' => array( 'path' => '/index', 'siteName' => CASCADE_SITE_PREFIX.'about' ));
 $params = array ('authentication' => $auth );
 
 // Read asset

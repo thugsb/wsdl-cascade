@@ -59,7 +59,7 @@ function changes(&$asset) {
         if($dyn->fieldValues->fieldValue->value == "Cross-Disciplinary Paths") {$cdp = true;}
       }
       if($cdp) {
-        readFolder($client, $auth, array(type => 'folder', path => array(path => $asset['path'].'/'.$year.'/related', siteName => 'www.sarahlawrence.edu+catalogue') ) );
+        readFolder($client, $auth, array(type => 'folder', path => array(path => $asset['path'].'/'.$year.'/related', siteName => CASCADE_SITE_PREFIX.'catalogue') ) );
         $disciplines = array_unique($disciplines);
         print_r($disciplines);
         foreach($disciplines as $disc) {

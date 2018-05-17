@@ -33,8 +33,8 @@ if (isset($_GET['to'])) {
   $to = '2016-08-31';
 }
 
-$events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
-$private_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=5&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$private_events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 
 // Merging the private into the public means the public events will be the ones created
 simplexml_merge($events, $private_events);
@@ -70,7 +70,7 @@ $message = '<div class="f">WARNING: Legacy script. <a href="./detectEventsRemove
 //$message = 'You can set ?from=yyyy-mm-dd&to=yyyy-mm-dd but you should make sure to use the whole academic year!';
 
 if (array_key_exists('submit',$_POST)) {
-  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Content-type: text/html; charset=UTF-8';
+  $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Content-type: text/html; charset=UTF-8';
   mail('stu@t.apio.ca','WARNING: Legacy script submitted',"unpublishEventsRemovedFromXML was submitted by $user.", $headers);
 }
 

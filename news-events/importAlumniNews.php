@@ -79,7 +79,7 @@ foreach ($articles as $key => $value) {
 			echo '<div class="s">Created successfully: '.$slug.'</div>';
 		}
 		$total['s']++;
-		readToEditPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => '/alumni/news/'.$slug, 'siteName' => 'SarahLawrence.edu') ), $asset_children_type, $slug, $value);
+		readToEditPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => '/alumni/news/'.$slug, 'siteName' => MAIN_SITE_NAME) ), $asset_children_type, $slug, $value);
 	} else {
 		if ($cron) {
 			$o[1] .= '<div style="padding:3px;color:#fff;background:#c00;">Creation failed: '.$slug.'<div>'.extractMessage($result)."</div></div>";

@@ -1,13 +1,35 @@
 <?php
 
-define('CMS_BASE_PATH', 		'https://cms.CASCADESERVER.edu:8443');
-define('CMS_PATH', 				CMS_BASE_PATH.'/ws/services/AssetOperationService?wsdl');
-define('CMS_OPEN_PATH', 		CMS_BASE_PATH.'/entity/open.act?id=');
-define('CMS_ENTITY_PATH', 		CMS_BASE_PATH.'/entity/');
+define('CMS_BASE_PATH', 			'https://cms.CASCADESERVER.edu:8443');
+define('CMS_PATH', 					CMS_BASE_PATH.'/ws/services/AssetOperationService?wsdl');
+define('CMS_OPEN_PATH', 			CMS_BASE_PATH.'/entity/open.act?id=');
+define('CMS_ENTITY_PATH', 			CMS_BASE_PATH.'/entity/');
 
-define('CMS_DEV_BASE_PATH', 	'https://cms.CASCADESERVER.edu:7443');
-define('CMS_DEV_PATH', 			CMS_DEV_BASE_PATH.'/ws/services/AssetOperationService?wsdl');
-define('CMS_DEV_OPEN_PATH', 	CMS_DEV_BASE_PATH.'/entity/open.act?id=');
-define('CMS_DEV_ENTITY_PATH', 	CMS_DEV_BASE_PATH.'/entity/');
+define('CMS_DEV_BASE_PATH', 		'https://cms.CASCADESERVER.edu:7443');
+define('CMS_DEV_PATH', 				CMS_DEV_BASE_PATH.'/ws/services/AssetOperationService?wsdl');
+define('CMS_DEV_OPEN_PATH', 		CMS_DEV_BASE_PATH.'/entity/open.act?id=');
+define('CMS_DEV_ENTITY_PATH', 		CMS_DEV_BASE_PATH.'/entity/');
+
+define('SERVER_EMAIL',				'cron@server.com');
+define('CC_EMAIL',					'another@developer.com');
+
+define('MOBILE_DESTINATION_REGEX', 	'/mobile.COLLEGE.edu/');
+
+define('PENDING_DESTINATION', 		'pending.COLLEGE.edu');
+
+define('CALENDAR_EVENTS_FEED_URL', 	'http://my.COLLEGE.edu/feeds/events/');
+define('EMS_CALENDAR_SCRAPE_URL', 	'https://ems.COLLEGE.edu/MasterCalendar/EventDetails.aspx?mode=child&isFE=true&EventDetailId=');
+
+define('ICAL_USER_DATA_URL', 		'https://apply.COLLEGE.edu/manage/event/?user=');
+
+define('INSTAGRAM_ACCOUNT', 		'collegeaccount');
+
+define('CASCADE_SITE_PREFIX', 		'www.college.edu+');
+
+define('MAIN_SITE_NAME', 			'College.edu');
+
+define('LIVE_WEB_URL', 				'https://www.college.edu');
+
+define('CONTENT_CREATOR_EMAIL', 	'content@college.edu');
 
 ?>

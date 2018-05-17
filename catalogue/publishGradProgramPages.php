@@ -8,7 +8,7 @@ $start_asset = '105d3f587f00000200360e4672462506,5789de757f000002007fee41c129535
 // grad faculty.html pages:
 // $start_asset = '1064a1bd7f00000200360e46cf00c479,5789e0457f000002007fee41fec2874a,57a1b85c7f000002007fee41d613af39,b395014b7f0000026beb496633af898c,57ac35b07f000002007fee41dde95491,57cce4407f000002007fee41f3ab3870,57ee24307f000002007fee41da9a788a,57fbd5477f000002007fee415e3cdec3,581ee16b7f000002007fee416b3533a5';
 
-$dest = 'pending.slc.edu';
+$dest = PENDING_DESTINATION;
 
 // Find HELP at http://help.hannonhill.com/discussions/web-services/1531-publishing-destinations-via-script
 

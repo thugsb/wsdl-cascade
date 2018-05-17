@@ -36,7 +36,7 @@ if (!$cron) {include('../header.php');}
 
 foreach ($lines as $path) {
   $cascadePath = preg_replace('/\.ics$/', '', substr($path, 14) );
-  $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array(type => 'page', path => array( path => $cascadePath, siteName => 'www.sarahlawrence.edu+news-events') ) ) );
+  $reply = $client->read ( array ('authentication' => $auth, 'identifier' => array(type => 'page', path => array( path => $cascadePath, siteName => CASCADE_SITE_PREFIX.'news-events') ) ) );
   // echo '<pre>';
   // print_r($reply);
   // echo '</pre>';

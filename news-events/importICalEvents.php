@@ -113,7 +113,7 @@ function iCalendarToXML($icalendarData) {
 
 }
 
-$icalendarData = file_get_contents("https://apply.slc.edu/manage/event/?user=".$_GET['user']."&output=ical");
+$icalendarData = file_get_contents(ICAL_USER_DATA_URL . $_GET['user']."&output=ical");
 
 print_r(iCalendarToXML($icalendarData));
 

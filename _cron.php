@@ -162,7 +162,7 @@ if (strlen($o[4]) > 0 ) {
   $output .= "\n\n\nFolders Processed:\n==========\n".$o[4];
 }
 
-$headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+$headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
 
 if ($total['f'] > 0) {
   $response = Rollbar::log(Level::error(), $output);

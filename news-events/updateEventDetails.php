@@ -10,7 +10,7 @@ include_once('eventFolderIDs.php');
 
 $start_asset = $year_folder;
 
-$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$yearstart.'&to='.$yearend, 'SimpleXMLElement',LIBXML_NOCDATA);
+$all_events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=2&from='.$yearstart.'&to='.$yearend, 'SimpleXMLElement',LIBXML_NOCDATA);
 
 
 function pagetest($child) {
@@ -40,8 +40,8 @@ function changes(&$asset) {
   	return;
   }
 	
-	$to      = 'tguiliano@sarahlawrence.edu';
-  $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+	$to      = CONTENT_CREATOR_EMAIL;
+  $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
 		
 	$message = $asset['name']."\n".CMS_OPEN_PATH.$asset['id'].'&type=page'."\n";
 

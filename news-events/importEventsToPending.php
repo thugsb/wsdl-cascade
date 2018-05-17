@@ -20,7 +20,7 @@ if (isset($_GET['to'])) {
 } else {
   $to = '';
 }
-$all_events = simplexml_load_file('http://my.slc.edu/feeds/events/?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
+$all_events = simplexml_load_file(CALENDAR_EVENTS_FEED_URL . '?cal=2&from='.$from.'&to='.$to, 'SimpleXMLElement',LIBXML_NOCDATA);
 
 $event_names = array();
 foreach ($all_events->event as $i=>$event) {
@@ -48,7 +48,7 @@ if ($cron) {
   $output = 'Events Import Script Started' ."\n". date('D, d M Y H:i');
   $response = Rollbar::log(Level::info(), $output);
   if (!$response->wasSuccessful()) {
-    $headers = 'From: com@vm-www.slc.edu' . "\r\n" . 'Cc: wjoell@sarahlawrence.edu';
+    $headers = 'From: '. SERVER_EMAIL . "\r\n" . 'Cc: '. CC_EMAIL;
     mail($email, 'Logging with Rollbar FAILED ' . $_GET['s'], $output, $headers);
   }
 }
@@ -108,7 +108,7 @@ function changes(&$asset, $event_n) {
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => "https://ems.slc.edu/MasterCalendar/EventDetails.aspx?mode=child&isFE=true&EventDetailId=$detailid",
+        CURLOPT_URL => EMS_CALENDAR_SCRAPE_URL . $detailid,
         CURLOPT_USERAGENT => 'Chrome 41.0.2228.0'
     ));
     $curlresult = curl_exec($curl);
@@ -300,7 +300,7 @@ function indexFolder($client, $auth, $asset) {
       // echo "<div class='k'>".$event_n." exists</div>";
       if (pagetest($event_n)) {
       	// If you want events to auto-update from the XML feed, uncomment this line:
-        // readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
+        // readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/'.$event_n, 'siteName' => CASCADE_SITE_PREFIX.'news-events') ), $asset_children_type, $event_n);
       }
 
 
@@ -344,7 +344,7 @@ function indexFolder($client, $auth, $asset) {
           echo '<div class="s">Created successfully: '.$event_n.'</div>';
         }
         $total['s']++;
-        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/_pending/'.$event_n, 'siteName' => 'www.sarahlawrence.edu+news-events') ), $asset_children_type, $event_n);
+        readPage($client, $auth, array ('type' => $asset_children_type, 'path' => array ('path' => $asset['path'].'/_pending/'.$event_n, 'siteName' => CASCADE_SITE_PREFIX.'news-events') ), $asset_children_type, $event_n);
       } else {
         if ($_POST['debug'] == 'on' || $cron) {
           $result = $client->__getLastResponse();

@@ -9,7 +9,7 @@ $asset_type = 'siteDestinationContainer';
 $asset_children_type = 'destination';
 
 function pagetest($child) {
-  if (preg_match('/mobile.slc.edu/', $child->path->path))
+  if (preg_match(MOBILE_DESTINATION_REGEX, $child->path->path))
     return true;
 }
 function foldertest($child) {
@@ -17,7 +17,7 @@ function foldertest($child) {
     return true;
 }
 function edittest($asset) {
-  if (preg_match('/mobile.slc.edu/', $asset['name']))
+  if (preg_match(MOBILE_DESTINATION_REGEX, $asset['name']))
     return true;
 }
 
@@ -28,11 +28,11 @@ function changes(&$asset) {
     $asset['enabled'] = '0';
     $changed = true;
   }
-  // if ( preg_match('/mobile.slc.edu/', $asset['directory']) ) {
+  // if ( preg_match(MOBILE_DESTINATION_REGEX, $asset['directory']) ) {
   //   $asset['directory'] = str_replace('mobile2','mobile',$asset['directory']);
   //   $changed = true;
   // }
-  // if ( preg_match('/mobile.slc.edu/', $asset['webUrl']) ) {
+  // if ( preg_match(MOBILE_DESTINATION_REGEX, $asset['webUrl']) ) {
   //   $asset['webUrl'] = str_replace('mobile2','mobile',$asset['webUrl']);
   //   $changed = true;
   // }
